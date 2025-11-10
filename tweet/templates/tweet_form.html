@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{%load static%}
+{% block title %}
+    {% if form.instance.pk %}
+        Edit Tweet - TweetShare
+    {% else %}
+        Create Tweet - TweetShare
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<link rel="stylesheet" href="{% static 'css/tweet_form.css' %}">
+
+<body>
+    <!-- Animated Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div class="form-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                {% if form.instance.pk %}
+                    ✏️ Edit Tweet
+                {% else %}
+                    🐦 Create Tweet
+                {% endif %}
+            </h1>
+            <p class="page-description">
+                {% if form.instance.pk %}
+                    Update your thoughts and share with the world
+                {% else %}
+                    Share your thoughts with the world
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Tweet Form -->
+        <form action="" method="post" enctype="multipart/form-data" class="tweet-form">
+            {% csrf_token %}
+            
+            <!-- Text Field -->
+            <div class="form-group">
+                <label for="id_text" class="form-label">Your Message</label>
+                <textarea 
+                    name="text" 
+                    id="id_text" 
+                    class="form-textarea" 
+                    placeholder="What's happening? Share your thoughts..."
+                    maxlength="280"
+                >{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+                <div id="charCounter" class="char-counter">0/280</div>
+            </div>
+            
+            <!-- Photo Field -->
+            <div class="form-group">
+                <label for="id_photo" class="form-label">Add Photo (Optional)</label>
+                <input 
+                    type="file" 
+                    name="photo" 
+                    id="id_photo" 
+                    class="form-file"
+                    accept="image/*"
+                >
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    {% if form.instance.pk %}
+                        ✨ Update Tweet
+                    {% else %}
+                        🚀 Post Tweet
+                    {% endif %}
+                </button>
+                
+                <a href="{% url 'tweet_list' %}" class="btn-back">
+                    ← Back to Feed
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="{% static 'java_script/tweet_form.js' %}"></script>
+</body>
+</html>
+{% endblock %}

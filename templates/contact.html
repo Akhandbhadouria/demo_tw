@@ -1,0 +1,92 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TweetShare</title>
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+</head>
+
+<body>
+    <div class="contact-container">
+        <div class="contact-header">
+            <h1>Get In Touch</h1>
+            <p>Have questions? We'd love to hear from you. Send us a message!</p>
+        </div>
+
+        <div class="contact-content">
+            <div class="contact-form-section">
+                <h2>Send Us a Message</h2>
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="How can we help?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us more about your inquiry..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <div class="contact-info-section">
+                <h2>Contact Information</h2>
+                
+                <div class="info-item">
+                    <div class="info-icon">📧</div>
+                    <div class="info-content">
+                        <h3>Email</h3>
+                        <p>support@tweetshare.com</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">📱</div>
+                    <div class="info-content">
+                        <h3>Phone</h3>
+                        <p>+91 123 456 7890</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div class="info-content">
+                        <h3>Location</h3>
+                        <p>Jalandhar, Punjab, India</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">⏰</div>
+                    <div class="info-content">
+                        <h3>Business Hours</h3>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM</p>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">📷</a>
+                    <a href="#" class="social-link">💼</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

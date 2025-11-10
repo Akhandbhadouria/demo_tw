@@ -1,0 +1,288 @@
+  * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(180deg, #0a0d2e 0%, #1a0b2e 50%, #2d1b69 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Stars Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Container */
+        .tweet-container {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header Section */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e879f9 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .page-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        /* Create Tweet Button */
+        .create-tweet-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #e879f9 0%, #c084fc 100%);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 40px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(232, 121, 249, 0.3);
+            animation: fadeInDown 0.8s ease-out 0.2s backwards;
+        }
+
+        .create-tweet-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(232, 121, 249, 0.5);
+            color: white;
+        }
+
+        /* Tweet Card */
+        .tweet-card {
+            background: rgba(30, 30, 60, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .tweet-card:nth-child(odd) { animation-delay: 0.1s; }
+        .tweet-card:nth-child(even) { animation-delay: 0.2s; }
+
+        .tweet-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(232, 121, 249, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tweet User Section */
+        .tweet-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tweet-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #e879f9 0%, #c084fc 100%);
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(232, 121, 249, 0.3);
+        }
+
+        .tweet-user-info {
+            flex: 1;
+        }
+
+        .tweet-name {
+            font-weight: 700;
+            color: white;
+            font-size: 1.05rem;
+            margin-bottom: 3px;
+        }
+
+        .tweet-handle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Tweet Content */
+        .tweet-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        /* Tweet Image */
+        .tweet-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tweet Actions */
+        .tweet-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-edit:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .tweet-card {
+                padding: 20px;
+            }
+
+            .create-tweet-btn {
+                padding: 12px 25px;
+                font-size: 0.95rem;
+            }
+
+            .tweet-actions {
+                flex-direction: column;
+            }
+
+            .btn-edit,
+            .btn-delete {
+                width: 100%;
+                text-align: center;
+            }
+        }

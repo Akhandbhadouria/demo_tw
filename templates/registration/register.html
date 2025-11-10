@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}
+Register - TweetShare
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+    
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="form-container">
+        <div class="page-header">
+            <h1 class="page-title">🚀 Join TweetShare</h1>
+            <p class="page-description">Create your account and start sharing your story</p>
+        </div>
+
+        {% if form.errors %}
+        <div class="error-messages">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form action="" method="post" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label">Username</label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    id="id_username" 
+                    class="form-input" 
+                    placeholder="Enter your username"
+                    value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
+                    required
+                >
+                {% if form.username.errors %}
+                    <span class="field-errors">{{ form.username.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_email" class="form-label">Email Address</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="id_email" 
+                    class="form-input" 
+                    placeholder="Enter your email"
+                    value="{% if form.email.value %}{{ form.email.value }}{% endif %}"
+                    required
+                >
+                {% if form.email.errors %}
+                    <span class="field-errors">{{ form.email.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1" class="form-label">Password</label>
+                <input 
+                    type="password" 
+                    name="password1" 
+                    id="id_password1" 
+                    class="form-input" 
+                    placeholder="Create a strong password"
+                    required
+                >
+                {% if form.password1.errors %}
+                    <span class="field-errors">{{ form.password1.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+\            <div class="form-group">
+                <label for="id_password2" class="form-label">Confirm Password</label>
+                <input 
+                    type="password" 
+                    name="password2" 
+                    id="id_password2" 
+                    class="form-input" 
+                    placeholder="Confirm your password"
+                    required
+                >
+                {% if form.password2.errors %}
+                    <span class="field-errors">{{ form.password2.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+        
+            <button type="submit" class="btn-submit">
+                ✨ Create Account
+            </button>
+            
+           
+            <div class="login-link">
+                Already have an account? <a href="{% url 'login' %}">Login here</a>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="{% static 'java_script/register.js' %}"></script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+Login - TweetShare
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <!-- Animated Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div class="form-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">🔐 Welcome Back</h1>
+            <p class="page-description">Sign in to your TweetShare account</p>
+        </div>
+
+        <!-- Display Form Errors -->
+        {% if form.errors %}
+        <div class="error-messages">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Success Messages (for registration redirects) -->
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                <div class="success-message">
+                    {{ message }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <!-- Login Form -->
+        <form action="" method="post" class="auth-form">
+            {% csrf_token %}
+            
+            <!-- Username Field -->
+            <div class="form-group">
+                <label for="id_username" class="form-label">Username</label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    id="id_username" 
+                    class="form-input" 
+                    placeholder="Enter your username"
+                    value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
+                    required
+                    autofocus
+                >
+                {% if form.username.errors %}
+                    <span class="field-errors">{{ form.username.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="id_password" class="form-label">Password</label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="id_password" 
+                    class="form-input" 
+                    placeholder="Enter your password"
+                    required
+                >
+                {% if form.password.errors %}
+                    <span class="field-errors">{{ form.password.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Additional Options -->
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember_me">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">
+                🚀 Sign In
+            </button>
+            
+            <!-- Register Link -->
+            <div class="register-link">
+                Don't have an account? <a href="{% url 'register' %}">Register here</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="{% static 'java_script/login.js' %}"></script>
+
+</body>
+</html>
+{% endblock %}

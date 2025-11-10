@@ -1,0 +1,113 @@
+{%extends "layout.html"%}
+{%load static%}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TweetShare - Share Your Thoughts</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <!-- Animated Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="hero-card">
+            <div class="logo-section">
+                <div class="logo-emoji">🐦</div>
+                <div class="logo-text">TweetShare</div>
+            </div>
+
+            <h1 class="hero-title">Your Voice. Your Story. Your Moment.</h1>
+            
+            <p class="hero-description">
+                Share your thoughts with the world. Connect with like-minded people. Create your digital presence.
+            </p>
+
+            <div class="cta-buttons">
+                {% if user.is_authenticated %}
+                <a href="{%url 'tweet_list'%}"> <button class="btn btn-primary">
+                    ✨ Get Started
+                </button></a>
+               {%else%}
+               <a href="{%url 'register'%}"> <button class="btn btn-secondary">
+                    Sign In
+                </button></a>
+               
+                {%endif%}
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        {% if user.is_authenticated %}
+        <div class="features-grid">
+            <a href="{% url 'tweet_list' %}">
+                 <div class="feature-card">
+                <div class="feature-icon icon-purple">
+                    💬
+                </div>
+                <h3 class="feature-title">Express Yourself</h3>
+                <p class="feature-description">
+                    Share your thoughts in 280 characters or less
+                </p>
+            </div>
+            </a>
+           
+            <a href="{% url 'tweet_list' %}">
+            <div class="feature-card">
+                <div class="feature-icon icon-blue">
+                    👥
+                </div>
+                <h3 class="feature-title">Build Community</h3>
+                <p class="feature-description">
+                    Connect with people who share your interests
+                </p>
+            </div>
+                </a>
+                <a href="{% url 'tweet_list' %}">
+            <div class="feature-card">
+                <div class="feature-icon icon-orange">
+                    ⚡
+                </div>
+                <h3 class="feature-title">Stay Updated</h3>
+                <p class="feature-description">
+                    Get real-time updates from the world
+                </p>
+            </div>
+            </a>
+        </div>
+    </div>
+{%endif%}
+    <!-- Tweet Preview Section -->
+    <div class="content-section">
+        <div class="tweet-preview">
+            <div class="preview-title">See How Your Tweets Look</div>
+            <div class="mock-tweet">
+                <div class="mock-user">
+                    <div class="mock-avatar"></div>
+                    <div>
+                        <div class="mock-name">Your Name</div>
+                        <div class="mock-handle">@yourhandle</div>
+                    </div>
+                </div>
+                <div class="mock-content">
+                    This is what your tweet will look like! Share your thoughts with an image and caption. ✨
+                </div>
+                <div class="mock-image">
+                    Your Image Here
+                </div>
+            </div>
+        </div>
+    </div>
+{%include "contact.html"%}
+    <!-- Footer -->
+   
+
+    <script src="{%static 'java_script/home.js'%}"></script>
+</body>
+</html>
+
+{% endblock %}
