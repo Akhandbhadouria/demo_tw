@@ -11,11 +11,17 @@ def logout(request):
 def index(request):
     return render(request,"index.html")
 
+from django.contrib.auth.decorators import login_required
 
 def tweet_list(request):
-    tweets=Tweet.objects.all().order_by('-updated_at')
-    return render(request,'tweet_list.html',{'tweets':tweets,'user':request.user})
-
+    if request.user.is_authenticated:
+        # Show all tweets except the current user's tweets
+        tweets = Tweet.objects.exclude(user=request.user).order_by('-updated_at')
+    else:
+        # Show all tweets for anonymous users
+        tweets = Tweet.objects.all().order_by('-updated_at')
+    
+    return render(request, 'tweet_list.html', {'tweets': tweets, 'user': request.user})
 
 
 @login_required
@@ -310,3 +316,5 @@ def my_feed(request):
     # Fetch tweets created by the currently logged-in user
     tweets = Tweet.objects.filter(user=request.user).order_by('-updated_at')
     return render(request, 'my_feed.html', {'tweets': tweets})
+
+

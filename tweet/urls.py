@@ -19,6 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static 
 from . import views
+
 urlpatterns = [
     path("", views.tweet_list, name="tweet_list"),
     path("create/", views.tweet_create, name="tweet_create"),
@@ -26,27 +27,16 @@ urlpatterns = [
     path("<int:tweet_id>/delete/", views.tweet_delete, name="tweet_delete"),
     path("register/", views.register, name="register"),
     path("logout/", views.logout, name="logout"),
-    path('create-profile/', views.create_profile, name='create_profile'),  # This should work
+    path('create-profile/', views.create_profile, name='create_profile'),
     path('profile/<str:username>/follow/', views.follow_user, name='follow_user'),
     path('profile/<str:username>/followers/', views.followers_list, name='followers_list'),
     path('profile/<str:username>/following/', views.following_list, name='following_list'),
-    
-       
-       
-       path('my-feed/', views.my_feed, name='my_feed'),
-
-        path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('my-feed/', views.my_feed, name='my_feed'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('following-feed/', views.following_feed, name='following_feed'),
-
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),
     
-
-
-
-
-
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

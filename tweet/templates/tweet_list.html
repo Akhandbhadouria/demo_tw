@@ -316,11 +316,7 @@ Tweets - TweetShare
 
 <div class="tweet-container">
     <!-- Page Header -->
-    <div class="page-header">
-        <h1 class="page-title">🐦 Your Feed</h1>
-        <p class="page-description">Share your thoughts with the world</p>
-    </div>
-
+   
     <!-- Create Tweet Button -->
     <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
         ✨ Create a Tweet
@@ -338,6 +334,7 @@ Tweets - TweetShare
                         <p>{{ tweet.text|truncatewords:20 }}</p>
                     </div>
                 {% endif %}
+                
             </div>
             {% endfor %}
         </div>

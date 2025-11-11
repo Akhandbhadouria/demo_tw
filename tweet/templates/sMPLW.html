@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Retro Modern</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.05) 2px, rgba(255,255,255,.05) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* LEFT SIDEBAR - PROFILE */
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        .profile-photo-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(147, 112, 219, 0.3);
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background: #4ade80;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .profile-profession {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .profile-email {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .profile-bio {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            border-color: #cbd5e0;
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* CENTER - MAIN CONTENT */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header-bar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 200px;
+        }
+
+        .post-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #667eea;
+        }
+
+        .post-info h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+
+        .post-time {
+            font-size: 0.85rem;
+            color: #a0aec0;
+        }
+
+        .post-content {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(5px);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid #cbd5e0;
+            cursor: pointer;
+        }
+
+        .checkbox.checked {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+
+        .task-text {
+            flex: 1;
+            color: #2d3748;
+        }
+
+        .task-date {
+            color: #a0aec0;
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #718096;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: #667eea;
+        }
+
+        /* RIGHT SIDEBAR */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .widget-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .widget-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .team-member {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .team-member:hover {
+            transform: scale(1.1);
+        }
+
+        .team-avatar {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-member {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px dashed #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-member:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .media-item {
+            position: relative;
+            padding-bottom: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .media-item:hover {
+            transform: scale(1.05);
+        }
+
+        .media-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .right-sidebar {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 15px 10px;
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- LEFT SIDEBAR -->
+        <div class="left-sidebar">
+            <div class="profile-card">
+                <div class="profile-photo-wrapper">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop" alt="Profile" class="profile-photo">
+                    <div class="status-indicator"></div>
+                </div>
+                <h2 class="profile-name">Francisco Maia</h2>
+                <span class="profile-profession">Designer</span>
+                <p class="profile-email">franco.maia@gmail.com</p>
+                <p class="profile-bio">
+                    Creative designer passionate about building beautiful and functional user experiences. Always learning and exploring new design trends.
+                </p>
+                <button class="btn btn-primary">✏️ Edit Profile</button>
+                <button class="btn btn-secondary">📧 Send Message</button>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">234</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">189</div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="header-bar">
+                <h1 class="header-title">All Tasks</h1>
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search...">
+                </div>
+            </div>
+
+            <div class="post-card">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop" alt="User" class="post-avatar">
+                    <div class="post-info">
+                        <h3>Francisco Maia</h3>
+                        <span class="post-time">3 hours ago</span>
+                    </div>
+                </div>
+                <p class="post-content">Assigned new tasks to the project</p>
+                <div class="task-list">
+                    <div class="task-item">
+                        <div class="checkbox"></div>
+                        <span class="task-text">Website design and development</span>
+                        <span class="task-date">04 Oct 2022</span>
+                    </div>
+                    <div class="task-item">
+                        <div class="checkbox"></div>
+                        <span class="task-text">Design new dashboard</span>
+                        <span class="task-date">15 Oct 2022</span>
+                    </div>
+                    <div class="task-item">
+                        <div class="checkbox"></div>
+                        <span class="task-text">Prepare HTML & CSS</span>
+                        <span class="task-date">26 Oct 2022</span>
+                    </div>
+                </div>
+                <div class="post-actions">
+                    <div class="action-btn">💬 23</div>
+                    <div class="action-btn">❤️ 36</div>
+                    <div class="action-btn">↗️ Share</div>
+                </div>
+            </div>
+
+            <div class="post-card">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop" alt="User" class="post-avatar">
+                    <div class="post-info">
+                        <h3>Francisco Maia</h3>
+                        <span class="post-time">15 minutes ago</span>
+                    </div>
+                </div>
+                <p class="post-content">Marked 2 tasks as complete</p>
+                <div class="task-list">
+                    <div class="task-item">
+                        <div class="checkbox checked">✓</div>
+                        <span class="task-text">Budget and contract</span>
+                        <span class="task-date">4 Oct 2022</span>
+                    </div>
+                    <div class="task-item">
+                        <div class="checkbox checked">✓</div>
+                        <span class="task-text">Search for a UI kit</span>
+                        <span class="task-date">7 Oct 2022</span>
+                    </div>
+                </div>
+                <div class="post-actions">
+                    <div class="action-btn">💬 12</div>
+                    <div class="action-btn">❤️ 28</div>
+                    <div class="action-btn">↗️ Share</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="right-sidebar">
+            <div class="widget-card">
+                <h3 class="widget-title">👥 Team Members</h3>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
+                    </div>
+                    <div class="add-member">+</div>
+                </div>
+            </div>
+
+            <div class="widget-card">
+                <h3 class="widget-title">📷 Latest Media</h3>
+                <div class="media-grid">
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=200&h=200&fit=crop" alt="Media">
+                    </div>
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200&h=200&fit=crop" alt="Media">
+                    </div>
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop" alt="Media">
+                    </div>
+                    <div class="media-item">
+                        <img src="https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?w=200&h=200&fit=crop" alt="Media">
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-card">
+                <h3 class="widget-title">⚡ Skills</h3>
+                <div class="skills-container">
+                    <div class="skill-tag">Business</div>
+                    <div class="skill-tag">User Experience</div>
+                    <div class="skill-tag">Interface Design</div>
+                    <div class="skill-tag">Marketing</div>
+                    <div class="skill-tag">Development</div>
+                    <div class="skill-tag">Founder</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Checkbox toggle
+        document.querySelectorAll('.checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                if (this.classList.contains('checked')) {
+                    this.textContent = '✓';
+                } else {
+                    this.textContent = '';
+                }
+            });
+        });
+
+        // Smooth fade-in animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.post-card, .widget-card, .profile-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
