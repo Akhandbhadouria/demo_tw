@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% block title %}Following - {{ profile_user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-semibold mb-4 text-center">
+        {{ profile_user.username }} is Following
+    </h2>
+
+    {% if following %}
+        <ul class="space-y-4">
+           {% for user in following %}
+    <li class="flex items-center justify-between bg-gray-100 p-4 rounded-xl shadow-sm">
+        <div class="flex items-center gap-3">
+            {% if user.userprofile and user.userprofile.profile_photo %}
+                <img src="{{ user.userprofile.profile_photo.url }}" alt="{{ user.username }}" class="rounded-circle" width="150" height="150">
+            {% else %}
+                <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span class="text-gray-600 text-sm">{{ user.username|first|upper }}</span>
+                </div>
+            {% endif %}
+            {% if user.username %}
+
+            <a href="{% url 'profile_detail' user.username %}" class="font-semibold text-blue-700 hover:underline">
+                {{ user.username }}
+            </a>
+            {%endif%}
+        </div>
+
+        {% if request.user != user and user.username %}
+            <form method="post" action="{% url 'follow_user' user.username %}">
+                {% csrf_token %}
+                {% if request.user in user.userprofile.followers.all %}
+                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600">
+                        Unfollow
+                    </button>
+                {% else %}
+                    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600">
+                        Follow
+                    </button>
+                {% endif %}
+            </form>
+        {% endif %}
+    </li>
+{% endfor %}
+
+        </ul>
+    {% else %}
+        <p class="text-center text-gray-600 mt-6">Not following anyone yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

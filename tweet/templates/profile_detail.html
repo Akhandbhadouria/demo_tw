@@ -1,12 +1,31 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="container mt-5 text-center">
+    {% if profile.profile_photo %}
   <img src="{{ profile.profile_photo.url }}" alt="Profile Photo"
        class="rounded-circle" width="150" height="150">
+       {%endif%}
   <h2 class="mt-3">{{ profile.user.username }}</h2>
   <p><strong>Profession:</strong> {{ profile.profession }}</p>
   <p><strong>Email:</strong> {{ profile.email }}</p>
   <p><strong>Bio:</strong> {{ profile.bio }}</p>
 </div>
 
+
+
+{% if request.user != profile.user %}
+  <form method="post" action="{% url 'follow_user' profile.user.username %}">
+    {% csrf_token %}
+    {% if request.user in profile.followers.all %}
+      <button type="submit">Unfollow</button>
+    {% else %}
+      <button type="submit">Follow</button>
+    {% endif %}
+  </form>
+{% endif %}
+<p>Followers: {{ profile.followers_count }}</p>
+<p>Following: {{ profile.following_count }}</p>
+
+<a href="{% url 'followers_list' profile.user.username %}">View Followers</a> |
+<a href="{% url 'following_list' profile.user.username %}">View Following</a>
 {% endblock %}

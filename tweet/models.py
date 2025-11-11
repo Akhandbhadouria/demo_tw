@@ -19,5 +19,16 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
    
+    followers = models.ManyToManyField(
+        User, related_name='following', blank=True
+    )
     def __str__(self):
         return self.user.username
+
+    @property
+    def following_count(self):
+        return self.user.following.count()
+
+    @property
+    def followers_count(self):
+        return self.followers.count()

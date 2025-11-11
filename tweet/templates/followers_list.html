@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block title %}Followers - {{ profile_user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-semibold mb-6 text-center">
+        Followers of {{ profile_user.username }}
+    </h2>
+
+    {% if followers %}
+    <ul class="space-y-4">
+        {% for user in followers %}
+        <li
+            class="flex items-center justify-between bg-gray-100 p-4 rounded-xl shadow-sm hover:bg-gray-200 transition duration-300">
+
+            <!-- Follower info: profile photo + username -->
+            <div class="flex items-center gap-3">
+                {% if user.userprofile.profile_photo %}
+                <img src="{{ user.userprofile.profile_photo.url }}" alt="{{ user.username }}" class="rounded-circle"
+                    width="150" height="150"> {% endif %}
+
+                <!-- Username link -->
+                <a href="{% url 'profile_detail' user.username %}" class="rounded-circle" width="150" height="150"> </a>
+            </div>
+
+            <!-- Follow/Unfollow button -->
+            {% if request.user != user %}
+            <form method="post" action="{% url 'follow_user' user.username %}">
+                {% csrf_token %}
+                {% if request.user in user.userprofile.followers.all %}
+                <button type="submit"
+                    class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300">
+                    Unfollow
+                </button>
+                {% else %}
+                <button type="submit"
+                    class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition duration-300">
+                    Follow
+                </button>
+                {% endif %}
+            </form>
+            {% endif %}
+
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-center text-gray-600 mt-6">No followers yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
