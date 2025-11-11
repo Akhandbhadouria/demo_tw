@@ -10,14 +10,236 @@ Tweets - TweetShare
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/tweet_list.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .page-description {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .create-tweet-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0 auto 40px;
+            display: block;
+            width: fit-content;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .create-tweet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Masonry Grid Layout */
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 1400px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .masonry-grid {
+                column-count: 1;
+            }
+        }
+
+        .tweet-card {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .tweet-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .tweet-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .tweet-content-wrapper {
+            padding: 16px;
+        }
+
+        .tweet-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tweet-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .tweet-user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tweet-user-info a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .tweet-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tweet-handle {
+            color: #666;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tweet-content {
+            color: #1a1a1a;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            word-wrap: break-word;
+        }
+
+        .tweet-actions {
+            display: flex;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .btn-edit, .btn-delete {
+            flex: 1;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: #f0f7ff;
+            color: #1e88e5;
+        }
+
+        .btn-edit:hover {
+            background: #e3f2fd;
+        }
+
+        .btn-delete {
+            background: #fff5f5;
+            color: #e53935;
+        }
+
+        .btn-delete:hover {
+            background: #ffebee;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Image-first cards (when tweet has photo) */
+        .tweet-card.has-image .tweet-image {
+            order: -1;
+        }
+    </style>
 </head>
 <body>
-    <!-- Animated Stars Background -->
-    <div class="stars" id="stars"></div>
-
     <div class="tweet-container">
         <!-- Page Header -->
         <div class="page-header">
@@ -30,38 +252,42 @@ Tweets - TweetShare
             ✨ Create a Tweet
         </a>
         
-        <!-- Tweets List -->
+        <!-- Masonry Grid -->
         {% if tweets %}
-            {% for tweet in tweets %}
-            <div class="tweet-card">
-                <div class="tweet-user">
-                    <div class="tweet-avatar">
-                        {{ tweet.user.username|first|upper }}
+            <div class="masonry-grid">
+                {% for tweet in tweets %}
+                <div class="tweet-card {% if tweet.photo %}has-image{% endif %}">
+                    {% if tweet.photo %}
+                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
+                    {% endif %}
+                    
+                    <div class="tweet-content-wrapper">
+                        <div class="tweet-user">
+                            <div class="tweet-avatar">
+                                {{ tweet.user.username|first|upper }}
+                            </div>
+                            <div class="tweet-user-info">
+                                <a href="{% url 'profile_detail' username=tweet.user.username %}">
+                                    <div class="tweet-name">{{ tweet.user.username }}</div>
+                                    <div class="tweet-handle">@{{ tweet.user.username }}</div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="tweet-content">
+                            {{ tweet.text }}
+                        </div>
+                        
+                        {% if tweet.user == user %}
+                        <div class="tweet-actions">
+                            <a href="{% url 'tweet_edit' tweet.id %}" class="btn-edit">Edit</a>
+                            <a href="{% url 'tweet_delete' tweet.id %}" class="btn-delete">Delete</a>
+                        </div>
+                        {% endif %}
                     </div>
-                    <div class="tweet-user-info">
-                            <a href="{% url 'profile_detail' username=tweet.user.username %}">
-
-                        <div class="tweet-name">{{ tweet.user.username }}</div>
-                        <div class="tweet-handle">@{{ tweet.user.username }}</div>
-                    </div>
                 </div>
-                
-                <div class="tweet-content">
-                    {{ tweet.text }}
-                </div>
-                
-                {% if tweet.photo %}
-                <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
-                {% endif %}
-                
-                {% if tweet.user == user %}
-                <div class="tweet-actions">
-                    <a href="{% url 'tweet_edit' tweet.id %}" class="btn-edit">Edit</a>
-                    <a href="{% url 'tweet_delete' tweet.id %}" class="btn-delete">Delete</a>
-                </div>
-                {% endif %}
+                {% endfor %}
             </div>
-            {% endfor %}
         {% else %}
             <!-- Empty State -->
             <div class="empty-state">
@@ -72,10 +298,7 @@ Tweets - TweetShare
         {% endif %}
     </div>
 
-
-     <script src="{% static 'java_script/tweet_list.js' %}"></script>
-
-       
+    <script src="{% static 'java_script/tweet_list.js' %}"></script>
 </body>
 </html>
 

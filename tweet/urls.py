@@ -32,6 +32,7 @@ urlpatterns = [
     path('profile/<str:username>/following/', views.following_list, name='following_list'),
     
         path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('following-feed/', views.following_feed, name='following_feed'),
 
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),
     

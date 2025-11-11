@@ -34,6 +34,8 @@
                 {% if user.is_authenticated and user.username %}
 
             <a class="nav-link active" aria-current="page" href="{% url 'profile_detail' username=user.username %}">profile</a>
+            <a href="{% url 'following_feed' %}" class="text-blue-700 font-semibold hover:underline">Following Feed</a>
+
             {%endif%}
           </li>
          

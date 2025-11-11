@@ -280,3 +280,25 @@ def edit_profile(request):
         form = UserProfileForm(instance=profile)
 
     return render(request, 'edit_profile.html', {'form': form})
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Tweet, UserProfile
+
+@login_required
+def following_feed(request):
+    # Get the logged-in user's profile
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    # Get all profiles that the current user is following
+    following_profiles = UserProfile.objects.filter(followers=request.user)
+
+    # Extract actual User objects from those profiles
+    following_users = [profile.user for profile in following_profiles]
+
+    # Get tweets by users that the current user follows
+    tweets = Tweet.objects.filter(user__in=following_users).order_by('-updated_at')
+
+    return render(request, 'following_feed.html', {'tweets': tweets})

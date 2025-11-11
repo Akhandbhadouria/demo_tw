@@ -1,0 +1,239 @@
+{% extends 'layout.html' %}
+{% block title %}Following Feed{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Masonry Grid Layout */
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 1400px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .masonry-grid {
+                column-count: 1;
+            }
+        }
+
+        .tweet-card {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .tweet-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .tweet-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .tweet-content-wrapper {
+            padding: 16px;
+        }
+
+        .tweet-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tweet-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+
+        .tweet-avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .tweet-user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tweet-user-info a {
+            text-decoration: none;
+            color: #1e88e5;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .tweet-user-info a:hover {
+            color: #1565c0;
+            text-decoration: underline;
+        }
+
+        .tweet-content {
+            color: #1a1a1a;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            word-wrap: break-word;
+        }
+
+        .tweet-timestamp {
+            color: #999;
+            font-size: 0.8rem;
+            padding-top: 8px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Image-first cards */
+        .tweet-card.has-image .tweet-image {
+            order: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">👥 Following Feed</h1>
+        </div>
+
+        {% if tweets %}
+            <div class="masonry-grid">
+                {% for tweet in tweets %}
+                <div class="tweet-card {% if tweet.photo %}has-image{% endif %}">
+                    {% if tweet.photo %}
+                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet Photo">
+                    {% endif %}
+                    
+                    <div class="tweet-content-wrapper">
+                        <div class="tweet-user">
+                            {% if tweet.user.userprofile.profile_photo %}
+                                <img src="{{ tweet.user.userprofile.profile_photo.url }}" 
+                                     alt="{{ tweet.user.username }}" 
+                                     class="tweet-avatar">
+                            {% else %}
+                                <div class="tweet-avatar-placeholder">
+                                    {{ tweet.user.username|first|upper }}
+                                </div>
+                            {% endif %}
+
+                            <div class="tweet-user-info">
+                                <a href="{% url 'profile_detail' tweet.user.username %}">
+                                    {{ tweet.user.username }}
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="tweet-content">
+                            {{ tweet.text }}
+                        </div>
+                        
+                        <div class="tweet-timestamp">
+                            {{ tweet.updated_at|date:"M d, Y H:i" }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-state-icon">👥</div>
+                <h2 class="empty-state-title">No tweets yet</h2>
+                <p class="empty-state-text">Start following people to see their tweets here!</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}
