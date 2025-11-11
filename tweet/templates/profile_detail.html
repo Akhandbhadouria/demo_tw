@@ -9,6 +9,9 @@
   <p><strong>Profession:</strong> {{ profile.profession }}</p>
   <p><strong>Email:</strong> {{ profile.email }}</p>
   <p><strong>Bio:</strong> {{ profile.bio }}</p>
+  {% if request.user == profile.user %}
+    <a href="{% url 'edit_profile' %}" class="btn btn-warning mt-3">Edit Profile</a>
+{% endif %}
 </div>
 
 

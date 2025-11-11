@@ -225,7 +225,8 @@ def follow_user(request, username):
         else:
             user_profile.followers.add(request.user)
 
-    return redirect('profile_detail', username=username)
+    next_url = request.META.get('HTTP_REFERER', '/')
+    return redirect(next_url)
 
 
 from django.shortcuts import render, get_object_or_404
@@ -251,3 +252,31 @@ def following_list(request, username):
         'following': following_users,
         'profile_user': user
     })
+
+
+
+
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import UserProfileForm
+from .models import UserProfile
+
+@login_required
+def edit_profile(request):
+    # Get the profile of the logged-in user
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == 'POST':
+        # Bind form with POST data and files (image)
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_detail', username=request.user.username)
+    else:
+        # Display form pre-filled with current profile data
+        form = UserProfileForm(instance=profile)
+
+    return render(request, 'edit_profile.html', {'form': form})

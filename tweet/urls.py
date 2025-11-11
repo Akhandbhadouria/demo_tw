@@ -30,7 +30,16 @@ urlpatterns = [
     path('profile/<str:username>/follow/', views.follow_user, name='follow_user'),
     path('profile/<str:username>/followers/', views.followers_list, name='followers_list'),
     path('profile/<str:username>/following/', views.following_list, name='following_list'),
+    
+        path('profile/edit/', views.edit_profile, name='edit_profile'),
+
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),
+    
+
+
+
+
+
 ]
 
 if settings.DEBUG:
