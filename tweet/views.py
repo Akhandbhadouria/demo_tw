@@ -162,7 +162,6 @@ def register(request):
 
 
 
-
 from django.shortcuts import render, redirect
 from .forms import UserProfileForm
 from .models import UserProfile
@@ -170,28 +169,31 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def create_profile(request):
+    # Check if user already has a profile
     try:
-        UserProfile.objects.get(user=request.user)
+        # If profile exists, redirect to profile detail
+        existing_profile = UserProfile.objects.get(user=request.user)
         return redirect('profile_detail', username=request.user.username)
     except UserProfile.DoesNotExist:
-        pass
+        # If no profile exists, proceed with creation
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST, request.FILES)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.user = request.user
+                profile.save()
+                return redirect('profile_detail', username=request.user.username)
+        else:
+            form = UserProfileForm()
+        
+        return render(request, 'create_profile.html', {'form': form})
+    
 
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            return redirect('profile_detail', username=request.user.username)
-    else:
-        form = UserProfileForm()
-    return render(request, 'create_profile.html', {'form': form})
 
-
-
+    
 from django.shortcuts import render, get_object_or_404
 from .models import UserProfile
-
+@login_required
 def profile_detail(request, username):
     profile = get_object_or_404(UserProfile, user__username=username)
     return render(request, 'profile_detail.html', {'profile': profile})
@@ -203,27 +205,49 @@ def profile_detail(request, username):
 
 
 
+
+
+
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserProfileForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from .models import UserProfile
+from .forms import UserProfileForm
+
 @login_required
-def update_profile(request):
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        return redirect('create_profile')
-    
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            updated_profile = form.save()
-            print(f"Profile updated for user: {request.user.username}")  # Debugging
-            print(f"New profession: {updated_profile.profession}")  # Debugging
-            print(f"New bio: {updated_profile.bio}")  # Debugging
-            return redirect('profile_detail', username=request.user.username)
+def follow_user(request, username):
+    user_to_follow = get_object_or_404(User, username=username)
+    user_profile = user_to_follow.userprofile
+
+    if request.user != user_to_follow:
+        if request.user in user_profile.followers.all():
+            user_profile.followers.remove(request.user)
         else:
-            print("Form errors:", form.errors)  # Debugging
-    else:
-        form = UserProfileForm(instance=profile)
+            user_profile.followers.add(request.user)
+
+    return redirect('profile_detail', username=username)
+
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+@login_required
+def followers_list(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    followers = profile_user.userprofile.followers.all()  # all users who follow this person
+    return render(request, 'followers_list.html', {
+        'profile_user': profile_user,
+        'followers': followers
+    })
+@login_required
+def following_list(request, username):
+    user = get_object_or_404(User, username=username)
     
-    return render(request, 'update_profile.html', {'form': form})
+    # CORRECT: Get all users that this user is following
+    # This means: find all UserProfiles where this user is in their followers list
+    following_profiles = UserProfile.objects.filter(followers=user)
+    following_users = [profile.user for profile in following_profiles]
+    
+    return render(request, 'following_list.html', {
+        'following': following_users,
+        'profile_user': user
+    })
