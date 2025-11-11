@@ -5,301 +5,438 @@ Tweets - TweetShare
 {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f0f0f0;
-            min-height: 100vh;
-            padding: 20px;
-        }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: #f0f0f0;
+        min-height: 100vh;
+        padding: 20px;
+    }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-        }
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+    }
 
-        .page-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 10px;
-        }
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 10px;
+    }
 
-        .page-description {
-            font-size: 1.1rem;
-            color: #666;
-        }
+    .page-description {
+        font-size: 1.1rem;
+        color: #666;
+    }
 
-        .create-tweet-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: 0 auto 40px;
-            display: block;
-            width: fit-content;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+    .create-tweet-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0 auto 40px;
+        display: block;
+        width: fit-content;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-        .create-tweet-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-        }
+    .create-tweet-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
 
-        /* Masonry Grid Layout */
+    /* Masonry Grid Layout */
+    .masonry-grid {
+        column-count: 4;
+        column-gap: 20px;
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    @media (max-width: 1400px) {
         .masonry-grid {
-            column-count: 4;
-            column-gap: 20px;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 20px;
+            column-count: 3;
         }
+    }
 
-        @media (max-width: 1400px) {
-            .masonry-grid {
-                column-count: 3;
-            }
+    @media (max-width: 1000px) {
+        .masonry-grid {
+            column-count: 2;
         }
+    }
 
-        @media (max-width: 1000px) {
-            .masonry-grid {
-                column-count: 2;
-            }
+    @media (max-width: 600px) {
+        .masonry-grid {
+            column-count: 1;
         }
+    }
 
-        @media (max-width: 600px) {
-            .masonry-grid {
-                column-count: 1;
-            }
+    .tweet-card {
+        break-inside: avoid;
+        margin-bottom: 20px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
+
+    .tweet-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .tweet-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+    }
+
+    /* Text only cards */
+    .tweet-text-only {
+        padding: 24px;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tweet-text-only p {
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        max-width: 700px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
         }
-
-        .tweet-card {
-            break-inside: avoid;
-            margin-bottom: 20px;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
+        to {
+            transform: translateY(0);
+            opacity: 1;
         }
+    }
 
-        .tweet-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
+    .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        line-height: 1;
+    }
 
-        .tweet-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-        }
+    .modal-close:hover {
+        background: rgba(0, 0, 0, 0.9);
+    }
 
-        .tweet-content-wrapper {
-            padding: 16px;
-        }
+    .modal-image {
+        width: 100%;
+        max-height: 500px;
+        object-fit: cover;
+    }
 
-        .tweet-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
+    .modal-details {
+        padding: 24px;
+    }
 
-        .tweet-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
+    .modal-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #f0f0f0;
+    }
 
-        .tweet-user-info {
-            flex: 1;
-            min-width: 0;
-        }
+    .modal-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
 
-        .tweet-user-info a {
-            text-decoration: none;
-            color: inherit;
-        }
+    .modal-username {
+        text-decoration: none;
+        color: #1e88e5;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
 
-        .tweet-name {
-            font-weight: 600;
-            color: #1a1a1a;
-            font-size: 0.95rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .modal-username:hover {
+        color: #1565c0;
+        text-decoration: underline;
+    }
 
-        .tweet-handle {
-            color: #666;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .modal-text {
+        color: #1a1a1a;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        margin-bottom: 20px;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
 
-        .tweet-content {
-            color: #1a1a1a;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-            word-wrap: break-word;
-        }
+    .modal-timestamp {
+        color: #888;
+        font-size: 0.95rem;
+        padding-top: 16px;
+        border-top: 2px solid #f0f0f0;
+        margin-bottom: 16px;
+    }
 
-        .tweet-actions {
-            display: flex;
-            gap: 8px;
-            padding-top: 12px;
-            border-top: 1px solid #f0f0f0;
-        }
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+    }
 
-        .btn-edit, .btn-delete {
-            flex: 1;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
+    .modal-btn {
+        flex: 1;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
 
-        .btn-edit {
-            background: #f0f7ff;
-            color: #1e88e5;
-        }
+    .modal-btn-edit {
+        background: #e3f2fd;
+        color: #1e88e5;
+    }
 
-        .btn-edit:hover {
-            background: #e3f2fd;
-        }
+    .modal-btn-edit:hover {
+        background: #bbdefb;
+    }
 
-        .btn-delete {
-            background: #fff5f5;
-            color: #e53935;
-        }
+    .modal-btn-delete {
+        background: #ffebee;
+        color: #e53935;
+    }
 
-        .btn-delete:hover {
-            background: #ffebee;
-        }
+    .modal-btn-delete:hover {
+        background: #ffcdd2;
+    }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
 
-        .empty-state-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-        }
+    .empty-state-icon {
+        font-size: 5rem;
+        margin-bottom: 20px;
+    }
 
-        .empty-state-title {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
+    .empty-state-title {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
 
-        .empty-state-text {
-            font-size: 1.1rem;
-            color: #666;
-        }
+    .empty-state-text {
+        font-size: 1.1rem;
+        color: #666;
+    }
+</style>
 
-        /* Image-first cards (when tweet has photo) */
-        .tweet-card.has-image .tweet-image {
-            order: -1;
-        }
-    </style>
-</head>
-<body>
-    <div class="tweet-container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">🐦 Your Feed</h1>
-            <p class="page-description">Share your thoughts with the world</p>
-        </div>
-
-        <!-- Create Tweet Button -->
-        <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
-            ✨ Create a Tweet
-        </a>
-        
-        <!-- Masonry Grid -->
-        {% if tweets %}
-            <div class="masonry-grid">
-                {% for tweet in tweets %}
-                <div class="tweet-card {% if tweet.photo %}has-image{% endif %}">
-                    {% if tweet.photo %}
-                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
-                    {% endif %}
-                    
-                    <div class="tweet-content-wrapper">
-                        <div class="tweet-user">
-                            <div class="tweet-avatar">
-                                {{ tweet.user.username|first|upper }}
-                            </div>
-                            <div class="tweet-user-info">
-                                <a href="{% url 'profile_detail' username=tweet.user.username %}">
-                                    <div class="tweet-name">{{ tweet.user.username }}</div>
-                                    <div class="tweet-handle">@{{ tweet.user.username }}</div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="tweet-content">
-                            {{ tweet.text }}
-                        </div>
-                        
-                        {% if tweet.user == user %}
-                        <div class="tweet-actions">
-                            <a href="{% url 'tweet_edit' tweet.id %}" class="btn-edit">Edit</a>
-                            <a href="{% url 'tweet_delete' tweet.id %}" class="btn-delete">Delete</a>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <!-- Empty State -->
-            <div class="empty-state">
-                <div class="empty-state-icon">📭</div>
-                <h2 class="empty-state-title">No tweets yet</h2>
-                <p class="empty-state-text">Be the first to share something!</p>
-            </div>
-        {% endif %}
+<div class="tweet-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">🐦 Your Feed</h1>
+        <p class="page-description">Share your thoughts with the world</p>
     </div>
 
-    <script src="{% static 'java_script/tweet_list.js' %}"></script>
-</body>
-</html>
+    <!-- Create Tweet Button -->
+    <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
+        ✨ Create a Tweet
+    </a>
+    
+    <!-- Masonry Grid -->
+    {% if tweets %}
+        <div class="masonry-grid">
+            {% for tweet in tweets %}
+            <div class="tweet-card" data-tweet-id="{{ tweet.id }}">
+                {% if tweet.photo %}
+                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
+                {% else %}
+                    <div class="tweet-text-only">
+                        <p>{{ tweet.text|truncatewords:20 }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" id="tweetModal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeModal">&times;</button>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <h2 class="empty-state-title">No tweets yet</h2>
+            <p class="empty-state-text">Be the first to share something!</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    const tweetData = {
+        {% for tweet in tweets %}
+        "{{ tweet.id }}": {
+            hasPhoto: {% if tweet.photo %}true{% else %}false{% endif %},
+            photoUrl: "{{ tweet.photo.url|default:'' }}",
+            text: `{{ tweet.text|escapejs }}`,
+            username: "{{ tweet.user.username }}",
+            profileUrl: "{% url 'profile_detail' username=tweet.user.username %}",
+            timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}",
+            isOwner: {% if tweet.user == user %}true{% else %}false{% endif %},
+            editUrl: "{% url 'tweet_edit' tweet.id %}",
+            deleteUrl: "{% url 'tweet_delete' tweet.id %}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    };
+
+    const modal = document.getElementById('tweetModal');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.getElementById('closeModal');
+
+    document.querySelectorAll('.tweet-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const tweetId = this.getAttribute('data-tweet-id');
+            openModal(tweetId);
+        });
+    });
+
+    function openModal(tweetId) {
+        const tweet = tweetData[tweetId];
+        if (!tweet) return;
+
+        let html = '';
+
+        if (tweet.hasPhoto && tweet.photoUrl) {
+            html += `<img src="${tweet.photoUrl}" class="modal-image" alt="Tweet Photo">`;
+        }
+
+        html += `<div class="modal-details">`;
+        html += `<div class="modal-user">`;
+        html += `<div class="modal-avatar">${tweet.username.charAt(0).toUpperCase()}</div>`;
+        html += `<a href="${tweet.profileUrl}" class="modal-username">@${tweet.username}</a>`;
+        html += `</div>`;
+        html += `<div class="modal-text">${tweet.text}</div>`;
+        html += `<div class="modal-timestamp">${tweet.timestamp}</div>`;
+
+        if (tweet.isOwner) {
+            html += `<div class="modal-actions">`;
+            html += `<a href="${tweet.editUrl}" class="modal-btn modal-btn-edit">Edit</a>`;
+            html += `<a href="${tweet.deleteUrl}" class="modal-btn modal-btn-delete">Delete</a>`;
+            html += `</div>`;
+        }
+
+        html += `</div>`;
+
+        modalBody.innerHTML = html;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
 
 {% endblock %}

@@ -302,3 +302,11 @@ def following_feed(request):
     tweets = Tweet.objects.filter(user__in=following_users).order_by('-updated_at')
 
     return render(request, 'following_feed.html', {'tweets': tweets})
+
+
+
+@login_required
+def my_feed(request):
+    # Fetch tweets created by the currently logged-in user
+    tweets = Tweet.objects.filter(user=request.user).order_by('-updated_at')
+    return render(request, 'my_feed.html', {'tweets': tweets})

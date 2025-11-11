@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">My Tweets</h2>
+
+    {% if tweets %}
+        {% for tweet in tweets %}
+            <div class="card shadow-sm mb-3 p-3 rounded-3">
+                <div class="d-flex align-items-center mb-2">
+                    {% if tweet.user.userprofile.profile_photo %}
+                        <img src="{{ tweet.user.userprofile.profile_photo.url }}" 
+                             class="rounded-circle me-2" width="40" height="40"
+                             alt="{{ tweet.user.username }} profile photo">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center" 
+                             style="width: 40px; height: 40px;">
+                            <span class="text-white">{{ tweet.user.username.0|upper }}</span>
+                        </div>
+                    {% endif %}
+                    <h5 class="mb-0">{{ tweet.user.username }}</h5>
+                </div>
+
+                <p class="mb-3">{{ tweet.content }}</p>
+
+                <!-- Use the correct field name here -->
+                {% if tweet.image %}  <!-- or tweet.photo -->
+                    <img src="{{ tweet.image.url }}" 
+                         class="img-fluid rounded mb-2" 
+                         alt="Tweet Image" 
+                         style="max-height: 400px; object-fit: cover;">
+                {% endif %}
+                
+                <small class="text-muted d-block text-end">{{ tweet.updated_at }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center text-muted">You haven't posted any tweets yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

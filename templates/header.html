@@ -35,7 +35,9 @@
 
             <a class="nav-link active" aria-current="page" href="{% url 'profile_detail' username=user.username %}">profile</a>
             <a href="{% url 'following_feed' %}" class="text-blue-700 font-semibold hover:underline">Following Feed</a>
-
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'my_feed' %}">My Feed</a>
+</li>
             {%endif%}
           </li>
          
