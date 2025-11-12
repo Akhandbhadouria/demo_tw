@@ -294,6 +294,9 @@
             photoUrl: "{{ tweet.photo.url|default:'' }}",
             text: `{{ tweet.text|escapejs }}`,
             username: "{{ tweet.user.username }}",
+            isOwner: {% if tweet.user == request.user %}true{% else %}false{% endif %},
+            editUrl: "{% url 'tweet_edit' tweet.id %}",
+            deleteUrl: "{% url 'tweet_delete' tweet.id %}",
             hasAvatar: {% if tweet.user.userprofile.profile_photo %}true{% else %}false{% endif %},
             avatarUrl: "{{ tweet.user.userprofile.profile_photo.url|default:'' }}",
             timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}"
@@ -318,6 +321,7 @@
 
         let html = '';
 
+        // Tweet image
         if (tweet.hasPhoto && tweet.photoUrl) {
             html += `<img src="${tweet.photoUrl}" class="modal-image" alt="Tweet Photo">`;
         }
@@ -325,17 +329,32 @@
         html += `<div class="modal-details">`;
         html += `<div class="modal-user">`;
         
+        // Avatar
         if (tweet.hasAvatar && tweet.avatarUrl) {
             html += `<img src="${tweet.avatarUrl}" class="modal-avatar" alt="${tweet.username}">`;
         } else {
             html += `<div class="modal-avatar-placeholder">${tweet.username.charAt(0).toUpperCase()}</div>`;
         }
-        
+
         html += `<div class="modal-username">${tweet.username}</div>`;
-        html += `</div>`;
+        html += `</div>`; // close modal-user
+
+        // Tweet text
         html += `<div class="modal-text">${tweet.text}</div>`;
         html += `<div class="modal-timestamp">${tweet.timestamp}</div>`;
-        html += `</div>`;
+
+        // Edit/Delete buttons if owner
+        if (tweet.isOwner) {
+            html += `<div class="modal-actions" style="margin-top:15px; text-align:right;">`;
+            html += `<a href="${tweet.editUrl}" class="btn btn-edit" style="margin-right:10px;">✏️ Edit</a>`;
+            html += `<form action="${tweet.deleteUrl}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this tweet?')">🗑️ Delete</button>
+                     </form>`;
+            html += `</div>`;
+        }
+
+        html += `</div>`; // close modal-details
 
         modalBody.innerHTML = html;
         modal.classList.add('show');
@@ -362,4 +381,4 @@
     });
 </script>
 
-{% endblock %}
+{%endblock%}

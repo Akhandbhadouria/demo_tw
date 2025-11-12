@@ -406,6 +406,29 @@
                 border-radius: 0;
             }
         }
+        .bk{
+            background-color: #000000;
+            border-radius: 50%;
+        }
+        .pro {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.profession-text {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0%; }
+  100% { background-position: 100%; }
+}
     </style>
 
 <!-- Theme Toggle Button -->
@@ -421,6 +444,11 @@
                 <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400" alt="Default Profile" class="profile-pic">
                 {% endif %}
             </div>
+            <div class="pro">
+  {% if profile.profession %}
+    <strong class="profession-text">{{ profile.profession }}</strong>
+  {% endif %}
+</div>
         </div>
 
         <div class="profile-info">
@@ -430,9 +458,11 @@
                 <a href="{% url 'edit_profile' %}" class="btn btn-secondary">
                     <i class="fas fa-edit"></i> Edit Profile
                 </a>
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+               <div class="bk">
+                 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
     <i class="fas fa-moon" id="theme-icon"></i>
 </button>
+               </div>
                 {% else %}
                 <form method="post" action="{% url 'follow_user' profile.user.username %}" style="display: inline;">
                     {% csrf_token %}
@@ -465,11 +495,11 @@
             </div>
 
             <div class="profile-bio">
-                {% if profile.profession %}
+                <!-- {% if profile.profession %}
                 <strong>{{ profile.profession }}</strong>
-                {% endif %}
+                {% endif %} -->
                 {% if profile.email %}
-                <p><i class="fas fa-envelope"></i> {{ profile.email }}</p>
+                <!-- <p><i class="fas fa-envelope"></i> {{ profile.email }}</p> -->
                 {% endif %}
                 {% if profile.bio %}
                 <p>{{ profile.bio }}</p>
@@ -486,91 +516,10 @@
             </div>
         </div>
     </div>
-
-    <div class="tabs">
-        <a href="#" class="tab active">
-            <i class="fas fa-th"></i> POSTS
-        </a>
-        <a href="#" class="tab">
-            <i class="fas fa-video"></i> REELS
-        </a>
-        <a href="#" class="tab">
-            <i class="fas fa-bookmark"></i> SAVED
-        </a>
-        <a href="#" class="tab">
-            <i class="fas fa-user-tag"></i> TAGGED
-        </a>
-    </div>
-
-    <div class="gallery">
-        <!-- Example gallery items - Replace with your actual posts -->
-        <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400" alt="Post 1">
-            <div class="gallery-overlay">
-                <div class="overlay-stat">
-                    <i class="fas fa-heart"></i> 1,234
-                </div>
-                <div class="overlay-stat">
-                    <i class="fas fa-comment"></i> 56
-                </div>
-            </div>
-        </div>
-        <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400" alt="Post 2">
-            <div class="gallery-overlay">
-                <div class="overlay-stat">
-                    <i class="fas fa-heart"></i> 2,345
-                </div>
-                <div class="overlay-stat">
-                    <i class="fas fa-comment"></i> 89
-                </div>
-            </div>
-        </div>
-        <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400" alt="Post 3">
-            <div class="gallery-overlay">
-                <div class="overlay-stat">
-                    <i class="fas fa-heart"></i> 3,456
-                </div>
-                <div class="overlay-stat">
-                    <i class="fas fa-comment"></i> 123
-                </div>
-            </div>
-        </div>
-        <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400" alt="Post 4">
-            <div class="gallery-overlay">
-                <div class="overlay-stat">
-                    <i class="fas fa-heart"></i> 890
-                </div>
-                <div class="overlay-stat">
-                    <i class="fas fa-comment"></i> 34
-                </div>
-            </div>
-        </div>
-        <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="Post 5">
-            <div class="gallery-overlay">
-                <div class="overlay-stat">
-                    <i class="fas fa-heart"></i> 4,567
-                </div>
-                <div class="overlay-stat">
-                    <i class="fas fa-comment"></i> 234
-                </div>
-            </div>
-        </div>
-        <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1484417894907-623942c8ee29?w=400" alt="Post 6">
-            <div class="gallery-overlay">
-                <div class="overlay-stat">
-                    <i class="fas fa-heart"></i> 1,789
-                </div>
-                <div class="overlay-stat">
-                    <i class="fas fa-comment"></i> 67
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="user-feed-section">
+      {% include 'my_feed.html' %}
+  </div>
+   
 </div>
 
 <script>
