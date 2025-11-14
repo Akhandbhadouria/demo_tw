@@ -151,6 +151,8 @@ body, html {
 }
 
 .feature-card {
+      text-decoration: none;
+
     background: rgba(255,255,255,0.9);
     backdrop-filter: blur(10px);
     border-radius: 1.5rem;
@@ -175,14 +177,23 @@ body, html {
 .icon-orange { color: #f97316; }
 
 .feature-title {
+color: #1f2937;
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+        text-decoration: none;
+
 }
 
 .feature-description {
+    text-decoration: none;
+
     font-size: 1rem;
     color: #4b5563;
+}
+a {
+    text-decoration: none;
+    color: inherit; /* optional: keeps the text color same as parent */
 }
 
 /* -------------------- Tweet Preview Section -------------------- */
@@ -555,9 +566,9 @@ body, html {
                 <div class="feature-icon icon-purple">
                     💬
                 </div>
-                <h3 class="feature-title">Express Yourself</h3>
+                <h3 class="feature-title">Profile</h3>
                 <p class="feature-description">
-                    Share your thoughts in 280 characters or less
+                    See Latest Updates
                 </p>
             </div>
             </a>
@@ -565,23 +576,22 @@ body, html {
             <a href="{% url 'tweet_list' %}">
             <div class="feature-card">
                 <div class="feature-icon icon-blue">
-                    👥
+                     ⚡
                 </div>
-                <h3 class="feature-title">Build Community</h3>
+                <h3 class="feature-title">Feed</h3>
                 <p class="feature-description">
-                    Connect with people who share your interests
+                    Explore recent activities
                 </p>
             </div>
                 </a>
                 <a href="{% url 'tweet_list' %}">
             <div class="feature-card">
                 <div class="feature-icon icon-orange">
-                    ⚡
+                    👥
                 </div>
-                <h3 class="feature-title">Stay Updated</h3>
+                <h3 class="feature-title">Following feed</h3>
                 <p class="feature-description">
-                    Get real-time updates from the world
-                </p>
+see the latest updates of your friends                </p>
             </div>
             </a>
         </div>
