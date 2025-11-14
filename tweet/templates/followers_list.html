@@ -21,6 +21,9 @@
 
                 <!-- Username link -->
                 <a href="{% url 'profile_detail' user.username %}" class="rounded-circle" width="150" height="150"> </a>
+                  <a href="{% url 'profile_detail' user.username %}" class="font-semibold text-blue-700 hover:underline">
+                {{ user.username }}
+            </a>
             </div>
 
             <!-- Follow/Unfollow button -->

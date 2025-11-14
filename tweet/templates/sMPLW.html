@@ -1,678 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Retro Modern</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Section</title>
+<style>
+  /* --------------------- Base Styles --------------------- */
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff, #ffe4f0);
+  }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
+  section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 5rem 2rem;
+  }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.05) 2px, rgba(255,255,255,.05) 4px);
-            pointer-events: none;
-            z-index: 1;
-        }
+  .max-container {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 300px 1fr 350px;
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            position: relative;
-            z-index: 2;
-        }
+  @media(min-width: 1024px) {
+    .max-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
 
-        /* LEFT SIDEBAR - PROFILE */
-        .left-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+  /* -------------------- Background animations -------------------- */
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+  }
 
-        .profile-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            text-align: center;
-        }
+  .circle1 {
+    top: -200px;
+    right: -100px;
+    width: 384px;
+    height: 384px;
+    background: linear-gradient(to bottom right, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+    animation: rotateScale1 20s linear infinite;
+  }
 
-        .profile-photo-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-        }
+  .circle2 {
+    bottom: -100px;
+    left: -100px;
+    width: 384px;
+    height: 384px;
+    background: linear-gradient(to top right, rgba(236,72,153,0.2), rgba(139,92,246,0.2));
+    animation: rotateScale2 15s linear infinite;
+  }
 
-        .profile-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 20px rgba(147, 112, 219, 0.3);
-        }
+  @keyframes rotateScale1 {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.2) rotate(90deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
 
-        .status-indicator {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            background: #4ade80;
-            border-radius: 50%;
-            border: 3px solid white;
-        }
+  @keyframes rotateScale2 {
+    0% { transform: scale(1.2) rotate(90deg); }
+    50% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.2) rotate(90deg); }
+  }
 
-        .profile-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 8px;
-        }
+  /* -------------------- Left content -------------------- */
+  .hero-left h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
 
-        .profile-profession {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
+  .gradient-text1 {
+    background: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-        .profile-email {
-            color: #718096;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
+  .gradient-text2 {
+    background: linear-gradient(to right, #9333ea, #ec4899, #4f46e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-        .profile-bio {
-            color: #4a5568;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            text-align: left;
-        }
+  .hero-left p {
+    font-size: 1.25rem;
+    color: #4b5563;
+    max-width: 480px;
+    margin-bottom: 2rem;
+  }
 
-        .btn {
-            width: 100%;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
+  .button-group button {
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: 1rem;
+    border: none;
+    transition: all 0.3s;
+  }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
+  .btn-primary {
+    background: linear-gradient(to right, #4f46e5, #9333ea);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(to right, #4338ca, #7e22ce);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-        }
+  .btn-outline {
+    background: white;
+    color: #4b5563;
+    border: 2px solid #d1d5db;
+  }
+  .btn-outline:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+  }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.9);
-            color: #4a5568;
-            border: 2px solid #e2e8f0;
-        }
+  .small-stats {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+  }
 
-        .btn-secondary:hover {
-            background: white;
-            border-color: #cbd5e0;
-            transform: translateY(-2px);
-        }
+  .avatars {
+    display: flex;
+    margin-right: 0.5rem;
+  }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
-        }
+  .avatars div {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -0.5rem;
+  }
 
-        .stat-box {
-            background: rgba(255, 255, 255, 0.6);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-        }
+  .avatar1 { background: linear-gradient(to bottom right, #6366f1, #9333ea); }
+  .avatar2 { background: linear-gradient(to bottom right, #9333ea, #ec4899); }
+  .avatar3 { background: linear-gradient(to bottom right, #ec4899, #6366f1); }
 
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-        }
+  /* -------------------- Right card -------------------- */
+  .hero-right {
+    position: relative;
+  }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: #718096;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+  .main-card {
+    background: white;
+    border-radius: 2rem;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    animation: float 4s ease-in-out infinite;
+  }
 
-        /* CENTER - MAIN CONTENT */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 
-        .header-bar {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
 
-        .header-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #2d3748;
-        }
+  .card-top div:first-child {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, #6366f1, #9333ea);
+  }
 
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-        }
+  .card-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff, #ffe4f0);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
 
-        .search-box input {
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 200px;
-        }
+  .card-floating1 {
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    animation: float2 3s ease-in-out infinite;
+  }
 
-        .post-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.3s ease;
-        }
+  .card-floating2 {
+    position: absolute;
+    bottom: -2rem;
+    left: -2rem;
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    animation: float3 3.5s ease-in-out infinite;
+  }
 
-        .post-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-        }
+  @keyframes float2 {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(15px) rotate(5deg); }
+  }
 
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+  @keyframes float3 {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
+  }
 
-        .post-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #667eea;
-        }
-
-        .post-info h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 3px;
-        }
-
-        .post-time {
-            font-size: 0.85rem;
-            color: #a0aec0;
-        }
-
-        .post-content {
-            color: #4a5568;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 15px;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .task-item:hover {
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateX(5px);
-        }
-
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
-            border: 2px solid #cbd5e0;
-            cursor: pointer;
-        }
-
-        .checkbox.checked {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
-        }
-
-        .task-text {
-            flex: 1;
-            color: #2d3748;
-        }
-
-        .task-date {
-            color: #a0aec0;
-            font-size: 0.85rem;
-            padding: 4px 12px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-        }
-
-        .post-actions {
-            display: flex;
-            gap: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #718096;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            color: #667eea;
-        }
-
-        /* RIGHT SIDEBAR */
-        .right-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .widget-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        .widget-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .team-member {
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .team-member:hover {
-            transform: scale(1.1);
-        }
-
-        .team-avatar {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .add-member {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: rgba(102, 126, 234, 0.1);
-            border: 2px dashed #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #667eea;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .add-member:hover {
-            background: rgba(102, 126, 234, 0.2);
-        }
-
-        .media-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .media-item {
-            position: relative;
-            padding-bottom: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .media-item:hover {
-            transform: scale(1.05);
-        }
-
-        .media-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .skill-tag {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #4a5568;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .skill-tag:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-        }
-
-        @media (max-width: 1200px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-
-            .right-sidebar {
-                grid-column: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .dashboard {
-                padding: 15px 10px;
-            }
-
-            .team-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
+</style>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- LEFT SIDEBAR -->
-        <div class="left-sidebar">
-            <div class="profile-card">
-                <div class="profile-photo-wrapper">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop" alt="Profile" class="profile-photo">
-                    <div class="status-indicator"></div>
-                </div>
-                <h2 class="profile-name">Francisco Maia</h2>
-                <span class="profile-profession">Designer</span>
-                <p class="profile-email">franco.maia@gmail.com</p>
-                <p class="profile-bio">
-                    Creative designer passionate about building beautiful and functional user experiences. Always learning and exploring new design trends.
-                </p>
-                <button class="btn btn-primary">✏️ Edit Profile</button>
-                <button class="btn btn-secondary">📧 Send Message</button>
 
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-number">234</div>
-                        <div class="stat-label">Followers</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">189</div>
-                        <div class="stat-label">Following</div>
-                    </div>
-                </div>
-            </div>
+<section>
+  <!-- Animated background circles -->
+  <div class="bg-circle circle1"></div>
+  <div class="bg-circle circle2"></div>
+
+  <div class="max-container">
+
+    <!-- Left content -->
+    <div class="hero-left">
+      <div class="badge">
+        <span>✨ Where connections happen</span>
+      </div>
+
+      <h1>
+        <span class="gradient-text1">Connect.</span><br>
+        <span class="gradient-text2">Share.</span><br>
+        <span>Inspire.</span>
+      </h1>
+
+      <p>
+        Join millions discovering meaningful connections, sharing moments that matter, and building communities that inspire.
+      </p>
+
+      <div class="button-group">
+        <button class="btn-primary">Get Started Free</button>
+        <button class="btn-outline">Watch Demo</button>
+      </div>
+
+      <div class="small-stats">
+        <div class="avatars">
+          <div class="avatar1"></div>
+          <div class="avatar2"></div>
+          <div class="avatar3"></div>
         </div>
-
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
-            <div class="header-bar">
-                <h1 class="header-title">All Tasks</h1>
-                <div class="search-box">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Search...">
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-header">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop" alt="User" class="post-avatar">
-                    <div class="post-info">
-                        <h3>Francisco Maia</h3>
-                        <span class="post-time">3 hours ago</span>
-                    </div>
-                </div>
-                <p class="post-content">Assigned new tasks to the project</p>
-                <div class="task-list">
-                    <div class="task-item">
-                        <div class="checkbox"></div>
-                        <span class="task-text">Website design and development</span>
-                        <span class="task-date">04 Oct 2022</span>
-                    </div>
-                    <div class="task-item">
-                        <div class="checkbox"></div>
-                        <span class="task-text">Design new dashboard</span>
-                        <span class="task-date">15 Oct 2022</span>
-                    </div>
-                    <div class="task-item">
-                        <div class="checkbox"></div>
-                        <span class="task-text">Prepare HTML & CSS</span>
-                        <span class="task-date">26 Oct 2022</span>
-                    </div>
-                </div>
-                <div class="post-actions">
-                    <div class="action-btn">💬 23</div>
-                    <div class="action-btn">❤️ 36</div>
-                    <div class="action-btn">↗️ Share</div>
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-header">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop" alt="User" class="post-avatar">
-                    <div class="post-info">
-                        <h3>Francisco Maia</h3>
-                        <span class="post-time">15 minutes ago</span>
-                    </div>
-                </div>
-                <p class="post-content">Marked 2 tasks as complete</p>
-                <div class="task-list">
-                    <div class="task-item">
-                        <div class="checkbox checked">✓</div>
-                        <span class="task-text">Budget and contract</span>
-                        <span class="task-date">4 Oct 2022</span>
-                    </div>
-                    <div class="task-item">
-                        <div class="checkbox checked">✓</div>
-                        <span class="task-text">Search for a UI kit</span>
-                        <span class="task-date">7 Oct 2022</span>
-                    </div>
-                </div>
-                <div class="post-actions">
-                    <div class="action-btn">💬 12</div>
-                    <div class="action-btn">❤️ 28</div>
-                    <div class="action-btn">↗️ Share</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT SIDEBAR -->
-        <div class="right-sidebar">
-            <div class="widget-card">
-                <h3 class="widget-title">👥 Team Members</h3>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="team-member">
-                        <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=80&h=80&fit=crop" alt="Member" class="team-avatar">
-                    </div>
-                    <div class="add-member">+</div>
-                </div>
-            </div>
-
-            <div class="widget-card">
-                <h3 class="widget-title">📷 Latest Media</h3>
-                <div class="media-grid">
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=200&h=200&fit=crop" alt="Media">
-                    </div>
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200&h=200&fit=crop" alt="Media">
-                    </div>
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop" alt="Media">
-                    </div>
-                    <div class="media-item">
-                        <img src="https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?w=200&h=200&fit=crop" alt="Media">
-                    </div>
-                </div>
-            </div>
-
-            <div class="widget-card">
-                <h3 class="widget-title">⚡ Skills</h3>
-                <div class="skills-container">
-                    <div class="skill-tag">Business</div>
-                    <div class="skill-tag">User Experience</div>
-                    <div class="skill-tag">Interface Design</div>
-                    <div class="skill-tag">Marketing</div>
-                    <div class="skill-tag">Development</div>
-                    <div class="skill-tag">Founder</div>
-                </div>
-            </div>
-        </div>
+        <span>10M+ users</span>
+        <span>| ✨ Trusted worldwide</span>
+      </div>
     </div>
 
-    <script>
-        // Checkbox toggle
-        document.querySelectorAll('.checkbox').forEach(checkbox => {
-            checkbox.addEventListener('click', function() {
-                this.classList.toggle('checked');
-                if (this.classList.contains('checked')) {
-                    this.textContent = '✓';
-                } else {
-                    this.textContent = '';
-                }
-            });
-        });
+    <!-- Right card -->
+    <div class="hero-right">
+      <div class="main-card">
+        <div class="card-top">
+          <div></div>
+          <div>
+            <div style="width: 8rem; height: 0.5rem; background: #e5e7eb; margin-bottom: 0.5rem;"></div>
+            <div style="width: 6rem; height: 0.25rem; background: #f3f4f6;"></div>
+          </div>
+        </div>
 
-        // Smooth fade-in animation
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.post-card, .widget-card, .profile-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        });
-    </script>
+        <div class="card-image">
+          ✨
+        </div>
+
+        <div style="height:0.5rem; width:100%; background:#e5e7eb; margin-bottom:0.25rem;"></div>
+        <div style="height:0.5rem; width:80%; background:#f3f4f6;"></div>
+      </div>
+
+      <div class="card-floating1"></div>
+      <div class="card-floating2"></div>
+    </div>
+
+  </div>
+</section>
+
 </body>
 </html>

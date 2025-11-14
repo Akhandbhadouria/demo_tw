@@ -12,15 +12,345 @@
   </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/header.css' %}">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    /* Modern Glassmorphic Navbar */
+    #mainNav {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    #mainNav .navbar-brand {
+      color: rgb(0, 0, 0);
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #mainNav .nav-link {
+      color: rgba(0, 0, 0, 0.9);
+      font-weight: 500;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #mainNav .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.3s ease;
+    }
+
+    #mainNav .nav-link:hover::before {
+      left: 0;
+    }
+
+    #mainNav .nav-link:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    #mainNav .nav-link.active {
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Search Bar */
+    .search-form {
+      position: relative;
+    }
+
+    .search-form input {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 25px;
+      padding: 8px 20px;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .search-form input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .search-form input:focus {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    .search-form .btn {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      border-radius: 25px;
+      padding: 8px 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .search-form .btn:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Tweets Link */
+    .tweets-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .tweets-link:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
+
+    /* User Menu */
+    .user-menu {
+      position: relative;
+    }
+
+    .avatar-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .avatar-container:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .dropdown-icon {
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .avatar-container.active .dropdown-icon {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 10px;
+      min-width: 200px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-header {
+      padding: 10px 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      margin-bottom: 8px;
+    }
+
+    .dropdown-header strong {
+      color: #2d3748;
+      font-size: 0.95rem;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      color: #4a5568;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      transform: translateX(3px);
+    }
+
+    .dropdown-item svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .dropdown-form {
+      margin: 0;
+    }
+
+    .logout-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      color: #e53e3e;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .logout-btn:hover {
+      background: rgba(229, 62, 62, 0.1);
+      transform: translateX(3px);
+    }
+
+    /* Auth Buttons */
+    .btn-login,
+    .btn-register {
+      padding: 8px 24px;
+      border-radius: 25px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-login {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-login:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-register {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-register:hover {
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Navbar Toggler */
+    .navbar-toggler {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* Container */
+    .container {
+      margin-top: 30px;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      #mainNav .navbar-collapse {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border-radius: 15px;
+        padding: 15px;
+        margin-top: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .search-form {
+        margin: 15px 0;
+      }
+
+      .tweets-link {
+        display: block;
+        margin: 10px 0;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg" id="mainNav">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">✨ Navbar</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,27 +358,39 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          {% if user.is_authenticated and user.username %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile_detail' username=user.username %}">
+              <i class="fas fa-user"></i> Profile
+            </a>
           </li>
           <li class="nav-item">
-                {% if user.is_authenticated and user.username %}
-
-            <a class="nav-link active" aria-current="page" href="{% url 'profile_detail' username=user.username %}">profile</a>
-            <a href="{% url 'following_feed' %}" class="text-blue-700 font-semibold hover:underline">Following Feed</a>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'my_feed' %}">My Feed</a>
-</li>
-            {%endif%}
+            <a class="nav-link" href="{% url 'following_feed' %}">
+              <i class="fas fa-users"></i> Following Feed
+            </a>
           </li>
-         
-          
-          
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'my_feed' %}">
+              <i class="fas fa-rss"></i> My Feed
+            </a>
+          </li>
+          {% endif %}
         </ul>
-        <form class="d-flex me-3" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">Search</button>
+        
+        <form class="d-flex me-3 search-form" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search" />
+          <button class="btn" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
         </form>
-        <a href="{% url 'tweet_list' %}" class="me-3 text-white text-decoration-none">Tweets</a>
+        
+        <a href="{% url 'tweet_list' %}" class="me-3 tweets-link">
+          <i class="fas fa-comment-dots"></i> Tweets
+        </a>
 
         {% if user.is_authenticated %}
         <div class="user-menu">
@@ -61,7 +403,7 @@
             </svg>
           </div>
           
-          <div class="dropdown-menu">
+          <div class="dropdown-menu" id="dropdownMenu">
             <div class="dropdown-header">
               <strong>{{ user.username }}</strong>
             </div>
@@ -73,7 +415,7 @@
             </a>
             <form method="post" action="{% url 'logout' %}" class="dropdown-form">
               {% csrf_token %}
-              <button type="submit" class="dropdown-item logout-btn">
+              <button type="submit" class="logout-btn">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"></path>
                 </svg>
@@ -93,13 +435,48 @@
   </nav>
 
   <div class="container">
-    
+    {% block content %}
+    {% endblock %}
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   
-    <script src="{% static 'java_script/header.js' %}"></script>
+  <script>
+    // Dropdown toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const avatarContainer = document.getElementById('avatarContainer');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      
+      if (avatarContainer && dropdownMenu) {
+        avatarContainer.addEventListener('click', function(e) {
+          e.stopPropagation();
+          avatarContainer.classList.toggle('active');
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!avatarContainer.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            avatarContainer.classList.remove('active');
+            dropdownMenu.classList.remove('show');
+          }
+        });
+      }
+
+      // Navbar scroll effect
+      window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+          navbar.style.background = 'rgba(255, 255, 255, 0.25)';
+          navbar.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.15)';
+        } else {
+          navbar.style.background = 'rgba(255, 255, 255, 0.15)';
+          navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

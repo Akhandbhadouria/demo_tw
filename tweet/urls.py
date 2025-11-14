@@ -27,6 +27,8 @@ urlpatterns = [
     path("<int:tweet_id>/delete/", views.tweet_delete, name="tweet_delete"),
     path("register/", views.register, name="register"),
     path("logout/", views.logout, name="logout"),
+    path("<int:tweet_id>/like/", views.like_tweet, name="like_tweet"),  # NEW
+
     path('create-profile/', views.create_profile, name='create_profile'),
     path('profile/<str:username>/follow/', views.follow_user, name='follow_user'),
     path('profile/<str:username>/followers/', views.followers_list, name='followers_list'),

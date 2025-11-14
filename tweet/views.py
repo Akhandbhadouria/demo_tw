@@ -195,18 +195,43 @@ def create_profile(request):
         return render(request, 'create_profile.html', {'form': form})
     
 
-
-    
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from .models import UserProfile
 @login_required
 def profile_detail(request, username):
     profile = get_object_or_404(UserProfile, user__username=username)
-    return render(request, 'profile_detail.html', {'profile': profile})
+    profile_user = profile.user
+    following_profiles = UserProfile.objects.filter(followers=profile_user)
+    following_users = [p.user for p in following_profiles]
+    
+    # Get all tweets from the profile user
+    all_tweets = Tweet.objects.filter(user=profile_user).order_by('-updated_at')
+    tweets_count = all_tweets.count()
+    
+    # Only show first 4 tweets initially
+    tweets_display = all_tweets[:4]
 
+    return render(request, 'profile_detail.html', {
+        'profile': profile,
+        'following': following_users,
+        'profile_user': profile_user,
+        'tweets': tweets_display,
+        'all_tweets_count': tweets_count,
+    })
 
-
-
+@login_required
+def like_tweet(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    
+    if tweet.user_has_liked(request.user):
+        tweet.likes.remove(request.user)
+    else:
+        tweet.likes.add(request.user)
+    
+    # Return to the same page
+    next_url = request.META.get('HTTP_REFERER', '/')
+    return redirect(next_url)
 
 
 

@@ -312,6 +312,72 @@ Tweets - TweetShare
         font-size: 1.1rem;
         color: #666;
     }
+    /* Like Button Styles */
+.tweet-actions {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    z-index: 5;
+}
+
+.like-form {
+    margin: 0;
+}
+
+.like-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .like-btn {
+    background: rgba(26, 26, 46, 0.9);
+}
+
+.like-btn:hover {
+    transform: scale(1.05);
+}
+
+.like-btn.liked {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.like-btn.liked .like-icon {
+    transform: scale(1.2);
+}
+
+.like-icon {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.like-count {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+[data-theme="dark"] .like-count {
+    color: #d4d4d4;
+}
+
+.like-btn.liked .like-count {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+/* Ensure tweet card has relative positioning for absolute positioning of like button */
+.tweet-card {
+    position: relative;
+}
 </style>
 
 <div class="tweet-container">
@@ -334,7 +400,15 @@ Tweets - TweetShare
                         <p>{{ tweet.text|truncatewords:20 }}</p>
                     </div>
                 {% endif %}
-                
+                 <div class="tweet-actions">
+            <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
+                {% csrf_token %}
+                <button type="submit" class="like-btn">
+                    <span class="like-icon">❤️</span>
+                    <span class="like-count">{{ tweet.total_likes }}</span>
+                </button>
+            </form>
+        </div>
             </div>
             {% endfor %}
         </div>

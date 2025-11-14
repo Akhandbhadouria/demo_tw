@@ -9,36 +9,542 @@
     <title>TweetShare - Share Your Thoughts</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
+<style>
+    /* -------------------- Base Styles -------------------- */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
+    color: #1f2937;
+    overflow-x: hidden;
+}
+
+/* -------------------- Stars Background -------------------- */
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(#ffffff 1px, transparent 1px);
+    background-size: 2px 2px;
+    z-index: -1;
+    animation: twinkle 5s linear infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* -------------------- Main Container -------------------- */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+/* -------------------- Hero Card -------------------- */
+.hero-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 2rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.logo-emoji {
+    font-size: 2rem;
+}
+
+.logo-text {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #6366f1, #9333ea, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    line-height: 1.2;
+    background: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    color: #4b5563;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #4f46e5, #9333ea);
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #4338ca, #7e22ce);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.btn-secondary {
+    background: white;
+    border: 2px solid #d1d5db;
+    color: #4b5563;
+}
+
+.btn-secondary:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+}
+
+/* -------------------- Features Grid -------------------- */
+.features-grid {
+    color: #1f2937;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media(min-width: 768px){
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.feature-card {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.icon-purple { color: #9333ea; }
+.icon-blue { color: #3b82f6; }
+.icon-orange { color: #f97316; }
+
+.feature-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.feature-description {
+    font-size: 1rem;
+    color: #4b5563;
+}
+
+/* -------------------- Tweet Preview Section -------------------- */
+.content-section {
+    text-align: center;
+}
+
+.tweet-preview {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.preview-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.mock-tweet {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mock-user {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.mock-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, #4f46e5, #9333ea);
+}
+
+.mock-name {
+    font-weight: 700;
+}
+
+.mock-handle {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.mock-content {
+    font-size: 1rem;
+    color: #374151;
+}
+
+.mock-image {
+    height: 150px;
+    background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+/* -------------------- Responsive -------------------- */
+@media(max-width: 768px){
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+}
+.max-container {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media(min-width: 1024px) {
+    .max-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* -------------------- Background animations -------------------- */
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+  }
+
+  .circle1 {
+    top: -200px;
+    right: -100px;
+    width: 384px;
+    height: 384px;
+    background: linear-gradient(to bottom right, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+    animation: rotateScale1 20s linear infinite;
+  }
+
+  .circle2 {
+    bottom: -100px;
+    left: -100px;
+    width: 384px;
+    height: 384px;
+    background: linear-gradient(to top right, rgba(236,72,153,0.2), rgba(139,92,246,0.2));
+    animation: rotateScale2 15s linear infinite;
+  }
+
+  @keyframes rotateScale1 {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.2) rotate(90deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes rotateScale2 {
+    0% { transform: scale(1.2) rotate(90deg); }
+    50% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.2) rotate(90deg); }
+  }
+
+  /* -------------------- Left content -------------------- */
+  .hero-left h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .gradient-text1 {
+    background: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text2 {
+    background: linear-gradient(to right, #9333ea, #ec4899, #4f46e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-left p {
+    font-size: 1.25rem;
+    color: #4b5563;
+    max-width: 480px;
+    margin-bottom: 2rem;
+  }
+
+  .button-group button {
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: 1rem;
+    border: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(to right, #4f46e5, #9333ea);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(to right, #4338ca, #7e22ce);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+
+  .btn-outline {
+    background: white;
+    color: #4b5563;
+    border: 2px solid #d1d5db;
+  }
+  .btn-outline:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+  }
+
+  .small-stats {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+  }
+
+  .avatars {
+    display: flex;
+    margin-right: 0.5rem;
+  }
+
+  .avatars div {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -0.5rem;
+  }
+
+  .avatar1 { background: linear-gradient(to bottom right, #6366f1, #9333ea); }
+  .avatar2 { background: linear-gradient(to bottom right, #9333ea, #ec4899); }
+  .avatar3 { background: linear-gradient(to bottom right, #ec4899, #6366f1); }
+
+  /* -------------------- Right card -------------------- */
+  .hero-right {
+    position: relative;
+  }
+
+  .main-card {
+    background: white;
+    border-radius: 2rem;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-top div:first-child {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, #6366f1, #9333ea);
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff, #ffe4f0);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .card-floating1 {
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    animation: float2 3s ease-in-out infinite;
+  }
+
+  .card-floating2 {
+    position: absolute;
+    bottom: -2rem;
+    left: -2rem;
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    animation: float3 3.5s ease-in-out infinite;
+  }
+
+  @keyframes float2 {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(15px) rotate(5deg); }
+  }
+
+  @keyframes float3 {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
+  }
+</style>
 <body>
+    
     <!-- Animated Stars Background -->
     <div class="stars" id="stars"></div>
 
     <div class="main-container">
         <!-- Hero Section -->
-        <div class="hero-card">
-            <div class="logo-section">
-                <div class="logo-emoji">🐦</div>
-                <div class="logo-text">TweetShare</div>
-            </div>
+       
+           <!-- Animated background circles -->
+  <div class="bg-circle circle1"></div>
+  <div class="bg-circle circle2"></div>
 
-            <h1 class="hero-title">Your Voice. Your Story. Your Moment.</h1>
-            
-            <p class="hero-description">
-                Share your thoughts with the world. Connect with like-minded people. Create your digital presence.
-            </p>
+  <div class="max-container">
 
-            <div class="cta-buttons">
-                {% if user.is_authenticated %}
-                <a href="{%url 'tweet_list'%}"> <button class="btn btn-primary">
-                    ✨ Get Started
-                </button></a>
-               {%else%}
-               <a href="{%url 'register'%}"> <button class="btn btn-secondary">
-                    Sign In
-                </button></a>
-               
-                {%endif%}
-            </div>
+    <!-- Left content -->
+    <div class="hero-left">
+      <div class="badge">
+        <span>✨ Where connections happen</span>
+      </div>
+
+      <h1>
+        <span class="gradient-text1">Connect.</span><br>
+        <span class="gradient-text2">Share.</span><br>
+        <span>Inspire.</span>
+      </h1>
+
+      <p>
+        Join millions discovering meaningful connections, sharing moments that matter, and building communities that inspire.
+      </p>
+
+      <div class="button-group">
+        <a href="{%url 'tweet_list'%}"> <button class="btn-primary">Get Started Free</button></a>
+       
+        <button class="btn-outline">Watch Demo</button>
+      </div>
+
+      <div class="small-stats">
+        <div class="avatars">
+          <div class="avatar1"></div>
+          <div class="avatar2"></div>
+          <div class="avatar3"></div>
+        </div>
+        <span>10M+ users</span>
+        <span>| ✨ Trusted worldwide</span>
+      </div>
+    </div>
+
+    <!-- Right card -->
+    <div class="hero-right">
+      <div class="main-card">
+        <div class="card-top">
+          <div></div>
+          <div>
+            <div style="width: 8rem; height: 0.5rem; background: #e5e7eb; margin-bottom: 0.5rem;"></div>
+            <div style="width: 6rem; height: 0.25rem; background: #f3f4f6;"></div>
+          </div>
+        </div>
+
+        <div class="card-image">
+          ✨
+        </div>
+
+        <div style="height:0.5rem; width:100%; background:#e5e7eb; margin-bottom:0.25rem;"></div>
+        <div style="height:0.5rem; width:80%; background:#f3f4f6;"></div>
+      </div>
+
+      <div class="card-floating1"></div>
+      <div class="card-floating2"></div>
+    </div>
+
+  </div>
+           
         </div>
 
         <!-- Features Section -->
