@@ -343,3 +343,27 @@ def my_feed(request):
     return render(request, 'my_feed.html', {'tweets': tweets})
 
 
+def search_user(request):
+    query = request.GET.get("q")
+    users = []
+
+    if query:
+        users = User.objects.filter(username__icontains=query)
+
+    return render(request, "search.html", {"users": users, "query": query})
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.models import User
+
+@login_required
+def delete_account(request):
+    if request.method == "POST":
+        user = request.user
+        auth_logout(request)   # log out first
+        user.delete()          # delete the user account
+        return redirect("home")  # redirect after deleting
+    
+    return render(request, "delete_account_confirm.html")

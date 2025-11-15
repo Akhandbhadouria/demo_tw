@@ -15,7 +15,405 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<link rel="stylesheet" href="{% static 'css/tweet_form.css' %}">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, .05) 2px, rgba(255, 255, 255, .05) 4px);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    [data-theme="dark"] body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+
+    [data-theme="dark"] body::before {
+        background-image:
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .3) 2px, rgba(0, 0, 0, .3) 4px);
+    }
+
+    /* Stars Background */
+    .stars {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: radial-gradient(#ffffff 1px, transparent 1px);
+        background-size: 2px 2px;
+        z-index: -1;
+        animation: twinkle 5s linear infinite;
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+    }
+
+    /* Form Container */
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    [data-theme="dark"] .page-header {
+        background: rgba(26, 26, 46, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 10px;
+    }
+
+    [data-theme="dark"] .page-title {
+        color: #ffffff;
+    }
+
+    .page-description {
+        color: #718096;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    [data-theme="dark"] .page-description {
+        color: #a8a8a8;
+    }
+
+    /* Tweet Form */
+    .tweet-form {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    [data-theme="dark"] .tweet-form {
+        background: rgba(26, 26, 46, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Form Groups */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    [data-theme="dark"] .form-label {
+        color: #ffffff;
+    }
+
+    /* Textarea */
+    .form-textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-family: inherit;
+        resize: vertical;
+        background: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+        line-height: 1.6;
+    }
+
+    .form-textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    [data-theme="dark"] .form-textarea {
+        background: rgba(40, 40, 60, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+    }
+
+    [data-theme="dark"] .form-textarea:focus {
+        background: rgba(50, 50, 70, 0.95);
+        border-color: #667eea;
+    }
+
+    /* File Input */
+    .form-file {
+        width: 100%;
+        padding: 15px;
+        border: 2px dashed #cbd5e0;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .form-file:hover {
+        border-color: #667eea;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-file:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    [data-theme="dark"] .form-file {
+        background: rgba(40, 40, 60, 0.8);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+    }
+
+    [data-theme="dark"] .form-file:hover {
+        background: rgba(50, 50, 70, 0.9);
+        border-color: #667eea;
+    }
+
+    /* Character Counter */
+    .char-counter {
+        text-align: right;
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: #718096;
+        font-weight: 500;
+    }
+
+    [data-theme="dark"] .char-counter {
+        color: #a8a8a8;
+    }
+
+    .char-counter.warning {
+        color: #ed8936;
+    }
+
+    .char-counter.danger {
+        color: #f56565;
+        font-weight: 700;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.9);
+        color: #4a5568;
+        border: 2px solid #e2e8f0;
+        padding: 13px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .btn-back:hover {
+        background: white;
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: #4a5568;
+    }
+
+    [data-theme="dark"] .btn-back {
+        background: rgba(40, 40, 60, 0.9);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .btn-back:hover {
+        background: rgba(50, 50, 70, 0.9);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 20px 15px;
+        }
+
+        .page-header {
+            padding: 25px 20px;
+        }
+
+        .page-title {
+            font-size: 1.7rem;
+        }
+
+        .tweet-form {
+            padding: 25px 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-submit, .btn-back {
+            width: 100%;
+            min-width: auto;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 15px 10px;
+        }
+
+        .page-header {
+            padding: 20px 15px;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .page-description {
+            font-size: 1rem;
+        }
+
+        .tweet-form {
+            padding: 20px 15px;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            padding: 15px;
+        }
+
+        .form-file {
+            padding: 12px;
+        }
+    }
+
+    /* Animation */
+    .form-container {
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Preview Section (Optional) */
+    .preview-section {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    [data-theme="dark"] .preview-section {
+        background: rgba(40, 40, 60, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-title {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    [data-theme="dark"] .preview-title {
+        color: #ffffff;
+    }
+
+    .preview-content {
+        color: #718096;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    [data-theme="dark"] .preview-content {
+        color: #a8a8a8;
+    }
+</style>
 
 <body>
     <!-- Animated Stars Background -->
@@ -86,7 +484,33 @@
         </form>
     </div>
 
-    <script src="{% static 'java_script/tweet_form.js' %}"></script>
+    <script>
+        // Character counter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('id_text');
+            const charCounter = document.getElementById('charCounter');
+            
+            function updateCharCounter() {
+                const length = textarea.value.length;
+                charCounter.textContent = `${length}/280`;
+                
+                // Add warning classes based on character count
+                charCounter.classList.remove('warning', 'danger');
+                if (length > 250) {
+                    charCounter.classList.add('warning');
+                }
+                if (length > 270) {
+                    charCounter.classList.add('danger');
+                }
+            }
+            
+            // Initial update
+            updateCharCounter();
+            
+            // Update on input
+            textarea.addEventListener('input', updateCharCounter);
+        });
+    </script>
 </body>
 </html>
 {% endblock %}

@@ -10,13 +10,12 @@
     }
 
     body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        background: #f0f0f0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
         min-height: 100vh;
-    
+        position: relative;
+        overflow-x: hidden;
     }
-
-   
 
     .page-title {
         font-size: 2.5rem;
@@ -61,6 +60,7 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
         cursor: pointer;
+        position: relative;
     }
 
     .tweet-card:hover {
@@ -101,7 +101,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.85);
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
         z-index: 1000;
         justify-content: center;
         align-items: center;
@@ -119,9 +120,9 @@
     }
 
     .modal-content {
-        background: white;
-        border-radius: 20px;
-        max-width: 700px;
+        background: transparent;
+        border-radius: 25px;
+        max-width: 650px;
         width: 100%;
         max-height: 90vh;
         overflow-y: auto;
@@ -142,13 +143,14 @@
 
     .modal-close {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(0, 0, 0, 0.7);
+        top: -50px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
         color: white;
-        border: none;
-        width: 40px;
-        height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         cursor: pointer;
         font-size: 24px;
@@ -157,77 +159,135 @@
         justify-content: center;
         z-index: 10;
         line-height: 1;
+        transition: all 0.3s ease;
     }
 
     .modal-close:hover {
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(255, 255, 255, 0.35);
+        transform: scale(1.1) rotate(90deg);
     }
 
-    .modal-image {
-        width: 100%;
-        max-height: 500px;
-        object-fit: cover;
-    }
-
-    .modal-details {
-        padding: 24px;
-    }
-
-    .modal-user {
+    /* Glassmorphic Tweet Modal */
+    .mock-tweet {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 35px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
         display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    [data-theme="dark"] .mock-tweet {
+        background: rgba(26, 26, 46, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mock-user {
+        display: flex;
+        gap: 15px;
         align-items: center;
-        gap: 12px;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 2px solid #f0f0f0;
     }
 
-    .modal-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .modal-avatar-placeholder {
-        width: 50px;
-        height: 50px;
+    .mock-avatar {
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-weight: 600;
-        font-size: 1.4rem;
+        font-weight: bold;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        flex-shrink: 0;
     }
 
-    .modal-username {
-        text-decoration: none;
-        color: #1e88e5;
-        font-weight: 600;
+    .mock-avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .mock-user-info {
+        flex: 1;
+    }
+
+    .mock-name {
+        font-weight: 700;
+        color: #2d3748;
         font-size: 1.2rem;
+        margin-bottom: 4px;
     }
 
-    .modal-username:hover {
-        color: #1565c0;
-        text-decoration: underline;
+    [data-theme="dark"] .mock-name {
+        color: #ffffff;
     }
 
-    .modal-text {
-        color: #1a1a1a;
+    .mock-handle {
+        font-size: 0.95rem;
+        color: #718096;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    [data-theme="dark"] .mock-handle {
+        color: #a8a8a8;
+    }
+
+    .mock-content {
+        font-size: 1.1rem;
+        color: #4a5568;
         line-height: 1.8;
-        font-size: 1.05rem;
-        margin-bottom: 20px;
         word-wrap: break-word;
         white-space: pre-wrap;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    .modal-timestamp {
-        color: #888;
-        font-size: 0.95rem;
-        padding-top: 16px;
-        border-top: 2px solid #f0f0f0;
+    [data-theme="dark"] .mock-content {
+        color: #d4d4d4;
+        background: rgba(40, 40, 60, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mock-image {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        max-height: 500px;
+    }
+
+    .mock-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .mock-timestamp {
+        font-size: 0.9rem;
+        color: #a0aec0;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    [data-theme="dark"] .mock-timestamp {
+        color: #a8a8a8;
+        background: rgba(40, 40, 60, 0.4);
     }
 
     /* Empty State */
@@ -253,77 +313,130 @@
         font-size: 1.1rem;
         color: #666;
     }
+
     /* Like Button Styles */
-.tweet-actions {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    z-index: 5;
-}
+    .tweet-actions {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        z-index: 5;
+    }
 
-.like-form {
-    margin: 0;
-}
+    .like-form {
+        margin: 0;
+    }
 
-.like-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
+    .like-btn {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 20px;
+        padding: 8px 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .like-btn {
+        background: rgba(26, 26, 46, 0.9);
+    }
+
+    .like-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .like-btn.liked {
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    .like-btn.liked .like-icon {
+        transform: scale(1.2);
+    }
+
+    .like-icon {
+        font-size: 1.1rem;
+        transition: transform 0.2s ease;
+    }
+
+    .like-count {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #4a5568;
+    }
+
+    [data-theme="dark"] .like-count {
+        color: #d4d4d4;
+    }
+
+    .like-btn.liked .like-count {
+        color: #ef4444;
+        font-weight: 700;
+    }
+
+    /* Custom Scrollbar */
+    .modal-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+    .mock-image {
     border-radius: 20px;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="dark"] .like-btn {
-    background: rgba(26, 26, 46, 0.9);
-}
-
-.like-btn:hover {
-    transform: scale(1.05);
-}
-
-.like-btn.liked {
-    background: rgba(239, 68, 68, 0.2);
-}
-
-.like-btn.liked .like-icon {
-    transform: scale(1.2);
-}
-
-.like-icon {
-    font-size: 1.1rem;
-    transition: transform 0.2s ease;
-}
-
-.like-count {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #4a5568;
-}
-
-[data-theme="dark"] .like-count {
-    color: #d4d4d4;
-}
-
-.like-btn.liked .like-count {
-    color: #ef4444;
-    font-weight: 700;
-}
-
-/* Ensure tweet card has relative positioning for absolute positioning of like button */
-.tweet-card {
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-height: none; /* Remove max-height restriction */
     position: relative;
+}
+
+.mock-image img {
+    width: 100%;
+    height: auto; /* Change to auto to maintain aspect ratio */
+    max-height: 70vh; /* Limit maximum height to viewport */
+    object-fit: contain; /* Show entire image without cropping */
+    display: block;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.mock-image img:hover {
+    transform: scale(1.02);
+}
+
+.mock-image-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.mock-image:hover .mock-image-overlay {
+    opacity: 1;
 }
 </style>
 
 <div class="container">
-   
-
     {% if tweets %}
         <div class="masonry-grid">
             {% for tweet in tweets %}
@@ -335,15 +448,15 @@
                         <p>{{ tweet.text|truncatewords:20 }}</p>
                     </div>
                 {% endif %}
-                 <div class="tweet-actions">
-            <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
-                {% csrf_token %}
-                <button type="submit" class="like-btn">
-                    <span class="like-icon">❤️</span>
-                    <span class="like-count">{{ tweet.total_likes }}</span>
-                </button>
-            </form>
-        </div>
+                <div class="tweet-actions">
+                    <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
+                        {% csrf_token %}
+                        <button type="submit" class="like-btn">
+                            <span class="like-icon">❤️</span>
+                            <span class="like-count">{{ tweet.total_likes }}</span>
+                        </button>
+                    </form>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -370,7 +483,7 @@
         "{{ tweet.id }}": {
             hasPhoto: {% if tweet.photo %}true{% else %}false{% endif %},
             photoUrl: "{{ tweet.photo.url|default:'' }}",
-            text: "{{ tweet.text|escapejs }}",
+            text: `{{ tweet.text|escapejs }}`,
             username: "{{ tweet.user.username|escapejs }}",
             profileUrl: "{% url 'profile_detail' tweet.user.username %}",
             hasAvatar: {% if tweet.user.userprofile.profile_photo %}true{% else %}false{% endif %},
@@ -391,35 +504,60 @@
         });
     });
 
-    function openModal(tweetId) {
-        const tweet = tweetData[tweetId];
-        if (!tweet) return;
+   function openModal(tweetId) {
+    const tweet = tweetData[tweetId];
+    if (!tweet) return;
 
-        let html = '';
+    let html = '<div class="mock-tweet">';
 
-        if (tweet.hasPhoto && tweet.photoUrl) {
-            html += `<img src="${tweet.photoUrl}" class="modal-image" alt="Tweet Photo">`;
-        }
-
-        html += `<div class="modal-details">`;
-        html += `<div class="modal-user">`;
-        
-        if (tweet.hasAvatar && tweet.avatarUrl) {
-            html += `<img src="${tweet.avatarUrl}" class="modal-avatar" alt="${tweet.username}">`;
-        } else {
-            html += `<div class="modal-avatar-placeholder">${tweet.username.charAt(0).toUpperCase()}</div>`;
-        }
-        
-        html += `<a href="${tweet.profileUrl}" class="modal-username">${tweet.username}</a>`;
-        html += `</div>`;
-        html += `<div class="modal-text">${tweet.text}</div>`;
-        html += `<div class="modal-timestamp">${tweet.timestamp}</div>`;
-        html += `</div>`;
-
-        modalBody.innerHTML = html;
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
+    // User info
+    html += '<div class="mock-user">';
+    
+    // Avatar
+    if (tweet.hasAvatar && tweet.avatarUrl) {
+        html += `<div class="mock-avatar"><img src="${tweet.avatarUrl}" class="mock-avatar-img" alt="${tweet.username}"></div>`;
+    } else {
+        html += `<div class="mock-avatar">${tweet.username.charAt(0).toUpperCase()}</div>`;
     }
+
+    html += '<div class="mock-user-info">';
+    html += `<div class="mock-name">${tweet.username}</div>`;
+    html += `<div class="mock-handle">@${tweet.username.toLowerCase()}</div>`;
+    html += '</div>';
+    html += '</div>'; // close mock-user
+
+    // Tweet content
+    html += `<div class="mock-content">${tweet.text}</div>`;
+
+    // Tweet image - now with click to open in new tab functionality
+    if (tweet.hasPhoto && tweet.photoUrl) {
+        html += `<div class="mock-image">`;
+        html += `<div class="mock-image-overlay">Click to open in new tab</div>`;
+        html += `<img src="${tweet.photoUrl}" alt="Tweet Photo" onclick="openImageInNewTab('${tweet.photoUrl}')">`;
+        html += `</div>`;
+    }
+
+    // Timestamp
+    html += `<div class="mock-timestamp">🕒 ${tweet.timestamp}</div>`;
+
+    html += '</div>'; // close mock-tweet
+
+    modalBody.innerHTML = html;
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function openImageInNewTab(imageUrl) {
+    // Open image in new tab
+    window.open(imageUrl, '_blank');
+}
+
+// Add this new event listener to prevent modal from closing when clicking on image
+modalBody.addEventListener('click', function(e) {
+    if (e.target.classList.contains('mock-image') || e.target.closest('.mock-image')) {
+        e.stopPropagation();
+    }
+});
 
     function closeModal() {
         modal.classList.remove('show');
@@ -439,6 +577,10 @@
             closeModal();
         }
     });
+    function openImageInNewTab(imageUrl) {
+    // Open image in new tab
+    window.open(imageUrl, '_blank');
+}
 </script>
 
 {% endblock %}
