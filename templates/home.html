@@ -18,6 +18,12 @@
         background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
         color: #1f2937;
         overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    /* -------------------- Perspective for 3D -------------------- */
+    html {
+        perspective: 1000px;
     }
 
     /* -------------------- Stars Background -------------------- */
@@ -48,6 +54,27 @@
         gap: 3rem;
     }
 
+    /* -------------------- Scroll Sections with 3D Effects -------------------- */
+    .scroll-section {
+        transform-origin: center;
+        transition: all 0.3s ease-out;
+    }
+
+    .scroll-section.parallax-up {
+        transform: translateY(-50px) rotateX(5deg);
+        opacity: 0.8;
+    }
+
+    .scroll-section.parallax-down {
+        transform: translateY(50px) rotateX(-5deg);
+        opacity: 0.8;
+    }
+
+    .scroll-section.in-view {
+        transform: translateY(0) rotateX(0deg);
+        opacity: 1;
+    }
+
     /* -------------------- Hero Section -------------------- */
     .max-container {
         max-width: 1200px;
@@ -69,6 +96,18 @@
     .hero-left {
         text-align: center;
         padding: 1rem;
+        animation: slideInLeft 1s ease-out;
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px) rotateY(-10deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) rotateY(0);
+        }
     }
 
     @media(min-width: 1024px) {
@@ -86,6 +125,18 @@
         border-radius: 2rem;
         font-size: 0.875rem;
         margin-bottom: 1.5rem;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .hero-left h1 {
@@ -93,6 +144,18 @@
         font-weight: bold;
         line-height: 1.2;
         margin-bottom: 1rem;
+        animation: slideInUp 1s ease-out 0.2s both;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px) rotateX(-10deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
     }
 
     @media(min-width: 768px) {
@@ -112,6 +175,7 @@
         color: #4b5563;
         margin-bottom: 2rem;
         line-height: 1.6;
+        animation: slideInUp 1s ease-out 0.4s both;
     }
 
     .button-group {
@@ -120,6 +184,7 @@
         justify-content: center;
         flex-wrap: wrap;
         margin-bottom: 2rem;
+        animation: slideInUp 1s ease-out 0.6s both;
     }
 
     @media(min-width: 1024px) {
@@ -139,6 +204,7 @@
         text-decoration: none;
         display: inline-block;
         text-align: center;
+        transform: perspective(1000px);
     }
 
     .btn-primary {
@@ -149,6 +215,7 @@
     .btn-primary:hover {
         background: linear-gradient(to right, #4338ca, #7e22ce);
         box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        transform: translateY(-3px) rotateX(2deg) perspective(1000px);
     }
 
     .btn-outline {
@@ -160,6 +227,7 @@
     .btn-outline:hover {
         border-color: #4f46e5;
         color: #4f46e5;
+        transform: translateY(-3px) perspective(1000px);
     }
 
     .small-stats {
@@ -170,6 +238,7 @@
         font-size: 0.875rem;
         color: #4b5563;
         flex-wrap: wrap;
+        animation: slideInUp 1s ease-out 0.8s both;
     }
 
     @media(min-width: 1024px) {
@@ -188,6 +257,11 @@
         border-radius: 50%;
         border: 2px solid white;
         margin-left: -0.5rem;
+        transition: transform 0.3s;
+    }
+
+    .avatars div:hover {
+        transform: scale(1.1) translateY(-5px);
     }
 
     .avatar1 { background: linear-gradient(to bottom right, #6366f1, #9333ea); }
@@ -198,6 +272,18 @@
     .hero-right {
         position: relative;
         display: none;
+        animation: slideInRight 1s ease-out;
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px) rotateY(10deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) rotateY(0);
+        }
     }
 
     @media(min-width: 1024px) {
@@ -212,6 +298,12 @@
         padding: 1.5rem;
         box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         animation: float 4s ease-in-out infinite;
+        transform-style: preserve-3d;
+        transition: transform 0.3s;
+    }
+
+    .main-card:hover {
+        transform: rotateY(3deg) rotateX(2deg) scale(1.02);
     }
 
     @keyframes float {
@@ -244,7 +336,7 @@
         margin-bottom: 1rem;
     }
 
-    /* -------------------- Features Grid (Minimized) -------------------- */
+    /* -------------------- Features Grid (with 3D Scroll) -------------------- */
     .features-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -258,7 +350,7 @@
         border-radius: 1.5rem;
         padding: 1.5rem;
         text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         box-shadow: 0 10px 25px rgba(0,0,0,0.08);
         text-decoration: none;
         color: inherit;
@@ -266,16 +358,29 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        transform-style: preserve-3d;
     }
 
     .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        transform: translateY(-10px) rotateX(5deg) rotateZ(2deg) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
 
     .feature-icon {
         font-size: 1.5rem;
         margin-bottom: 0.75rem;
+        transition: transform 0.3s;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.3) rotateY(360deg);
+        animation: spinIcon 0.6s ease-out;
+    }
+
+    @keyframes spinIcon {
+        0% { transform: scale(1) rotateY(0deg); }
+        50% { transform: scale(1.2) rotateY(180deg); }
+        100% { transform: scale(1.3) rotateY(360deg); }
     }
 
     .icon-purple { color: #9333ea; }
@@ -309,6 +414,7 @@
         font-size: 1.25rem;
         font-weight: 700;
         margin-bottom: 1.5rem;
+        animation: slideInUp 1s ease-out;
     }
 
     .mock-tweet {
@@ -320,6 +426,13 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        transform-style: preserve-3d;
+        transition: all 0.4s;
+    }
+
+    .mock-tweet:hover {
+        transform: rotateX(2deg) rotateY(-2deg) scale(1.03);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.12);
     }
 
     .mock-user {
@@ -333,6 +446,11 @@
         height: 2.5rem;
         border-radius: 50%;
         background: linear-gradient(to bottom right, #4f46e5, #9333ea);
+        transition: transform 0.3s;
+    }
+
+    .mock-tweet:hover .mock-avatar {
+        transform: scale(1.1) rotateZ(10deg);
     }
 
     .mock-name {
@@ -361,6 +479,11 @@
         font-weight: 600;
         color: #4f46e5;
         font-size: 0.875rem;
+        transition: all 0.3s;
+    }
+
+    .mock-tweet:hover .mock-image {
+        transform: scale(1.05) perspective(1000px) rotateX(-3deg);
     }
 
     /* -------------------- Background animations -------------------- */
@@ -444,7 +567,7 @@
 
     <div class="main-container">
         <!-- Hero Section -->
-        <div class="max-container">
+        <div class="max-container scroll-section">
             <!-- Animated background circles -->
             <div class="bg-circle circle1"></div>
             <div class="bg-circle circle2"></div>
@@ -504,7 +627,7 @@
         <br><br><br><br>
         <!-- Features Section (Minimized) -->
         {% if user.is_authenticated %}
-        <div class="features-grid">
+        <div class="features-grid scroll-section">
             <a href="{% url 'tweet_list' %}">
                 <div class="feature-card">
                     <div class="feature-icon icon-purple">💬</div>
@@ -532,7 +655,7 @@
         {% endif %}
 
         <!-- Tweet Preview Section -->
-        <div class="content-section">
+        <div class="content-section scroll-section">
             <div class="tweet-preview">
                 <div class="preview-title">See How Your Tweets Look</div>
                 <div class="mock-tweet">
@@ -555,6 +678,57 @@
     </div>
 
     {%include "contact.html"%}
+
+    <script>
+        // 3D Scroll Effect Handler
+        const scrollSections = document.querySelectorAll('.scroll-section');
+        
+        function handleScroll() {
+            scrollSections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const sectionCenter = rect.top + rect.height / 2;
+                const viewportCenter = window.innerHeight / 2;
+                const distance = sectionCenter - viewportCenter;
+                const scrollProgress = distance / viewportCenter;
+                
+                section.classList.remove('parallax-up', 'parallax-down', 'in-view');
+                
+                if (Math.abs(distance) < 150) {
+                    section.classList.add('in-view');
+                } else if (distance > 150) {
+                    section.classList.add('parallax-down');
+                    section.style.transform = `translateY(${Math.min(distance * 0.3, 100)}px) rotateX(-${Math.min(Math.abs(scrollProgress) * 5, 8)}deg)`;
+                } else {
+                    section.classList.add('parallax-up');
+                    section.style.transform = `translateY(${Math.max(distance * 0.3, -100)}px) rotateX(${Math.min(Math.abs(scrollProgress) * 5, 8)}deg)`;
+                }
+            });
+        }
+
+        // Add scroll event listener with throttling
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(handleScroll);
+                ticking = true;
+                setTimeout(() => { ticking = false; }, 10);
+            }
+        });
+
+        // Initial call
+        handleScroll();
+
+        // Smooth scroll for buttons
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 
     <script src="{%static 'java_script/home.js'%}"></script>
 </body>
