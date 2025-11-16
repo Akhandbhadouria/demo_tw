@@ -4,6 +4,9 @@ from .forms import TweetForm,UserRegrestrationForm
 from django.shortcuts import get_object_or_404,redirect # Fetches an object from the database or returns a 404 error if it doesn’t exist.
 from django.contrib.auth.decorators import login_required #login_required is used to restrict access to a view so that only authenticated (logged-in) users can access it.
 from django.contrib.auth import login
+from django.http import Http404
+from django.contrib.auth import login
+from django.contrib.auth.backends import ModelBackend
 
 def logout(request):
     return render(request,"logged_out.html")
@@ -75,7 +78,7 @@ def register(request):
             user=form.save(commit=False)
             user.set_password(form.cleaned_data['password1']) #set_password() ek built-in method hai jo Django ke User model me hota hai.Iska kaam hota hai: Password ko hash (encrypt) karna.
             user.save()
-            login(request,user)# imported from the liberari and autometically login the user
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')# imported from the liberari and autometically login the user
             return redirect('create_profile')
     else:
         form=UserRegrestrationForm()
@@ -194,13 +197,22 @@ def create_profile(request):
         
         return render(request, 'create_profile.html', {'form': form})
     
-
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.shortcuts import render, get_object_or_404
 from .models import UserProfile
+
 @login_required
 def profile_detail(request, username):
-    profile = get_object_or_404(UserProfile, user__username=username)
+    try:
+        profile = UserProfile.objects.get(user__username=username)
+    except UserProfile.DoesNotExist:
+        # If profile doesn't exist and it's the current user, redirect to create profile
+        if request.user.username == username:
+            return redirect('create_profile')
+        else:
+            # If it's another user's profile that doesn't exist, show 404
+            raise Http404("Profile does not exist")
+    
     profile_user = profile.user
     following_profiles = UserProfile.objects.filter(followers=profile_user)
     following_users = [p.user for p in following_profiles]

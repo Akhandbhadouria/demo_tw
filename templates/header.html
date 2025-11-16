@@ -365,8 +365,8 @@
     }
 
     .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg ... %3e");
-}
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
 
     /* Container */
     .container {
@@ -401,6 +401,33 @@
         justify-content: center;
       }
     }
+    /* Add this to your layout.css */
+.profile-incomplete-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.nav-item {
+    position: relative;
+}
   </style>
 </head>
 
@@ -428,6 +455,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'profile_detail' username=user.username %}">
               <i class="fas fa-user"></i> Profile
+              {% if not user.userprofile %}
+        <span class="profile-incomplete-badge" title="Complete your profile">!</span>
+        {% endif %}
             </a>
           </li>
           <li class="nav-item">

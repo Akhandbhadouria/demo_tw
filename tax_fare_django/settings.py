@@ -39,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tweet',
     'widget_tweaks',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
    
 ]
 
@@ -50,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
 ROOT_URLCONF = 'tax_fare_django.urls'
@@ -135,9 +143,16 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 LOGIN_URL= '/accounts/login'
 
-LOGIN_REDIRECT_URL='/tweet/'
-LOGOUT_REDIRECT_URL='/tweet/'
 
+
+# LOGIN_REDIRECT_URL='/tweet/'
+# LOGOUT_REDIRECT_URL='/tweet/'
+
+ACCOUNT_EMAIL_REQUIRED = True            # require email
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # force email verification
+ACCOUNT_USERNAME_REQUIRED = True          # force username
+LOGIN_REDIRECT_URL = '/'                  # redirect after login
+LOGOUT_REDIRECT_URL = '/'
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -145,3 +160,31 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
 ]
 
+
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # manual login
+    'allauth.account.auth_backends.AuthenticationBackend',  # social login
+]
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': '998688829192-q2mgn2k4i0dhqlqdh4k12r1a7uptmh2d.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'your_email@gmail.com'  # Use your Gmail
+EMAIL_HOST_PASSWORD = 'your_app_password'  # Use App Password

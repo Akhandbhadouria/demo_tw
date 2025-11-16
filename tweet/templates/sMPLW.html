@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TweetShare - Login</title>
+    <title>3D Button</title>
     <style>
         * {
             margin: 0;
@@ -12,649 +12,221 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            perspective: 1200px;
-            overflow: hidden;
+            align-items: center;
+            perspective: 1000px;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .container {
+            text-align: center;
+            padding: 2rem;
         }
 
-        /* Animated Background Elements */
-        .bg-elements {
-            position: fixed;
-            width: 100%;
-            height: 100%;
+        h1 {
+            color: white;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-3d {
+            position: relative;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            box-shadow: 
+                0 10px 0 rgba(0, 0, 0, 0.2),
+                0 15px 20px rgba(0, 0, 0, 0.3);
+            outline: none;
+        }
+
+        .btn-3d:active {
+            transform: translateY(10px) translateZ(0);
+            box-shadow: 
+                0 0 0 rgba(0, 0, 0, 0.2),
+                0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-3d::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .floating-element {
-            position: absolute;
-            opacity: 0.1;
-            font-size: 4rem;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .element-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .element-2 { top: 20%; right: 15%; animation-delay: 1s; }
-        .element-3 { bottom: 15%; left: 5%; animation-delay: 2s; }
-        .element-4 { bottom: 20%; right: 10%; animation-delay: 3s; }
-        .element-5 { top: 50%; left: 5%; animation-delay: 4s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotateZ(0deg); }
-            50% { transform: translateY(-30px) rotateZ(10deg); }
-        }
-
-        /* Blob Background */
-        .blob {
-            position: fixed;
-            filter: blur(60px);
-            opacity: 0.2;
-            z-index: -1;
-        }
-
-        .blob-1 {
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 107, 107, 0.5);
-            border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
-            top: 10%;
-            left: 5%;
-            animation: blobMove1 15s ease-in-out infinite;
-        }
-
-        .blob-2 {
-            width: 350px;
-            height: 350px;
-            background: rgba(100, 200, 255, 0.5);
-            border-radius: 70% 30% 60% 40% / 40% 50% 30% 60%;
-            bottom: -100px;
-            right: 5%;
-            animation: blobMove2 20s ease-in-out infinite;
-        }
-
-        @keyframes blobMove1 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(30px, -50px) rotate(180deg); }
-        }
-
-        @keyframes blobMove2 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-30px, 50px) rotate(-180deg); }
-        }
-
-        /* Main Container */
-        .container {
-            display: flex;
-            width: 100%;
-            max-width: 1200px;
-            gap: 2rem;
-            padding: 2rem;
-            perspective: 1000px;
-            z-index: 10;
-        }
-
-        /* Left Side - Illustration */
-        .left-side {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1000px;
-            transform: translateZ(0);
-            animation: slideInLeft 1s ease-out;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px) rotateY(-20deg);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) rotateY(0);
-            }
-        }
-
-        .illustration-box {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            aspect-ratio: 1;
-        }
-
-        .card-stack {
-            position: absolute;
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card {
-            position: absolute;
-            width: 280px;
-            height: 280px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            animation: cardFloat 4s ease-in-out infinite;
-            transform-style: preserve-3d;
-        }
-
-        .card-1 {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
-            color: white;
-            animation-delay: 0s;
-            transform: translateX(0) translateY(0) rotateZ(8deg) rotateX(15deg) rotateY(-15deg);
-        }
-
-        .card-2 {
-            background: linear-gradient(135deg, rgba(240, 147, 251, 0.95), rgba(245, 158, 11, 0.95));
-            animation-delay: 0.3s;
-            transform: translateX(20px) translateY(30px) rotateZ(-12deg) rotateX(-10deg) rotateY(15deg);
-        }
-
-        .card-3 {
-            background: linear-gradient(135deg, rgba(79, 172, 254, 0.95), rgba(0, 242, 254, 0.95));
-            color: white;
-            animation-delay: 0.6s;
-            transform: translateX(-30px) translateY(10px) rotateZ(5deg) rotateX(8deg) rotateY(-8deg);
-        }
-
-        @keyframes cardFloat {
-            0%, 100% {
-                transform: translateY(0) rotateX(15deg) rotateY(-15deg);
-            }
-            50% {
-                transform: translateY(-20px) rotateX(10deg) rotateY(-10deg);
-            }
-        }
-
-        .card-1:hover {
-            animation-play-state: paused;
-            transform: translateX(0) translateY(0) rotateZ(0deg) rotateX(20deg) rotateY(-20deg) scale(1.05);
-        }
-
-        .card-2:hover {
-            animation-play-state: paused;
-            transform: translateX(20px) translateY(30px) rotateZ(0deg) rotateX(-15deg) rotateY(20deg) scale(1.05);
-        }
-
-        .card-3:hover {
-            animation-play-state: paused;
-            transform: translateX(-30px) translateY(10px) rotateZ(0deg) rotateX(15deg) rotateY(-15deg) scale(1.05);
-        }
-
-        /* Right Side - Login Form */
-        .right-side {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: slideInRight 1s ease-out;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px) rotateY(20deg);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) rotateY(0);
-            }
-        }
-
-        .login-form {
-            width: 100%;
-            max-width: 450px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 2.5rem;
-            padding: 3rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 0 2px rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transform-style: preserve-3d;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateZ(-10px);
             transition: all 0.3s ease;
         }
 
-        .login-form:hover {
-            transform: translateY(-5px) rotateX(2deg);
-            box-shadow: 0 35px 60px rgba(0, 0, 0, 0.3), 0 0 2px rgba(255, 255, 255, 0.5);
+        .btn-3d:active::before {
+            transform: translateZ(-5px);
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            animation: fadeInUp 0.8s ease-out;
+        /* Button Variants */
+        .btn-primary {
+            background: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%);
+            color: white;
         }
 
-        .logo {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            animation: bounce 2s ease-in-out infinite;
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.1); }
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            color: white;
         }
 
-        .form-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: white;
         }
 
-        .form-subtitle {
-            font-size: 0.9rem;
-            color: #64748b;
-            animation: fadeInUp 0.8s ease-out 0.1s both;
+        .btn-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.8s ease-out both;
+        /* Hover Effects */
+        .btn-3d:hover {
+            transform: translateY(-5px) translateZ(10px);
+            box-shadow: 
+                0 15px 0 rgba(0, 0, 0, 0.2),
+                0 20px 25px rgba(0, 0, 0, 0.4);
         }
 
-        .form-group:nth-child(1) { animation-delay: 0.2s; }
-        .form-group:nth-child(2) { animation-delay: 0.3s; }
-        .form-group:nth-child(3) { animation-delay: 0.4s; }
+        .btn-3d:hover::before {
+            transform: translateZ(-15px);
+        }
 
-        @keyframes fadeInUp {
+        /* Icon Styling */
+        .btn-icon {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+
+        /* Glow Effect */
+        .btn-glow {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
             from {
-                opacity: 0;
-                transform: translateY(20px);
+                box-shadow: 
+                    0 10px 0 rgba(0, 0, 0, 0.2),
+                    0 15px 20px rgba(0, 0, 0, 0.3),
+                    0 0 20px rgba(126, 34, 206, 0.5);
             }
             to {
-                opacity: 1;
-                transform: translateY(0);
+                box-shadow: 
+                    0 10px 0 rgba(0, 0, 0, 0.2),
+                    0 15px 20px rgba(0, 0, 0, 0.3),
+                    0 0 30px rgba(126, 34, 0, 0.8),
+                    0 0 40px rgba(126, 34, 206, 0.6);
             }
         }
 
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.6rem;
-            transition: all 0.3s;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 1rem 1.2rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 1rem;
+        /* Instructions */
+        .instructions {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 3rem;
             font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: rgba(248, 250, 252, 0.5);
+            max-width: 600px;
+            line-height: 1.6;
         }
 
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1),
-                        0 0 20px rgba(102, 126, 234, 0.3);
-            transform: scale(1.02);
-        }
-
-        input[type="email"]::placeholder,
-        input[type="password"]::placeholder {
-            color: #94a3b8;
-        }
-
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.875rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease-out 0.5s both;
-        }
-
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        input[type="checkbox"] {
-            width: 1.2rem;
-            height: 1.2rem;
-            cursor: pointer;
-            accent-color: #667eea;
-        }
-
-        .forgot-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .forgot-link:hover {
-            color: #764ba2;
-            transform: translateX(2px);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 1rem;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-
-        .login-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
-            transition: left 0.3s;
-            z-index: -1;
-        }
-
-        .login-btn:hover::before {
-            left: 0;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4),
-                        0 0 20px rgba(102, 126, 234, 0.2);
-        }
-
-        .login-btn:active {
-            transform: translateY(-1px) scale(1.01);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            animation: fadeInUp 0.8s ease-out 0.7s both;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .divider-text {
-            color: #64748b;
-            font-size: 0.875rem;
-        }
-
-        .social-login {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            animation: fadeInUp 0.8s ease-out 0.8s both;
-        }
-
-        .social-btn {
-            padding: 0.85rem;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 1rem;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-btn:hover {
-            transform: translateY(-5px) scale(1.1);
-            border-color: #667eea;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #64748b;
-            animation: fadeInUp 0.8s ease-out 0.9s both;
-        }
-
-        .signup-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .signup-link a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .container {
-                flex-direction: column;
-                max-width: 600px;
-            }
-
-            .left-side {
-                display: none;
-            }
-
-            .login-form {
-                max-width: 100%;
-            }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+            .button-container {
+                flex-direction: column;
             }
-
-            .container {
-                padding: 1.5rem;
-            }
-
-            .login-form {
-                padding: 2rem;
-                border-radius: 1.5rem;
-            }
-
-            .form-title {
-                font-size: 1.5rem;
-            }
-
-            .form-group {
-                margin-bottom: 1.2rem;
+            
+            h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="bg-elements">
-        <div class="floating-element element-1">💬</div>
-        <div class="floating-element element-2">✨</div>
-        <div class="floating-element element-3">🚀</div>
-        <div class="floating-element element-4">💡</div>
-        <div class="floating-element element-5">🌟</div>
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-
     <div class="container">
-        <!-- Left Side - 3D Card Stack Illustration -->
-        <div class="left-side">
-            <div class="illustration-box">
-                <div class="card-stack">
-                    <div class="card card-1">💬</div>
-                    <div class="card card-2">✨</div>
-                    <div class="card card-3">🚀</div>
-                </div>
-            </div>
+        <h1>3D Buttons Collection</h1>
+        
+        <div class="button-container">
+            <!-- Primary Button -->
+            <button class="btn-3d btn-primary">
+                <i class="btn-icon">🚀</i> Primary Action
+            </button>
+            
+            <!-- Success Button -->
+            <button class="btn-3d btn-success">
+                <i class="btn-icon">✅</i> Success
+            </button>
+            
+            <!-- Danger Button -->
+            <button class="btn-3d btn-danger">
+                <i class="btn-icon">⚠️</i> Danger
+            </button>
+            
+            <!-- Warning Button -->
+            <button class="btn-3d btn-warning">
+                <i class="btn-icon">🔥</i> Warning
+            </button>
+            
+            <!-- Info Button -->
+            <button class="btn-3d btn-info">
+                <i class="btn-icon">ℹ️</i> Info
+            </button>
+            
+            <!-- Glowing Button -->
+            <button class="btn-3d btn-primary btn-glow">
+                <i class="btn-icon">✨</i> Glowing
+            </button>
         </div>
-
-        <!-- Right Side - Login Form -->
-        <div class="right-side">
-            <form class="login-form" onsubmit="handleLogin(event)">
-                <!-- Header -->
-                <div class="form-header">
-                    <div class="logo">🐦</div>
-                    <h1 class="form-title">TweetShare</h1>
-                    <p class="form-subtitle">Welcome back! Sign in to your account</p>
-                </div>
-
-                <!-- Email Input -->
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="you@example.com"
-                        required
-                    >
-                </div>
-
-                <!-- Password Input -->
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter your password"
-                        required
-                    >
-                </div>
-
-                <!-- Remember & Forgot -->
-                <div class="remember-forgot">
-                    <label class="checkbox-wrapper">
-                        <input type="checkbox" id="remember">
-                        <span>Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
-                </div>
-
-                <!-- Login Button -->
-                <button type="submit" class="login-btn">Sign In</button>
-
-                <!-- Divider -->
-                <div class="divider">
-                    <span class="divider-text">Or continue with</span>
-                </div>
-
-                <!-- Social Login -->
-                <div class="social-login">
-                    <button type="button" class="social-btn" title="Login with Google">🔵</button>
-                    <button type="button" class="social-btn" title="Login with Facebook">👥</button>
-                </div>
-
-                <!-- Sign Up Link -->
-                <div class="signup-link">
-                    Don't have an account? <a href="#">Sign up</a>
-                </div>
-            </form>
+        
+        <div class="instructions">
+            <p><strong>How it works:</strong> These buttons use CSS 3D transforms, shadows, and pseudo-elements to create depth. Hover to see the lift effect, and click to experience the press animation.</p>
+            <p>The 3D effect is achieved through layered shadows and the transform property with translateZ for depth perception.</p>
         </div>
     </div>
 
     <script>
-        // Mouse tracking for 3D effect
-        document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.card');
-            const form = document.querySelector('.login-form');
-            
-            const x = (e.clientX / window.innerWidth) - 0.5;
-            const y = (e.clientY / window.innerHeight) - 0.5;
-
-            cards.forEach(card => {
-                const rotateX = y * 10;
-                const rotateY = x * 10;
-                card.style.transform += ` perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-
-            form.style.transform = `perspective(1000px) rotateX(${y * 3}deg) rotateY(${x * 3}deg)`;
-        });
-
-        // Form submission
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            console.log('Login attempt:', { email, password });
-            
-            // Add animation
-            const btn = e.target.querySelector('.login-btn');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                btn.style.transform = '';
-                alert('Welcome to TweetShare! 🚀');
-                // Here you would typically send data to your backend
-            }, 100);
-        }
-
-        // Input focus animations
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', (e) => {
-                e.target.style.transform = 'scale(1.02)';
+        // Add click effects
+        document.querySelectorAll('.btn-3d').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.style.transition = 'all 0.1s ease';
             });
             
-            input.addEventListener('blur', (e) => {
-                e.target.style.transform = 'scale(1)';
+            button.addEventListener('mouseup', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transition = 'all 0.3s ease';
             });
         });
-
-        // Prevent card rotation on mobile
-        if (window.innerWidth < 1024) {
-            document.removeEventListener('mousemove', null);
-        }
     </script>
 </body>
 </html>
