@@ -1,0 +1,22 @@
+# Django
+*.pyc
+__pycache__/
+/static/
+/media/
+db.sqlite3
+.env
+*.log
+*.sqlite3
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Node
+node_modules/
+
+# Other
+*.bak
+*.swp
