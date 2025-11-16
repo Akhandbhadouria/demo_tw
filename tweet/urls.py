@@ -19,7 +19,8 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static 
 from . import views
-
+from django.urls import path
+from .views import verify_email
 urlpatterns = [
 
     path("", views.tweet_list, name="tweet_list"),
@@ -29,6 +30,7 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("logout/", views.logout, name="logout"),
     path("<int:tweet_id>/like/", views.like_tweet, name="like_tweet"),  # NEW
+    path("verify-email/<uuid:token>/", verify_email, name="verify_email"),
 
     path('create-profile/', views.create_profile, name='create_profile'),
     path('profile/<str:username>/follow/', views.follow_user, name='follow_user'),

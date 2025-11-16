@@ -22,7 +22,8 @@ class Tweet(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profession = models.CharField(max_length=100, blank=True)
-    email = models.EmailField(max_length=100, blank=True)
+    email = models.CharField(max_length=200)
+    is_verified=models.BooleanField(default=False)
     bio = models.TextField(blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
    
@@ -45,3 +46,17 @@ class UserProfile(models.Model):
         return Tweet.objects.filter(user=self.user).aggregate(
             total_likes=Count('likes')
         )['total_likes'] or 0
+    
+
+
+import uuid
+from django.contrib.auth.models import User
+from django.db import models
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.token}"

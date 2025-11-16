@@ -70,21 +70,66 @@ def tweet_delete(request,tweet_id):
     return render(request,"tweet_confirm_delete.html",{"tweet":tweet})
 
 
+from django.core.mail import send_mail
+from .models import EmailVerificationToken, UserProfile
+from django.urls import reverse
 
 def register(request):
-    if request.method=="POST":
-        form= UserRegrestrationForm(request.POST)
+    if request.method == "POST":
+        form = UserRegrestrationForm(request.POST)
         if form.is_valid():
-            user=form.save(commit=False)
-            user.set_password(form.cleaned_data['password1']) #set_password() ek built-in method hai jo Django ke User model me hota hai.Iska kaam hota hai: Password ko hash (encrypt) karna.
+            user = form.save()
+            user.set_password(form.cleaned_data['password1'])
             user.save()
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')# imported from the liberari and autometically login the user
-            return redirect('create_profile')
+
+            # Create empty profile
+            UserProfile.objects.create(user=user)
+
+            # Create verification token
+            token_obj = EmailVerificationToken.objects.create(user=user)
+
+           
+            verification_link = request.build_absolute_uri(
+                reverse("verify_email", args=[token_obj.token])
+            )
+
+            # Send verification mail
+            send_mail(
+                subject="Verify your Email - TweetShare",
+                message=f"Click the link to verify your email:\n{verification_link}",
+                from_email="yourgmail@gmail.com",
+                recipient_list=[user.email],
+            )
+
+            return render(request, "email_sent.html", {"email": user.email})
+
     else:
-        form=UserRegrestrationForm()
+        form = UserRegrestrationForm()
+
+    return render(request, 'registration/register.html', {'form': form})
 
 
-    return render(request,'registration/register.html',{'form':form})
+
+from django.shortcuts import render, redirect
+from .models import EmailVerificationToken, UserProfile
+
+def verify_email(request, token):
+    try:
+        token_obj = EmailVerificationToken.objects.get(token=token)
+    except EmailVerificationToken.DoesNotExist:
+        return render(request, "invalid_token.html")
+
+    # Mark user as verified
+    profile = UserProfile.objects.get(user=token_obj.user)
+    profile.is_verified = True
+    profile.save()
+
+    # Delete token
+    token_obj.delete()
+
+    return render(request, "email_verified.html")
+
+
 ### Step-by-Step Flow of Django User Registration (Hinglish me samjha hua)
 
 # 1.                                                       **User register page open karta hai (GET request hoti hai)**
