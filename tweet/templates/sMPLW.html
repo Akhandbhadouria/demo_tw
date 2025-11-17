@@ -1,232 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Button</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Bottom Navigation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1000px;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(to bottom right, #0f172a, #1e293b);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
 
-        .container {
-            text-align: center;
-            padding: 2rem;
-        }
+    /* Bottom Navigation Container */
+    .bottom-nav-container {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
 
-        h1 {
-            color: white;
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
+    /* Navigation Bar */
+    .nav-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      height: 64px;
+      padding: 0 16px 12px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(75, 85, 99, 0.5);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
 
-        .button-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            align-items: center;
-        }
+    /* Nav Button */
+    .nav-button {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #262626;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: visible;
+    }
 
-        .btn-3d {
-            position: relative;
-            padding: 1.2rem 2.5rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            transform-style: preserve-3d;
-            transform: translateZ(0);
-            box-shadow: 
-                0 10px 0 rgba(0, 0, 0, 0.2),
-                0 15px 20px rgba(0, 0, 0, 0.3);
-            outline: none;
-        }
+    .nav-button:hover {
+      background: #404040;
+      transform: translateY(-2px);
+    }
 
-        .btn-3d:active {
-            transform: translateY(10px) translateZ(0);
-            box-shadow: 
-                0 0 0 rgba(0, 0, 0, 0.2),
-                0 5px 10px rgba(0, 0, 0, 0.2);
-        }
+    .nav-button.active {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    }
 
-        .btn-3d::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateZ(-10px);
-            transition: all 0.3s ease;
-        }
+    /* Icon Container */
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+    }
 
-        .btn-3d:active::before {
-            transform: translateZ(-5px);
-        }
+    .nav-button svg {
+      width: 100%;
+      height: 100%;
+      stroke: #737373;
+      transition: all 0.3s ease;
+    }
 
-        /* Button Variants */
-        .btn-primary {
-            background: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%);
-            color: white;
-        }
+    .nav-button:hover svg {
+      stroke: #a3a3a3;
+    }
 
-        .btn-success {
-            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-            color: white;
-        }
+    .nav-button.active svg {
+      stroke: #ffffff;
+      transform: scale(1.1);
+    }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-            color: white;
-        }
+    /* Tooltip Label */
+    .nav-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(5px);
+      background: rgba(255, 255, 255, 0.95);
+      color: #1f2937;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
 
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-            color: white;
-        }
+    .nav-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: rgba(255, 255, 255, 0.95);
+    }
 
-        .btn-info {
-            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-            color: white;
-        }
+    .nav-button:hover .nav-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
 
-        /* Hover Effects */
-        .btn-3d:hover {
-            transform: translateY(-5px) translateZ(10px);
-            box-shadow: 
-                0 15px 0 rgba(0, 0, 0, 0.2),
-                0 20px 25px rgba(0, 0, 0, 0.4);
-        }
+    .nav-button.active .nav-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+    }
 
-        .btn-3d:hover::before {
-            transform: translateZ(-15px);
-        }
+    .nav-button.active .nav-tooltip::after {
+      border-top-color: #3b82f6;
+    }
 
-        /* Icon Styling */
-        .btn-icon {
-            margin-right: 8px;
-            font-size: 1.1em;
-        }
+    /* Mobile Toggle Button */
+    .mobile-toggle {
+      display: none;
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: #262626;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
 
-        /* Glow Effect */
-        .btn-glow {
-            animation: glow 2s infinite alternate;
-        }
+    .mobile-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: #737373;
+    }
 
-        @keyframes glow {
-            from {
-                box-shadow: 
-                    0 10px 0 rgba(0, 0, 0, 0.2),
-                    0 15px 20px rgba(0, 0, 0, 0.3),
-                    0 0 20px rgba(126, 34, 206, 0.5);
-            }
-            to {
-                box-shadow: 
-                    0 10px 0 rgba(0, 0, 0, 0.2),
-                    0 15px 20px rgba(0, 0, 0, 0.3),
-                    0 0 30px rgba(126, 34, 0, 0.8),
-                    0 0 40px rgba(126, 34, 206, 0.6);
-            }
-        }
+    /* Content Demo */
+    .content {
+      text-align: center;
+      color: white;
+    }
 
-        /* Instructions */
-        .instructions {
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 3rem;
-            font-size: 1rem;
-            max-width: 600px;
-            line-height: 1.6;
-        }
+    .content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .button-container {
-                flex-direction: column;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    .content p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-bar {
+        gap: 12px;
+        padding: 0 12px 12px;
+      }
+
+      .nav-button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .icon-container {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>3D Buttons Collection</h1>
-        
-        <div class="button-container">
-            <!-- Primary Button -->
-            <button class="btn-3d btn-primary">
-                <i class="btn-icon">🚀</i> Primary Action
-            </button>
-            
-            <!-- Success Button -->
-            <button class="btn-3d btn-success">
-                <i class="btn-icon">✅</i> Success
-            </button>
-            
-            <!-- Danger Button -->
-            <button class="btn-3d btn-danger">
-                <i class="btn-icon">⚠️</i> Danger
-            </button>
-            
-            <!-- Warning Button -->
-            <button class="btn-3d btn-warning">
-                <i class="btn-icon">🔥</i> Warning
-            </button>
-            
-            <!-- Info Button -->
-            <button class="btn-3d btn-info">
-                <i class="btn-icon">ℹ️</i> Info
-            </button>
-            
-            <!-- Glowing Button -->
-            <button class="btn-3d btn-primary btn-glow">
-                <i class="btn-icon">✨</i> Glowing
-            </button>
-        </div>
-        
-        <div class="instructions">
-            <p><strong>How it works:</strong> These buttons use CSS 3D transforms, shadows, and pseudo-elements to create depth. Hover to see the lift effect, and click to experience the press animation.</p>
-            <p>The 3D effect is achieved through layered shadows and the transform property with translateZ for depth perception.</p>
-        </div>
-    </div>
+  <!-- Demo Content -->
+  <div class="content">
+    <h1>Modern Bottom Navigation</h1>
+    <p>Click on the navigation icons below</p>
+  </div>
 
-    <script>
-        // Add click effects
-        document.querySelectorAll('.btn-3d').forEach(button => {
-            button.addEventListener('mousedown', function() {
-                this.style.transition = 'all 0.1s ease';
-            });
-            
-            button.addEventListener('mouseup', function() {
-                this.style.transition = 'all 0.3s ease';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.transition = 'all 0.3s ease';
-            });
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav-container">
+    <div class="nav-bar">
+      <!-- Home -->
+      <button class="nav-button" data-page="home">
+        <div class="nav-tooltip">Home</div>
+        <div class="icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12l-2 0l9 -9l9 9l-2 0"></path>
+            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
+            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Profile -->
+      <button class="nav-button" data-page="profile">
+        <div class="nav-tooltip">Profile</div>
+        <div class="icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Code -->
+      <button class="nav-button" data-page="code">
+        <div class="nav-tooltip">Projects</div>
+        <div class="icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 8l-4 4l4 4"></path>
+            <path d="M17 8l4 4l-4 4"></path>
+            <path d="M14 4l-4 16"></path>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Work -->
+      <button class="nav-button" data-page="work">
+        <div class="nav-tooltip">Work</div>
+        <div class="icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
+            <path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2"></path>
+            <path d="M12 12l0 .01"></path>
+            <path d="M3 13a20 20 0 0 0 18 0"></path>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Contact -->
+      <button class="nav-button" data-page="contact">
+        <div class="nav-tooltip">Contact</div>
+        <div class="icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
+            <path d="M3 7l9 6l9 -6"></path>
+          </svg>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Navigation functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const navButtons = document.querySelectorAll('.nav-button');
+      
+      navButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          // Get the page data
+          const page = this.getAttribute('data-page');
+          console.log('Navigating to:', page);
+          
+          // Here you can add navigation logic or page changes
+          // For example: window.location.href = `/${page}`;
         });
-    </script>
+      });
+    });
+  </script>
 </body>
 </html>

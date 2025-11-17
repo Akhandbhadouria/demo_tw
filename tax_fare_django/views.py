@@ -4,7 +4,8 @@
 #     return render(request,"index.html")
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
 def home(request):
-    return render(request,'home.html')
-
+    total_users = User.objects.count()
+    return render(request, "home.html", {"total_users": total_users})

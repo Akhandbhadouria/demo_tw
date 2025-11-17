@@ -41,7 +41,7 @@ def tweet_create(request):
             tweet=form.save(commit=False)            #creates a Tweet object but doesn’t save to DB yet (lets you modify before saving).
             tweet.user=request.user                  #This way, the currently logged-in user is linked to the tweet.
             tweet.save()
-            return redirect("tweet_list")              #→ sends the user to the list view after creation.
+            return redirect("my_feed")              #→ sends the user to the list view after creation.
     else:
         form=TweetForm()
     return render(request,"tweet_form.html",{"form":form})
@@ -72,7 +72,7 @@ def tweet_delete(request,tweet_id):
     tweet=get_object_or_404(Tweet,pk=tweet_id,user=request.user)
     if request.method=="POST":
         tweet.delete()
-        return redirect("tweet_list")
+        return redirect("my_feed")
     return render(request,"tweet_confirm_delete.html",{"tweet":tweet})
 def register(request):
     if request.method=="POST":
