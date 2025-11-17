@@ -329,16 +329,25 @@
         background: linear-gradient(to bottom right, #6366f1, #9333ea);
     }
 
-    .card-image {
-        width: 100%;
-        aspect-ratio: 1/1;
-        background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff, #ffe4f0);
-        border-radius: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
+  .card-image {
+    width: 460px;
+    aspect-ratio: 1/1;
+    background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff, #ffe4f0);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    overflow: hidden; /* important to avoid overflow */
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* keeps image looking good */
+    border-radius: 1rem; /* optional */
+}
+
 
     /* -------------------- Features Grid (with 3D Scroll) -------------------- */
     .features-grid {
@@ -616,7 +625,7 @@
                     </div>
 
                     <div class="card-image">
-                        ✨
+                        <img src="https://i.pinimg.com/736x/a6/1c/49/a61c497a88baaf2a1c52841bb0fa50ca.jpg" alt="">
                     </div>
 
                     <div style="height:0.5rem; width:100%; background:#e5e7eb; margin-bottom:0.25rem;"></div>
@@ -653,7 +662,7 @@
             </a>
         </div>
         {% endif %}
-
+<br><br><br>
         <!-- Tweet Preview Section -->
         <div class="content-section scroll-section">
             <div class="tweet-preview">
@@ -676,7 +685,7 @@
             </div>
         </div>
     </div>
-
+<br><br><br>
     {%include "contact.html"%}
 
     <script>

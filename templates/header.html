@@ -582,6 +582,8 @@
               </svg>
               Explore
             </a>
+            <a href="{% url 'tweet_create' %}" class="dropdown-item">+   Create Tweet</a>
+
             <form method="post" action="{% url 'logout' %}" class="dropdown-form">
               {% csrf_token %}
               <button type="submit" class="logout-btn">
