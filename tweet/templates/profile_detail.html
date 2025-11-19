@@ -1152,19 +1152,30 @@
     <div class="main-content">
         <div class="header-bar">
             <h1 class="header-title">Profile Activity</h1>
-             {% if request.user == profile.user %}
-            <a href="{% url 'tweet_create' %}" class="btn btn-primary">Create Tweet</a>
-            {% else %}
-            <form method="post" action="{% url 'follow_user' profile.user.username %}">
-                {% csrf_token %}
-                {% if request.user in profile.followers.all %}
+            {% if request.user == profile.user %}
+    <a href="{% url 'tweet_create' %}" class="btn btn-primary">Create Tweet</a>
+{% else %}
+    <div style="display: flex; gap: 10px;">
+        <!-- Follow/Following button -->
+        <form method="post" action="{% url 'follow_user' profile.user.username %}">
+            {% csrf_token %}
+            {% if request.user in profile.followers.all %}
                 <button type="submit" class="btn btn-secondary">Following</button>
-                {% else %}
+                 {% if request.user.is_authenticated and profile_user %}
+    <a href="{% url 'start_chat' username=profile_user.username %}" class="btn btn-primary">
+        Message
+    </a>
+{% endif %}
+            {% else %}
                 <button type="submit" class="btn btn-primary">Follow</button>
-                {% endif %}
-            </form>
-           
             {% endif %}
+        </form>
+
+        <!-- Message button -->
+   
+    </div>
+{% endif %}
+
         </div>
 
        <div class="post-card">
@@ -1277,7 +1288,9 @@
     <a href="{% url 'delete_account' %}" class="btn btn-danger">
         Delete Account
     </a>
+    
 {% endif %}
+
         </div>
     </div>
 </div>

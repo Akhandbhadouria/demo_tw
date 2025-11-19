@@ -27,7 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tweet/', include("tweet.urls")),
     path('', views.home,name="home"),
-    path('accountss/',include('django.contrib.auth.urls')),
+path('accounts/', include('django.contrib.auth.urls')),
+path('chat/chat/', include('chat.urls')),
 
 ]
 

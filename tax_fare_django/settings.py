@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tweet',
     'widget_tweaks',
+    'channels',
+    'chat',
 
     # 'django.contrib.sites',
     # 'allauth',
@@ -151,3 +153,12 @@ CSRF_TRUSTED_ORIGINS = [
 
 LOGIN_REDIRECT_URL='/tweet/'
 LOGOUT_REDIRECT_URL='/tweet/'
+
+
+ASGI_APPLICATION = "tax_fare_django.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

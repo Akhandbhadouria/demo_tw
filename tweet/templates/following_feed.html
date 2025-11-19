@@ -457,6 +457,11 @@
                         </button>
                     </form>
                 </div>
+                {% if request.user.is_authenticated and tweet.user.username %}
+        <a href="{% url 'start_chat' username=tweet.user.username %}" class="btn btn-primary btn-sm">
+            Message
+        </a>
+    {% endif %}
             </div>
             {% endfor %}
         </div>
