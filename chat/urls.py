@@ -6,8 +6,8 @@ urlpatterns = [
     path('room/<int:chatroom_id>/', views.chat_room, name='chat_room'),  # View chat room
         path('inbox/', views.inbox, name='inbox'),
 
-        path('chat/delete/<int:room_id>/', views.delete_chat, name='delete_chat'),
+  
+ path('chat/delete/<int:room_id>/', views.delete_chat, name='delete_chat'),
 
 path('message/delete/<int:msg_id>/', views.delete_message, name='delete_message'),
-
 ]

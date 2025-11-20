@@ -140,3 +140,4 @@ def delete_message(request, msg_id):
     message.delete()
 
     return redirect('chat_room', chatroom_id=chatroom_id)
+
