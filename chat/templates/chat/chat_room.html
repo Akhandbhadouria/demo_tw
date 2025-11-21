@@ -732,7 +732,12 @@
                     {{ other_user.username.0|upper }}
                 </div>
                 <div class="user-info">
-                    <h3 class="username">{{ other_user.username }}</h3>
+                    <h3 class="username">
+                        {% if other_user %}
+    {{ other_user.username }}
+{% else %}
+    No active chat
+{% endif %}</h3>
                     <span class="user-status">
                         <span class="status-dot"></span>
                         Online
@@ -823,68 +828,23 @@
                         <span class="action-text">Home</span>
                     </a>
                 </div>
-                <form action="{% url 'delete_chat' chatroom.id %}" method="post" class="delete-form">
-                    {% csrf_token %}
-                    <button type="submit" class="action-btn delete-action" style="width: 100%;">
-                        <div class="action-icon">
-                            <i class="fas fa-trash"></i>
-                        </div>
-                        <span class="action-text">Delete Chat</span>
-                    </button>
-                </form>
+               {% if chatroom %}
+<form action="{% url 'delete_chat' chatroom.id %}" method="post" class="delete-form">
+    {% csrf_token %}
+    <button type="submit" class="action-btn delete-action" style="width: 100%;">
+        <div class="action-icon">
+            <i class="fas fa-trash"></i>
+        </div>
+        <span class="action-text">Delete Chat</span>
+    </button>
+</form>
+{% endif %}
+
             </div>
         </div>
 
         <!-- Chat Info Section -->
-        <div class="sidebar-section">
-            <h4 class="sidebar-title">
-                <i class="fas fa-info-circle"></i>
-                Chat Info
-            </h4>
-            <div class="info-cards">
-                <div class="info-card">
-                    <div class="info-header">
-                        <div class="info-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <span class="info-title">Participants</span>
-                    </div>
-                    <div class="participant-list">
-                        <div class="participant">
-                            <div class="participant-avatar">
-                                {{ request.user.username.0|upper }}
-                            </div>
-                            <span class="participant-name">You</span>
-                        </div>
-                        <div class="participant">
-                            <div class="participant-avatar">
-                                {{ other_user.username.0|upper }}
-                            </div>
-                            <span class="participant-name">{{ other_user.username }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-card">
-                    <div class="info-header">
-                        <div class="info-icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <span class="info-title">Statistics</span>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">{{ messages|length }}</div>
-                            <div class="stat-label">Messages</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">2</div>
-                            <div class="stat-label">Users</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
     </div>
 </div>
 
