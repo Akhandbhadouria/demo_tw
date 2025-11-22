@@ -22,18 +22,7 @@
     position: relative;
     overflow-x: hidden;
 }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, .05) 2px, rgba(255, 255, 255, .05) 4px);
-            pointer-events: none;
-            z-index: 1;
-        }
+       
 
         /* Animated floating elements */
         .floating-elements {
@@ -198,7 +187,7 @@
             align-items: center;
             padding: 0.75rem;
             background: rgba(41, 40, 40, 0.229);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(5px);
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
@@ -316,19 +305,7 @@
             font-weight: 600;
         }
 
-        .unread-badge {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 0.2rem 0.5rem;
-            border-radius: 8px;
-            min-width: 16px;
-            text-align: center;
-            margin-left: 0.4rem;
-            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
-        }
-
+        
         .empty-inbox {
             text-align: center;
             padding: 2.5rem 1.25rem;
@@ -360,8 +337,8 @@
             width: 65%;
             height: 100%;
             background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(5px) saturate(180%);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.18);
             box-shadow: 
@@ -390,8 +367,8 @@
 
         .chat-header {
             background: linear-gradient(135deg, 
-                rgba(79, 70, 229, 0.85), 
-                rgba(147, 51, 234, 0.85));
+                rgba(129, 122, 255, 0.85), 
+                rgba(192, 124, 255, 0.85));
             color: white;
             padding: 1rem 1.25rem;
             display: flex;
@@ -403,7 +380,7 @@
             overflow: hidden;
         }
 
-        .chat-header::before {
+        /* .chat-header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -415,7 +392,7 @@
                 rgba(255, 255, 255, 0.1) 50%, 
                 transparent 70%);
             animation: shimmer 3s infinite;
-        }
+        } */
 
         @keyframes shimmer {
             0% { transform: translateX(-100%); }
@@ -510,7 +487,7 @@
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #ec4899, #f97316);
+            background: linear-gradient(135deg, #f7dabb, #ff9100);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -692,7 +669,7 @@
         }
 
         .message-sent .message-bubble {
-            background: rgba(253, 164, 0, 0.8);
+            background: linear-gradient(135deg, #f7dabb, #ff9100);
             color: white;
             border-bottom-right-radius: 5px;
         }
@@ -729,7 +706,7 @@
         }
 
         .delete-message-btn {
-            background: none;
+            background: linear-gradient(135deg, #f7dabb, #ff9100);
             border: none;
             color: white;
             font-size: 0.8rem;
@@ -832,7 +809,7 @@
         }
 
         .send-btn {
-            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            background: linear-gradient(135deg, #f7dabb, #ff9100);
             color: white;
             border: none;
             padding: 0.75rem;
@@ -1042,9 +1019,10 @@
         <div class="inbox-container" id="inboxContainer">
             <div class="inbox-header">
                 <h2 class="inbox-title">
-                    <i class="fas fa-inbox"></i>
+                   <img src="icons8-arrow-100.png" alt="">
                     Messages
                 </h2>
+                
                 <div class="inbox-stats">
                     <span class="conversation-count">{{ conversations|length }}</span>
                 </div>
@@ -1081,9 +1059,7 @@
                                         Start a conversation...
                                     {% endif %}
                                 </p>
-                                {% if convo.unread_count > 0 %}
-                                    <span class="unread-badge">{{ convo.unread_count }}</span>
-                                {% endif %}
+                               
                             </div>
                         </div>
                     </a>
