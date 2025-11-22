@@ -32,25 +32,6 @@ def get_or_create_room(request, username):
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ChatRoom, Message
 from django.contrib.auth.decorators import login_required
-@login_required
-def chat_room(request, chatroom_id):
-    chatroom = get_object_or_404(ChatRoom, id=chatroom_id)
-    messages = chatroom.messages.all().order_by('timestamp')
-    
-    # Get the other participant
-    other_user = chatroom.participants.exclude(id=request.user.id).first()
-
-    if request.method == 'POST':
-        content = request.POST.get('message')
-        if content:
-            chatroom.messages.create(sender=request.user, content=content)
-            return redirect('chat_room', chatroom_id=chatroom.id)
-
-    return render(request, 'chat/chat_room.html', {
-        'chatroom': chatroom,
-        'messages': messages,
-        'other_user': other_user
-    })
 
 
 from django.shortcuts import get_object_or_404, redirect
@@ -78,36 +59,6 @@ from django.db import models  # Add this import
 from .models import ChatRoom, Message  # Make sure you have this import
 from django.utils import timezone  # Add this for timezone handling
 from django.http import HttpResponseForbidden  # Import for forbidden response
-
-@login_required
-def inbox(request):
-    # Get all chatrooms where current user is a participant
-    chatrooms = ChatRoom.objects.filter(participants=request.user).annotate(
-        last_message_time=models.Max('messages__timestamp')
-    ).order_by('-last_message_time', '-created_at')
-
-    # For each chatroom, find the other participant(s) and get message info
-    conversations = []
-    for room in chatrooms:
-        other_user = room.participants.exclude(id=request.user.id).first()
-        if other_user:
-            # Get the last message in this chatroom
-            last_message = room.messages.order_by('-timestamp').first()
-            
-            # Count unread messages (messages after user's last login)
-            unread_count = room.messages.filter(
-                sender=other_user,
-                timestamp__gt=request.user.last_login
-            ).count() if request.user.last_login else room.messages.filter(sender=other_user).count()
-            
-            conversations.append({
-                'chatroom': room,
-                'user': other_user,
-                'last_message': last_message,
-                'unread_count': unread_count
-            })
-
-    return render(request, 'chat/inbox.html', {'conversations': conversations})
 
 
 @login_required

@@ -1,529 +1,215 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Sidebar Navbar</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
-            min-height: 100vh;
-            color: #1f2937;
-            scroll-behavior: smooth;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .container-wrapper {
-            display: flex;
-            min-height: 100vh;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100px;
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-right: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 32px 0;
-            gap: 32px;
-            z-index: 999;
-            transition: all 0.3s ease;
-        }
-
-        .nav-items {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-        }
-
-        .nav-btn {
-            width: 56px;
-            height: 56px;
-            border: none;
-            border-radius: 16px;
-            background-color: transparent;
-            color: #4b5563;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(79, 70, 229, 0.1), rgba(147, 51, 234, 0.1));
-            transition: left 0.3s ease;
-            border-radius: 16px;
-            z-index: -1;
-        }
-
-        .nav-btn:hover::before {
-            left: 0;
-        }
-
-        .nav-btn:hover {
-            color: #4f46e5;
-            background: rgba(79, 70, 229, 0.08);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(to right, #4f46e5, #9333ea);
-            color: white;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            transform: scale(1.05);
-        }
-
-        .nav-btn.active:hover {
-            background: linear-gradient(to right, #4338ca, #7e22ce);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-        }
-
-        .spacer {
-            flex: 1;
-        }
-
-        .settings-btn {
-            width: 56px;
-            height: 56px;
-            border: none;
-            border-radius: 16px;
-            background-color: transparent;
-            color: #4b5563;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .settings-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(79, 70, 229, 0.1), rgba(147, 51, 234, 0.1));
-            transition: left 0.3s ease;
-            border-radius: 16px;
-            z-index: -1;
-        }
-
-        .settings-btn:hover::before {
-            left: 0;
-        }
-
-        .settings-btn:hover {
-            color: #4f46e5;
-            background: rgba(79, 70, 229, 0.08);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15);
-        }
-
-        .settings-btn.active {
-            background: linear-gradient(to right, #4f46e5, #9333ea);
-            color: white;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            transform: scale(1.05);
-        }
-
-        .settings-btn.active:hover {
-            background: linear-gradient(to right, #4338ca, #7e22ce);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            margin-left: 100px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .content-header {
-            color: #1f2937;
-            margin-bottom: 40px;
-        }
-
-        .content-header h1 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #4f46e5, #9333ea, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .content-header p {
-            color: #6b7280;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        /* Content Cards */
-        .content-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .content-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-            border-color: rgba(79, 70, 229, 0.3);
-        }
-
-        .content-card h3 {
-            color: #1f2937;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .content-card h3 i {
-            color: #4f46e5;
-            font-size: 20px;
-        }
-
-        .content-card p {
-            color: #6b7280;
-            line-height: 1.6;
-        }
-
-        /* Tooltip */
-        .tooltip-container {
-            position: relative;
-        }
-
-        .nav-btn[title]:hover::after,
-        .settings-btn[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            left: 75px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #1f2937;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            white-space: nowrap;
-            z-index: 1000;
-            pointer-events: none;
-            font-weight: 600;
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 80px;
-                gap: 20px;
-                padding: 20px 0;
-            }
-
-            .nav-btn,
-            .settings-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 18px;
-            }
-
-            .main-content {
-                margin-left: 80px;
-                padding: 30px 20px;
-            }
-
-            .content-header h1 {
-                font-size: 28px;
-            }
-
-            .content-header p {
-                font-size: 14px;
-            }
-
-            .content-card {
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .sidebar {
-                width: 70px;
-                gap: 16px;
-                padding: 16px 0;
-            }
-
-            .nav-btn,
-            .settings-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 16px;
-            }
-
-            .main-content {
-                margin-left: 70px;
-                padding: 20px 15px;
-            }
-
-            .content-header h1 {
-                font-size: 24px;
-            }
-
-            .nav-btn[title]:hover::after,
-            .settings-btn[title]:hover::after {
-                left: 60px;
-                font-size: 12px;
-                padding: 8px 12px;
-            }
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .content-card {
-            animation: fadeIn 0.5s ease-out;
-        }
-    </style>
-</head>
 <body>
-    <div class="container-wrapper">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <!-- Navigation Items -->
-            <div class="nav-items">
-                <button class="nav-btn active" data-id="dashboard" title="Dashboard">
-                    <i class="fas fa-th-large"></i>
-                </button>
-                <button class="nav-btn" data-id="home" title="Home">
-                    <i class="fas fa-home"></i>
-                </button>
-                <button class="nav-btn" data-id="explore" title="Explore">
-                    <i class="fas fa-compass"></i>
-                </button>
-                <button class="nav-btn" data-id="messages" title="Messages">
-                    <i class="fas fa-comment-dots"></i>
-                </button>
-                <button class="nav-btn" data-id="bookmarks" title="Bookmarks">
-                    <i class="fas fa-bookmark"></i>
-                </button>
-                <button class="nav-btn" data-id="lists" title="Lists">
-                    <i class="fas fa-list"></i>
-                </button>
-                <button class="nav-btn" data-id="profile" title="Profile">
-                    <i class="fas fa-user-circle"></i>
-                </button>
+    <!-- Floating background elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <div class="main-container">
+        <!-- Inbox Sidebar -->
+        <div class="inbox-container">
+            <div class="inbox-header">
+                <h2 class="inbox-title">
+                    <i class="fas fa-inbox"></i>
+                    Messages
+                </h2>
+                <div class="inbox-stats">
+                    <span class="conversation-count">{{ conversations|length }} conversation{{ conversations|length|pluralize }}</span>
+                </div>
             </div>
 
-            <!-- Spacer -->
-            <div class="spacer"></div>
-
-            <!-- Settings Button -->
-            <button class="settings-btn" data-id="settings" title="Settings">
-                <i class="fas fa-cog"></i>
-            </button>
+            <div class="conversations-list">
+                {% for convo in conversations %}
+                    <a href="{% url 'combined_chat' chatroom_id=convo.chatroom.id %}" 
+                       class="conversation-item {% if active_chatroom and active_chatroom.id == convo.chatroom.id %}active{% endif %}">
+                        <div class="conversation-avatar">
+                            <div class="avatar-circle">
+                                {{ convo.user.username.0|upper }}
+                            </div>
+                        </div>
+                        
+                        <div class="conversation-content">
+                            <div class="conversation-header">
+                                <h3 class="username">{{ convo.user.username }}</h3>
+                                <span class="message-time">
+                                    {% if convo.last_message %}
+                                        {{ convo.last_message.timestamp|timesince }} ago
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="conversation-preview">
+                                <p class="last-message">
+                                    {% if convo.last_message %}
+                                        {% if convo.last_message.sender == request.user %}
+                                            <span class="you-indicator">You: </span>
+                                        {% endif %}
+                                        {{ convo.last_message.content|truncatewords:10 }}
+                                    {% else %}
+                                        Start a conversation...
+                                    {% endif %}
+                                </p>
+                                {% if convo.unread_count > 0 %}
+                                    <span class="unread-badge">{{ convo.unread_count }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                {% empty %}
+                    <div class="empty-inbox">
+                        <div class="empty-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>No messages yet</h3>
+                        <p>Start a conversation with someone!</p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="content-header">
-                <h1 id="page-title">Dashboard</h1>
-                <p>Welcome to your personalized space</p>
-            </div>
+        <!-- Chat Area -->
+        <div class="chat-container">
+            {% if active_chatroom and other_user %}
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="avatar">
+                            {{ other_user.username.0|upper }}
+                        </div>
+                        <div class="user-info">
+                            <h3 class="username">{{ other_user.username }}</h3>
+                            <span class="user-status">
+                                <span class="status-dot"></span>
+                                Online
+                            </span>
+                        </div>
+                        <form method="post" action="{% url 'delete_chat' active_chatroom.id %}" onsubmit="return confirm('Are you sure you want to delete this entire chat?');">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-chat-btn">
+                                <i class="fas fa-trash"></i>
+                                Delete Chat
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
-            <!-- Content Cards -->
-            <div id="content-cards">
-                <div class="content-card">
-                    <h3><i class="fas fa-chart-line"></i> Overview</h3>
-                    <p>Track your activity and engagement metrics. Stay updated with real-time statistics and insights about your performance.</p>
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    {% for message in messages %}
+                        <div class="message {% if message.sender == request.user %}message-sent{% else %}message-received{% endif %}">
+                            <div class="message-bubble">
+                                <div class="message-content">{{ message.content }}</div>
+
+                                {% if message.sender == request.user %}
+                                <form method="post" action="{% url 'delete_message' message.id %}" class="delete-form" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="delete-message-btn">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                                {% endif %}
+
+                                <div class="message-time">
+                                    {{ message.timestamp|time:"g:i A" }}
+                                    {% if message.sender == request.user %}
+                                        <i class="fas fa-check-double read-receipt"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="empty-chat">
+                            <div class="empty-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3>No messages yet</h3>
+                            <p>Start the conversation!</p>
+                        </div>
+                    {% endfor %}
                 </div>
-                <div class="content-card">
-                    <h3><i class="fas fa-bell"></i> Notifications</h3>
-                    <p>Get instant updates on new interactions. Never miss important activities and stay connected with your community.</p>
+
+                <!-- Message Input -->
+                <div class="message-input-container">
+                    <form method="post" class="message-form">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <textarea name="message" placeholder="Type a message..." required class="message-input" id="messageInput"></textarea>
+                            </div>
+                            <button type="submit" class="send-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="content-card">
-                    <h3><i class="fas fa-star"></i> Highlights</h3>
-                    <p>Discover your best performing content. Learn what resonates most with your audience and optimize your strategy.</p>
+            {% else %}
+                <!-- Empty State when no chat is selected -->
+                <div class="empty-chat" style="width: 100%;">
+                    <div class="empty-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Select a conversation</h3>
+                    <p>Choose a chat from the sidebar to start messaging</p>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 
     <script>
-        const navButtons = document.querySelectorAll('.nav-btn, .settings-btn');
-        const pageTitle = document.getElementById('page-title');
-        const contentCards = document.getElementById('content-cards');
-
-        // Map of page content
-        const pageContent = {
-            dashboard: {
-                title: 'Dashboard',
-                subtitle: 'Welcome to your personalized space',
-                cards: [
-                    { icon: 'chart-line', title: 'Overview', description: 'Track your activity and engagement metrics. Stay updated with real-time statistics and insights about your performance.' },
-                    { icon: 'bell', title: 'Notifications', description: 'Get instant updates on new interactions. Never miss important activities and stay connected with your community.' },
-                    { icon: 'star', title: 'Highlights', description: 'Discover your best performing content. Learn what resonates most with your audience and optimize your strategy.' }
-                ]
-            },
-            home: {
-                title: 'Home',
-                subtitle: 'Your feed and recent updates',
-                cards: [
-                    { icon: 'home', title: 'Feed', description: 'See posts and updates from accounts you follow. Stay informed and engaged with fresh content.' },
-                    { icon: 'heart', title: 'Likes', description: 'View all your liked posts in one place. Easily access your favorite content whenever you want.' },
-                    { icon: 'share', title: 'Shares', description: 'Track all your shared content. See how your posts are being distributed across the platform.' }
-                ]
-            },
-            explore: {
-                title: 'Explore',
-                subtitle: 'Discover trending content',
-                cards: [
-                    { icon: 'compass', title: 'Trending', description: 'Discover what is trending right now. Find popular topics, hashtags, and conversations.' },
-                    { icon: 'fire', title: 'Hot Topics', description: 'See the hottest discussions happening now. Join conversations that matter to your interests.' },
-                    { icon: 'search', title: 'Search', description: 'Find exactly what you are looking for. Advanced search filters to narrow down your results.' }
-                ]
-            },
-            messages: {
-                title: 'Messages',
-                subtitle: 'Your conversations and chats',
-                cards: [
-                    { icon: 'inbox', title: 'Inbox', description: 'Manage all your incoming messages. Keep your conversations organized and accessible.' },
-                    { icon: 'paper-plane', title: 'Sent', description: 'View all your sent messages. Keep track of your communication history.' },
-                    { icon: 'archive', title: 'Archive', description: 'Restore or manage archived conversations. Never lose important messages.' }
-                ]
-            },
-            bookmarks: {
-                title: 'Bookmarks',
-                subtitle: 'Your saved content collection',
-                cards: [
-                    { icon: 'bookmark', title: 'Saved Items', description: 'Access all your bookmarked content. Build your personal library of interesting posts.' },
-                    { icon: 'folder', title: 'Collections', description: 'Organize bookmarks into collections. Create themed folders for different interests.' },
-                    { icon: 'history', title: 'History', description: 'View your browsing history. See everything you have viewed recently.' }
-                ]
-            },
-            lists: {
-                title: 'Lists',
-                subtitle: 'Manage your custom lists',
-                cards: [
-                    { icon: 'list', title: 'My Lists', description: 'Create and manage custom lists. Organize accounts and topics the way you want.' },
-                    { icon: 'users', title: 'Following', description: 'Keep track of who you are following. Organize follows into different groups.' },
-                    { icon: 'users-slash', title: 'Blocked', description: 'Manage your block list. Control who can interact with you.' }
-                ]
-            },
-            profile: {
-                title: 'Profile',
-                subtitle: 'Your personal profile',
-                cards: [
-                    { icon: 'user-circle', title: 'About', description: 'View and edit your profile information. Keep your details up to date.' },
-                    { icon: 'image', title: 'Media', description: 'All photos and videos you have shared. Browse your media gallery.' },
-                    { icon: 'link', title: 'Links', description: 'Manage your connected accounts. Link your social profiles.' }
-                ]
-            },
-            settings: {
-                title: 'Settings',
-                subtitle: 'Customize your experience',
-                cards: [
-                    { icon: 'shield', title: 'Privacy & Safety', description: 'Control your privacy settings. Manage who can see your content.' },
-                    { icon: 'moon', title: 'Appearance', description: 'Choose your preferred theme and colors. Customize the look and feel.' },
-                    { icon: 'bell-slash', title: 'Notifications', description: 'Manage notification preferences. Control what alerts you receive.' }
-                ]
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('messageInput');
+            const messageForm = document.querySelector('.message-form');
+            
+            // Auto-scroll to bottom
+            function scrollToBottom() {
+                if (chatMessages) {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
             }
-        };
+            
+            // Auto-resize textarea
+            if (messageInput) {
+                messageInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                });
+            }
+            
+            // Scroll to bottom on page load
+            scrollToBottom();
+            
+            // Handle form submission
+            if (messageForm) {
+                messageForm.addEventListener('submit', function() {
+                    setTimeout(() => {
+                        if (messageInput) {
+                            messageInput.value = '';
+                            messageInput.style.height = 'auto';
+                        }
+                        scrollToBottom();
+                    }, 100);
+                });
+            }
+            
+            // Add Enter key support (Shift+Enter for new line)
+            if (messageInput) {
+                messageInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (messageForm) {
+                            messageForm.dispatchEvent(new Event('submit'));
+                        }
+                    }
+                });
+            }
 
-        // Update page content
-        function updatePageContent(pageId) {
-            const content = pageContent[pageId];
-            if (!content) return;
-
-            pageTitle.textContent = content.title;
-
-            // Create card HTML
-            contentCards.innerHTML = content.cards.map(card => `
-                <div class="content-card">
-                    <h3><i class="fas fa-${card.icon}"></i> ${card.title}</h3>
-                    <p>${card.description}</p>
-                </div>
-            `).join('');
-        }
-
-        // Button click handlers
-        navButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                navButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
-                this.classList.add('active');
-                
-                // Update page content
-                const id = this.getAttribute('data-id');
-                updatePageContent(id);
-            });
+            // Prevent going back to previous page
+            history.pushState(null, null, location.href);
+            window.onpopstate = function () {
+                history.pushState(null, null, location.href);
+            };
         });
     </script>
 </body>
-</html>
