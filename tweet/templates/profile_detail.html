@@ -11,8 +11,8 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
         min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
+        /* position: relative;
+        overflow-x: hidden; */
     }
 
     body::before {
@@ -457,7 +457,7 @@
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid rgba(255, 255, 255, 0.9);
-        box-shadow: 
+        box-shadow:
             0 8px 25px rgba(0, 0, 0, 0.15),
             0 4px 12px rgba(0, 0, 0, 0.1),
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -477,7 +477,7 @@
         align-items: center;
         justify-content: center;
         border: 3px solid rgba(255, 255, 255, 0.9);
-        box-shadow: 
+        box-shadow:
             0 8px 25px rgba(102, 126, 234, 0.3),
             0 4px 12px rgba(0, 0, 0, 0.1),
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -559,11 +559,9 @@
 
     .horizontal-avatar-link:hover .horizontal-profile-photo,
     .horizontal-avatar-link:hover .horizontal-default-avatar {
-        transform: 
-            rotateY(10deg) 
-            rotateX(5deg) 
-            translateZ(10px);
-        box-shadow: 
+        transform:
+            rotateY(10deg) rotateX(5deg) translateZ(10px);
+        box-shadow:
             0 15px 35px rgba(102, 126, 234, 0.4),
             0 5px 15px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -574,17 +572,17 @@
         .horizontal-following-grid {
             gap: 10px;
         }
-        
+
         .horizontal-profile-photo,
         .horizontal-default-avatar {
             width: 50px;
             height: 50px;
         }
-        
+
         .horizontal-avatar-initial {
             font-size: 1rem;
         }
-        
+
         .horizontal-username {
             font-size: 0.65rem;
         }
@@ -594,12 +592,13 @@
         .horizontal-following-grid {
             justify-content: center;
         }
-        
+
         .horizontal-user-item {
             flex: 0 0 calc(25% - 10px);
         }
     }
-     .masonry-grid {
+
+    .masonry-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 15px;
@@ -839,12 +838,29 @@
     }
 
     /* Stagger animation for multiple cards */
-    .tweet-card:nth-child(1) { animation-delay: 0.1s; }
-    .tweet-card:nth-child(2) { animation-delay: 0.2s; }
-    .tweet-card:nth-child(3) { animation-delay: 0.3s; }
-    .tweet-card:nth-child(4) { animation-delay: 0.4s; }
-    .tweet-card:nth-child(5) { animation-delay: 0.5s; }
-    .tweet-card:nth-child(6) { animation-delay: 0.6s; }
+    .tweet-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .tweet-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .tweet-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .tweet-card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .tweet-card:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .tweet-card:nth-child(6) {
+        animation-delay: 0.6s;
+    }
 
     /* Hover overlay for tweet cards */
     .tweet-card::after {
@@ -854,12 +870,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(
-            to bottom,
-            transparent 0%,
-            transparent 70%,
-            rgba(0, 0, 0, 0.1) 100%
-        );
+        background: linear-gradient(to bottom,
+                transparent 0%,
+                transparent 70%,
+                rgba(0, 0, 0, 0.1) 100%);
         opacity: 0;
         transition: opacity 0.3s ease;
         pointer-events: none;
@@ -871,13 +885,12 @@
     }
 
     [data-theme="dark"] .tweet-card::after {
-        background: linear-gradient(
-            to bottom,
-            transparent 0%,
-            transparent 70%,
-            rgba(0, 0, 0, 0.3) 100%
-        );
+        background: linear-gradient(to bottom,
+                transparent 0%,
+                transparent 70%,
+                rgba(0, 0, 0, 0.3) 100%);
     }
+
     .tweet-modal-overlay {
         position: fixed;
         top: 0;
@@ -998,98 +1011,105 @@
     [data-theme="dark"] .tweet-modal-date {
         color: #a8a8a8;
     }
-/* Like Button Styles */
-.tweet-actions {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    z-index: 5;
-}
 
-.like-form {
-    margin: 0;
-}
+    /* Like Button Styles */
+    .tweet-actions {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        z-index: 5;
+    }
 
-.like-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 20px;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+    .like-form {
+        margin: 0;
+    }
 
-[data-theme="dark"] .like-btn {
-    background: rgba(26, 26, 46, 0.9);
-}
+    .like-btn {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 20px;
+        padding: 8px 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-.like-btn:hover {
-    transform: scale(1.05);
-}
+    [data-theme="dark"] .like-btn {
+        background: rgba(26, 26, 46, 0.9);
+    }
 
-.like-btn.liked {
-    background: rgba(239, 68, 68, 0.2);
-}
+    .like-btn:hover {
+        transform: scale(1.05);
+    }
 
-.like-btn.liked .like-icon {
-    transform: scale(1.2);
-}
+    .like-btn.liked {
+        background: rgba(239, 68, 68, 0.2);
+    }
 
-.like-icon {
-    font-size: 1.1rem;
-    transition: transform 0.2s ease;
-}
+    .like-btn.liked .like-icon {
+        transform: scale(1.2);
+    }
 
-.like-count {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #4a5568;
-}
+    .like-icon {
+        font-size: 1.1rem;
+        transition: transform 0.2s ease;
+    }
 
-[data-theme="dark"] .like-count {
-    color: #d4d4d4;
-}
+    .like-count {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #4a5568;
+    }
 
-.like-btn.liked .like-count {
-    color: #ef4444;
-    font-weight: 700;
-}
+    [data-theme="dark"] .like-count {
+        color: #d4d4d4;
+    }
 
-/* Ensure tweet card has relative positioning for absolute positioning of like button */
-.tweet-card {
-    position: relative;
-}
-/* Show More Button Styles */
-.show-more-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 24px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
+    .like-btn.liked .like-count {
+        color: #ef4444;
+        font-weight: 700;
+    }
 
-.show-more-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-}
+    /* Ensure tweet card has relative positioning for absolute positioning of like button */
+    .tweet-card {
+        position: relative;
+    }
 
-.show-more-btn:active {
-    transform: translateY(0);
-}
+    /* Show More Button Styles */
+    .show-more-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
 
-[data-theme="dark"] .show-more-btn {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-}
+    .show-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .show-more-btn:active {
+        transform: translateY(0);
+    }
+
+    [data-theme="dark"] .show-more-btn {
+        background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    }
+
+    .ms {
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
 
 <div class="dashboard">
@@ -1116,7 +1136,7 @@
             <p class="profile-bio">BIO: {{ profile.bio }}</p>
             {% endif %}
 
-           
+
 
             <div class="stats-grid">
                 <div class="stat-box">
@@ -1135,8 +1155,8 @@
                     <div class="stat-label">Following</div>
                 </div>
                 <div class="stat-box">
-        <div class="stat-number">{{ profile.total_likes_received|default:"0" }}</div>
-        <div class="stat-label">Total Likes</div>
+                    <div class="stat-number">{{ profile.total_likes_received|default:"0" }}</div>
+                    <div class="stat-label">Total Likes</div>
                 </div>
             </div>
 
@@ -1153,85 +1173,89 @@
         <div class="header-bar">
             <h1 class="header-title">Profile Activity</h1>
             {% if request.user == profile.user %}
-    <a href="{% url 'tweet_create' %}" class="btn btn-primary">Create Tweet</a>
-{% else %}
-    <div style="display: flex; gap: 10px;">
-        <!-- Follow/Following button -->
-        <form method="post" action="{% url 'follow_user' profile.user.username %}">
-            {% csrf_token %}
-            {% if request.user in profile.followers.all %}
-                <button type="submit" class="btn btn-secondary">Following</button>
-                 {% if request.user.is_authenticated and profile_user %}
-    <a href="{% url 'start_chat' username=profile_user.username %}" class="btn btn-primary">
-        Message
-    </a>
-{% endif %}
+            <a href="{% url 'tweet_create' %}" class="btn btn-primary">Create Tweet</a>
             {% else %}
-                <button type="submit" class="btn btn-primary">Follow</button>
-            {% endif %}
-        </form>
+            <div class="ms">
+                <!-- Follow/Following button -->
+                <form method="post" action="{% url 'follow_user' profile.user.username %}">
+                    {% csrf_token %}
+                    {% if request.user in profile.followers.all %}
+                    <div style="display: flex;">
+                        <div>
+                            <button type="submit" class="btn btn-secondary">Following</button>
+                        </div>
+                        {% if request.user.is_authenticated and profile_user %}
+                        <div> <a href="{% url 'start_chat' username=profile_user.username %}" class="btn btn-primary">
+                                Message
+                            </a>
+                        </div>
+                    </div>
 
-        <!-- Message button -->
-   
-    </div>
-{% endif %}
+                    {% endif %}
+                    {% else %}
+                    <button type="submit" class="btn btn-primary">Follow</button>
+                    {% endif %}
+                </form>
+
+                <!-- Message button -->
+
+            </div>
+            {% endif %}
 
         </div>
 
-       <div class="post-card">
-    {% if tweets %}
-        <div class="masonry-grid" id="tweetsGrid">
-            {% for tweet in tweets %}
-            <div class="tweet-card" 
-                 data-tweet-id="{{ tweet.id }}"
-                 data-tweet-text="{{ tweet.text }}"
-                 data-tweet-photo="{% if tweet.photo %}{{ tweet.photo.url }}{% endif %}"
-                 data-tweet-username="{{ tweet.user.username }}"
-                 data-tweet-date="{{ tweet.updated_at|date:'M d, Y' }}"
-                 data-tweet-userphoto="{% if tweet.user.userprofile.profile_photo %}{{ tweet.user.userprofile.profile_photo.url }}{% endif %}"
-                 data-tweet-likes="{{ tweet.total_likes }}">
-                
-                {% if tweet.photo %}
+        <div class="post-card">
+            {% if tweets %}
+            <div class="masonry-grid" id="tweetsGrid">
+                {% for tweet in tweets %}
+                <div class="tweet-card" data-tweet-id="{{ tweet.id }}" data-tweet-text="{{ tweet.text }}"
+                    data-tweet-photo="{% if tweet.photo %}{{ tweet.photo.url }}{% endif %}"
+                    data-tweet-username="{{ tweet.user.username }}"
+                    data-tweet-date="{{ tweet.updated_at|date:'M d, Y' }}"
+                    data-tweet-userphoto="{% if tweet.user.userprofile.profile_photo %}{{ tweet.user.userprofile.profile_photo.url }}{% endif %}"
+                    data-tweet-likes="{{ tweet.total_likes }}">
+
+                    {% if tweet.photo %}
                     <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet Photo">
-                {% else %}
+                    {% else %}
                     <div class="tweet-text-only">
                         <p>{{ tweet.text|truncatewords:20 }}</p>
                     </div>
-                {% endif %}
-                
-                <!-- Like Button and Count -->
-                <div class="tweet-actions">
-                    <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
-                        {% csrf_token %}
-                        <button type="submit" class="like-btn">
-                            <span class="like-icon">❤️</span>
-                            <span class="like-count">{{ tweet.total_likes }}</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+                    {% endif %}
 
-        <!-- Show more posts link -->
-        {% if all_tweets_count > 4 %}
-        <div class="show-more-container" style="text-align: center; margin-top: 20px;">
-           <a href="{% url 'my_feed' %}">
- <button id="showMoreBtn" class="show-more-btn">
-                +{{ all_tweets_count|add:"-4" }} more posts
-            </button>
-           </a>
-           
+                    <!-- Like Button and Count -->
+                    <div class="tweet-actions">
+                        <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
+                            {% csrf_token %}
+                            <button type="submit" class="like-btn">
+                                <span class="like-icon">❤️</span>
+                                <span class="like-count">{{ tweet.total_likes }}</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Show more posts link -->
+            {% if all_tweets_count > 4 %}
+            <div class="show-more-container" style="text-align: center; margin-top: 20px;">
+                <a href="{% url 'my_feed' %}">
+                    <button id="showMoreBtn" class="show-more-btn">
+                        +{{ all_tweets_count|add:"-4" }} more posts
+                    </button>
+                </a>
+
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h2 class="empty-state-title">No tweets yet</h2>
+                <p class="empty-state-text">You haven't posted any tweets yet.</p>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
-    {% else %}
-        <div class="empty-state">
-            <div class="empty-state-icon">📭</div>
-            <h2 class="empty-state-title">No tweets yet</h2>
-            <p class="empty-state-text">You haven't posted any tweets yet.</p>
-        </div>
-    {% endif %}
-</div>
     </div>
 
     <!-- RIGHT SIDEBAR -->
@@ -1244,13 +1268,12 @@
                 <div class="horizontal-user-item">
                     <a href="{% url 'profile_detail' user.username %}" class="horizontal-avatar-link">
                         {% if user.userprofile and user.userprofile.profile_photo %}
-                            <img src="{{ user.userprofile.profile_photo.url }}" 
-                                 alt="{{ user.username }}" 
-                                 class="horizontal-profile-photo">
+                        <img src="{{ user.userprofile.profile_photo.url }}" alt="{{ user.username }}"
+                            class="horizontal-profile-photo">
                         {% else %}
-                            <div class="horizontal-default-avatar">
-                                <span class="horizontal-avatar-initial">{{ user.username|first|upper }}</span>
-                            </div>
+                        <div class="horizontal-default-avatar">
+                            <span class="horizontal-avatar-initial">{{ user.username|first|upper }}</span>
+                        </div>
                         {% endif %}
                     </a>
                     <a href="{% url 'profile_detail' user.username %}" class="horizontal-username">
@@ -1261,9 +1284,8 @@
             </div>
             {% if following|length > 4 %}
             <div style="text-align: center; margin-top: 15px;">
-                <a href="{% url 'following_list' profile.user.username %}" 
-                   class="profile-link" 
-                   style="display: inline-flex; padding: 8px 16px; font-size: 0.8rem;">
+                <a href="{% url 'following_list' profile.user.username %}" class="profile-link"
+                    style="display: inline-flex; padding: 8px 16px; font-size: 0.8rem;">
                     +{{ following|length|add:"-4" }} more
                 </a>
             </div>
@@ -1284,12 +1306,12 @@
             <a href="{% url 'following_list' profile.user.username %}" class="profile-link">
                 <i class="fas fa-user-friends"></i> View Following
             </a>
-           {% if request.user == profile.user %}
-    <a href="{% url 'delete_account' %}" class="btn btn-danger">
-        Delete Account
-    </a>
-    
-{% endif %}
+            {% if request.user == profile.user %}
+            <a href="{% url 'delete_account' %}" class="btn btn-danger">
+                Delete Account
+            </a>
+
+            {% endif %}
 
         </div>
     </div>
@@ -1307,7 +1329,7 @@
 
 <script>
     // Tweet Modal functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const tweetCards = document.querySelectorAll('.tweet-card');
         const tweetModal = document.getElementById('tweetModal');
         const closeTweetModal = document.getElementById('closeTweetModal');
@@ -1315,14 +1337,14 @@
 
         // Open modal on tweet card click
         tweetCards.forEach(card => {
-            card.addEventListener('click', function() {
+            card.addEventListener('click', function () {
                 const tweetId = this.getAttribute('data-tweet-id');
                 const tweetText = this.getAttribute('data-tweet-text');
                 const tweetPhoto = this.getAttribute('data-tweet-photo');
                 const tweetUsername = this.getAttribute('data-tweet-username');
                 const tweetDate = this.getAttribute('data-tweet-date');
                 const tweetUserPhoto = this.getAttribute('data-tweet-userphoto');
-                
+
                 showTweetModal({
                     id: tweetId,
                     text: tweetText,
@@ -1335,19 +1357,19 @@
         });
 
         // Close modal
-        closeTweetModal.addEventListener('click', function() {
+        closeTweetModal.addEventListener('click', function () {
             tweetModal.style.display = 'none';
         });
 
         // Close modal when clicking outside
-        tweetModal.addEventListener('click', function(e) {
+        tweetModal.addEventListener('click', function (e) {
             if (e.target === tweetModal) {
                 tweetModal.style.display = 'none';
             }
         });
 
         // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && tweetModal.style.display === 'flex') {
                 tweetModal.style.display = 'none';
             }
@@ -1355,27 +1377,27 @@
 
         function showTweetModal(tweet) {
             let modalContent = '';
-            
+
             if (tweet.photo && tweet.photo !== 'None') {
                 modalContent += `<img src="${tweet.photo}" class="tweet-modal-image" alt="Tweet Photo">`;
             }
-            
+
             modalContent += `
                 <div class="tweet-modal-text">
                     ${tweet.text}
                 </div>
                 <div class="tweet-modal-info">
                     <div class="tweet-modal-user">
-                        ${tweet.userPhoto && tweet.userPhoto !== 'None' ? 
-                            `<img src="${tweet.userPhoto}" class="tweet-modal-avatar" alt="${tweet.username}">` : 
-                            `<div style="width:40px;height:40px;border-radius:50%;background:#667eea;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold">${tweet.username.charAt(0).toUpperCase()}</div>`
-                        }
+                        ${tweet.userPhoto && tweet.userPhoto !== 'None' ?
+                    `<img src="${tweet.userPhoto}" class="tweet-modal-avatar" alt="${tweet.username}">` :
+                    `<div style="width:40px;height:40px;border-radius:50%;background:#667eea;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold">${tweet.username.charAt(0).toUpperCase()}</div>`
+                }
                         <span class="tweet-modal-username">${tweet.username}</span>
                     </div>
                     <div class="tweet-modal-date">${tweet.date}</div>
                 </div>
             `;
-            
+
             tweetModalBody.innerHTML = modalContent;
             tweetModal.style.display = 'flex';
         }
