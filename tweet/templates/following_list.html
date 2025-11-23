@@ -17,7 +17,7 @@
     .header-icon {
         width: 70px;
         height: 70px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -59,7 +59,7 @@
 
     .following-count {
         display: inline-block;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         padding: 0.5rem 1.5rem;
         border-radius: 20px;
@@ -148,7 +148,7 @@
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -192,7 +192,7 @@
         left: 0;
         width: 0;
         height: 2px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         transition: width 0.3s ease;
     }
 
@@ -229,7 +229,7 @@
     }
 
     .btn-follow {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
@@ -378,10 +378,7 @@
     </a>
 
     <div class="page-header">
-        <div class="header-icon">
-            <i class="fas fa-user-friends"></i>
-        </div>
-        <h2 class="page-title">Following</h2>
+       
         <p class="page-subtitle">People {{ profile_user.username }} is following</p>
         {% if following %}
         <span class="following-count">

@@ -97,7 +97,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from tweet.models import UserProfile
-
 @login_required
 def combined_chat_view(request, chatroom_id=None):
     # Get all conversations for the inbox
@@ -137,14 +136,13 @@ def combined_chat_view(request, chatroom_id=None):
         messages = active_chatroom.messages.all().order_by('timestamp')
         other_user = active_chatroom.participants.exclude(id=request.user.id).first()
 
-    # Handle message sending - FIX THIS PART
+    # Handle message sending
     if request.method == 'POST' and active_chatroom:
         content = request.POST.get('message')
         if content:
             active_chatroom.messages.create(sender=request.user, content=content)
             # Redirect to the same chatroom using the correct URL name
             return redirect('combined_chat', chatroom_id=active_chatroom.id)
-    profile = UserProfile.objects.get(user__username=username)
 
     return render(request, 'chat/combine.html', {
         'conversations': conversations,

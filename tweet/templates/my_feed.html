@@ -195,7 +195,7 @@
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -470,9 +470,16 @@
     .modal-content::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.5);
     }
+    .tit{
+    color: #2d3748;
+    display: flex;
+    justify-content: center;   /* horizontal center */
+    align-items: center;        /* vertical center */
+}
 </style>
 
 <div class="container">
+    <h3 class="tit">Your Post</h3>
     {% if tweets %}
         <div class="masonry-grid">
             {% for tweet in tweets %}

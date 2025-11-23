@@ -41,7 +41,7 @@ Tweets - TweetShare
 
     .create-tweet-btn {
         display: inline-block;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         padding: 15px 40px;
         border-radius: 50px;
@@ -231,7 +231,7 @@ Tweets - TweetShare
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -506,6 +506,12 @@ Tweets - TweetShare
     .modal-content::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.5);
     }
+    .tit{
+    color: #2d3748;
+    display: flex;
+    justify-content: center;   /* horizontal center */
+    align-items: center;        /* vertical center */
+}
 </style>
 
 <div class="tweet-container">
@@ -515,6 +521,7 @@ Tweets - TweetShare
     </a> -->
     
     <!-- Masonry Grid -->
+     <h3 class="tit">Public Feed</h3>
     {% if tweets %}
         <div class="masonry-grid">
             {% for tweet in tweets %}
