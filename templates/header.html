@@ -711,6 +711,11 @@
         display: none !important;
       }
     }
+   
+    .img{
+      height: 100px;
+      width: auto;
+    }
   </style>
 </head>
 
@@ -721,10 +726,10 @@
   <!-- Mobile Sidebar -->
   <div class="mobile-sidebar" id="mobileSidebar">
     <div class="sidebar-header">
-      <div class="sidebar-brand">
-        <i class="fa fa-coffee"></i>
-        <span>TweetHub</span>
-      </div>
+    <div class="sidebar-brand">
+  <img src="{% static 'images/final_logo.png' %}" alt="TweetHub Logo" style="height: 100px; width: 150px;">
+
+</div>
       <button class="close-sidebar-btn" id="closeSidebarBtn">
         <i class="fas fa-times"></i>
       </button>
@@ -831,13 +836,10 @@
   <!-- Desktop Navbar -->
   <nav class="navbar navbar-expand-lg" id="mainNav">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">
-        <div class="brand-icon">
-          <i class="fa fa-coffee" aria-hidden="true" style="color: white;"></i>
-        </div>
-        <span>TweetHub</span>
-      </a>
-
+   
+ <a class="navbar-brand" href="{% url 'home' %}" >
+    <img src="{% static 'images/final_logo.png' %}" alt="TweetHub Logo" style="height: 40px; width: auto;">
+  </a>
       <button class="sidebar-toggle-btn" id="sidebarToggleBtn">
         <i class="fas fa-bars"></i>
       </button>
