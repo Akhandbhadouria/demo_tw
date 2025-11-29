@@ -642,6 +642,16 @@
             min-height: 140px;
         }
     }
+    .review-card {
+    padding: 15px;
+    margin: 10px 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.reviews h2 {
+    margin-bottom: 20px;
+}
 </style>
 <body>
 
@@ -755,6 +765,29 @@
     </div>
     <br><br><br>
     {%include "contact.html"%}
+
+    <section class="reviews">
+    <h2>Latest Reviews</h2>
+{% for profile in profiles %}
+    <div>
+        <p>{{ profile.user.username }}</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_review' profile.id %}" class="btn btn-primary">Add Review</a>
+        {% else %}
+            <p>Login to add a review</p>
+        {% endif %}
+    </div>
+{% endfor %}
+
+
+</section>
+{% if user.is_authenticated %}
+    <a href="{% url 'add_review' profile.id %}" class="btn btn-primary">Add Review</a>
+{% else %}
+    <p>Login to add a review</p>
+{% endif %}
+
+
 
     <script>
         // Theme Switching Functionality

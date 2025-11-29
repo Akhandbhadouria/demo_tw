@@ -1305,6 +1305,26 @@
             };
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on the main messages page (no active chat)
+    const isEmptyChat = document.querySelector('.empty-chat') !== null;
+    
+    if (isEmptyChat) {
+        // Get the first conversation from the inbox (most recent)
+        const firstConversation = document.querySelector('.conversation-item');
+        const mobileFirstConversation = document.querySelector('.mobile-conversation-btn');
+        
+        if (firstConversation) {
+            // Redirect to the most recent conversation
+            window.location.href = firstConversation.href;
+        } else if (mobileFirstConversation) {
+            // For mobile, use the mobile conversation button
+            window.location.href = mobileFirstConversation.href;
+        }
+    }
+});
+</script>
 </body>
 
 </html>

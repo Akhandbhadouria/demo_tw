@@ -76,3 +76,17 @@ class UserProfileForm(forms.ModelForm):
         self.fields['profession'].required = False
         self.fields['email'].required = False
         self.fields['profile_photo'].required = False
+
+
+
+from django import forms
+from .models import Review
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'text']
+        widgets = {
+            'rating': forms.NumberInput(attrs={'min':1, 'max':5, 'class': 'form-control'}),
+            'text': forms.Textarea(attrs={'rows':3, 'class':'form-control'}),
+        }

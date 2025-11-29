@@ -286,8 +286,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     [data-theme="dark"] .header-title {
         color: #ffffff;
     }
-
-    .post-card {
+.post-card {
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(10px);
         border-radius: 20px;
@@ -295,6 +294,10 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.6);
         transition: all 0.3s ease;
+        /* Add these properties for scrolling */
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
     }
 
     [data-theme="dark"] .post-card {
@@ -1110,63 +1113,701 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         display: flex;
         justify-content: space-between;
     }
+    /* MOBILE OPTIMIZATION STYLES */
+
+/* Mobile - Hide header bar completely */
+@media (max-width: 768px) {
+    .header-bar {
+        display: none;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px 10px;
+    }
+
+    .left-sidebar {
+        gap: 15px;
+    }
+
+    .profile-card {
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    [data-theme="dark"] .profile-card {
+        background: rgba(26, 26, 46, 0.9);
+    }
+
+    /* Reduce profile photo size */
+    .profile-photo-wrapper {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 15px;
+    }
+
+    .profile-photo {
+        width: 90px;
+        height: 90px;
+        border: 3px solid rgba(255, 255, 255, 0.9);
+    }
+.theme-toggle-wrapper {
+        display: none !important;
+    }
+    /* Reduce profile name size */
+    .profile-name {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    /* Reduce profession badge size */
+    .profile-profession {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        margin-bottom: 10px;
+    }
+
+    /* Reduce email size */
+    .profile-email {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+
+    /* Reduce bio size */
+    .profile-bio {
+        font-size: 0.8rem;
+        margin-bottom: 15px;
+    }
+
+    /* Compact stats grid */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .stat-box {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .stat-number {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+
+    /* Compact buttons */
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+        border-radius: 10px;
+    }
+
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    /* Main content adjustments */
+    .main-content {
+        gap: 15px;
+    }
+
+    .post-card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    /* Masonry grid for mobile */
+    .masonry-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .tweet-card {
+        border-radius: 12px;
+    }
+
+    /* Tweet image height for mobile */
+    .tweet-image {
+        height: 140px;
+    }
+
+    /* Tweet text only styling */
+    .tweet-text-only {
+        min-height: 100px;
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .tweet-text-only p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    /* Like button mobile */
+    .like-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        border-radius: 15px;
+    }
+
+    .like-icon {
+        font-size: 0.9rem;
+    }
+
+    .like-count {
+        font-size: 0.8rem;
+    }
+
+    /* Show more button mobile */
+    .show-more-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+    }
+
+    /* Right sidebar adjustments */
+    .right-sidebar {
+        gap: 15px;
+    }
+
+    .widget-card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .widget-title {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+
+    /* Horizontal following grid */
+    .horizontal-following-grid {
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .horizontal-profile-photo,
+    .horizontal-default-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .horizontal-avatar-initial {
+        font-size: 1rem;
+    }
+
+    .horizontal-username {
+        font-size: 0.65rem;
+        margin-top: 6px;
+    }
+
+    /* Profile links */
+    .profile-link {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    /* Info items */
+    .info-item {
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+    }
+
+    .info-icon {
+        font-size: 1rem;
+    }
+
+    .info-text {
+        font-size: 0.85rem;
+    }
+
+    /* Empty states */
+    .empty-state {
+        padding: 30px 15px;
+        border-radius: 15px;
+    }
+
+    .empty-state-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .empty-state-title {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+        font-size: 0.9rem;
+    }
+
+    /* Tweet modal mobile */
+    .tweet-modal-overlay {
+        padding: 15px;
+    }
+
+    .tweet-modal-content {
+        max-width: 90%;
+        max-height: 85vh;
+        border-radius: 15px;
+        padding: 0;
+    }
+
+    .tweet-modal-close {
+        top: 10px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 1.3rem;
+    }
+
+    .tweet-modal-image {
+        max-height: 300px;
+    }
+
+    .tweet-modal-text {
+        padding: 15px;
+        font-size: 1rem;
+    }
+
+    .tweet-modal-info {
+        padding: 10px 15px 15px;
+    }
+
+    .tweet-modal-username {
+        font-size: 0.9rem;
+    }
+
+    .tweet-modal-date {
+        font-size: 0.8rem;
+    }
+}
+
+/* Extra small mobile screens - less than 480px */
+@media (max-width: 480px) {
+    .dashboard {
+        gap: 12px;
+        padding: 12px 8px;
+    }
+
+    .profile-card {
+        padding: 15px;
+    }
+
+    .profile-photo-wrapper {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 12px;
+    }
+
+    .profile-photo {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-name {
+        font-size: 1rem;
+    }
+
+    .profile-profession {
+        font-size: 0.7rem;
+        padding: 3px 10px;
+    }
+
+    .profile-email {
+        font-size: 0.75rem;
+    }
+
+    .profile-bio {
+        font-size: 0.75rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .stat-box {
+        padding: 10px;
+    }
+
+    .stat-number {
+        font-size: 1rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-size: 0.75rem;
+    }
+
+    .post-card {
+        padding: 12px;
+    }
+
+    .masonry-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .tweet-image {
+        height: 120px;
+    }
+
+    .tweet-text-only {
+        min-height: 90px;
+        padding: 10px;
+    }
+
+    .tweet-text-only p {
+        font-size: 0.75rem;
+    }
+
+    .show-more-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+
+    .widget-card {
+        padding: 12px;
+    }
+
+    .widget-title {
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+
+    .horizontal-profile-photo,
+    .horizontal-default-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .horizontal-username {
+        font-size: 0.6rem;
+    }
+
+    .profile-link {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    .empty-state {
+        padding: 25px 12px;
+    }
+
+    .empty-state-icon {
+        font-size: 2rem;
+    }
+
+    .empty-state-title {
+        font-size: 1rem;
+    }
+
+    .empty-state-text {
+        font-size: 0.85rem;
+    }
+
+    .tweet-modal-content {
+        max-width: 95%;
+    }
+
+    .tweet-modal-text {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Ultra small screens - less than 360px */
+@media (max-width: 360px) {
+    .masonry-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .tweet-image {
+        height: 150px;
+    }
+
+    .profile-name {
+        font-size: 0.95rem;
+    }
+
+    .stat-number {
+        font-size: 0.95rem;
+    }
+}
+
+.tweet-card.hidden {
+        display: none;
+    }
+
+    .show-more-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .show-more-btn {
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .show-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .show-more-btn:active {
+        transform: translateY(0);
+    }
+
+    [data-theme="dark"] .show-more-btn {
+        background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    }
+
+    /* Animation for newly shown tweets */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .tweet-card.show {
+        animation: fadeIn 0.6s ease forwards;
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    /* Add this to your existing CSS */
+.post-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+    /* Ensure scrolling works on all devices */
+    max-height: 70vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Custom scrollbar for post-card */
+.post-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.post-card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin: 5px;
+}
+
+.post-card::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.5);
+    border-radius: 3px;
+}
+
+.post-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.7);
+}
+
+[data-theme="dark"] .post-card::-webkit-scrollbar-track {
+    background: rgba(26, 26, 46, 0.3);
+}
+
+[data-theme="dark"] .post-card::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .post-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.5);
+}
+
+/* Mobile-specific scroll adjustments */
+@media (max-width: 768px) {
+    .post-card {
+        max-height: 60vh; /* Slightly smaller height on mobile */
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    /* Better touch scrolling on mobile */
+    .post-card {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .post-card {
+        max-height: 55vh;
+        padding: 12px;
+    }
+}
+
+/* Ensure masonry grid doesn't interfere with scrolling */
+.masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+    /* Prevent grid from causing overflow issues */
+    min-height: auto;
+}
+
+/* Mobile masonry grid adjustments */
+@media (max-width: 768px) {
+    .masonry-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .masonry-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+}
+
+/* Fix for when there are no tweets - ensure empty state is scrollable */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    /* Ensure empty state doesn't prevent scrolling */
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Mobile empty state */
+@media (max-width: 768px) {
+    .empty-state {
+        padding: 30px 15px;
+        border-radius: 15px;
+        min-height: 200px; /* Fixed height for mobile */
+    }
+}
+
 </style>
 
 <div class="dashboard">
     <!-- LEFT SIDEBAR - PROFILE -->
-    <div class="left-sidebar">
-        <div class="profile-card">
-            <div class="profile-photo-wrapper">
-                {% if profile.profile_photo %}
-                <img src="{{ profile.profile_photo.url }}" alt="Profile" class="profile-photo">
-                {% else %}
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop"
-                    alt="Default Profile" class="profile-photo">
-                {% endif %}
-                <div class="status-indicator"></div>
-            </div>
-            <h2 class="profile-name">{{ profile.user.username }} <a href="{% url 'edit_profile' %}">🖋️</a></h2>
-            {% if profile.profession %}
-            <span class="profile-profession">{{ profile.profession }}</span>
+   <!-- LEFT SIDEBAR - PROFILE -->
+<div class="left-sidebar">
+    <div class="profile-card">
+        <!-- Left Column: Profile Info -->
+        <div class="profile-photo-wrapper">
+            {% if profile.profile_photo %}
+            <img src="{{ profile.profile_photo.url }}" alt="Profile" class="profile-photo">
+            {% else %}
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop"
+                alt="Default Profile" class="profile-photo">
             {% endif %}
+            <div class="status-indicator"></div>
+        </div>
+        
+        <div class="profile-info-left">
+            <div class="profile-name-container">
+                <h2 class="profile-name">{{ profile.user.username }}</h2>
+                {% if profile.profession %}
+                <span class="profile-profession">{{ profile.profession }}</span>
+                {% endif %}
+                <a href="{% url 'edit_profile' %}">🖋️</a>
+            </div>
+            
             {% if profile.email %}
             <p class="profile-email">{{ profile.email }}</p>
             {% endif %}
+            
             {% if profile.bio %}
             <p class="profile-bio">BIO: {{ profile.bio }}</p>
             {% endif %}
+        </div>
 
-
-
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-number">{{ profile.user.tweet_set.count|default:"0" }}</div>
-                    <div class="stat-label">Posts</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">{{ profile.followers_count }}</div>
-                    <div class="stat-label">Followers</div>
-                </div>
+        <!-- Right Column: Stats -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">{{ profile.user.tweet_set.count|default:"0" }}</div>
+                <div class="stat-label">Posts</div>
             </div>
-
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-number">{{ profile.following_count }}</div>
-                    <div class="stat-label">Following</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">{{ profile.total_likes_received|default:"0" }}</div>
-                    <div class="stat-label">Total Likes</div>
-                </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ profile.followers_count }}</div>
+                <div class="stat-label">Followers</div>
             </div>
-
-            <div class="theme-toggle-wrapper">
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-                    <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
+            <div class="stat-box">
+                <div class="stat-number">{{ profile.following_count }}</div>
+                <div class="stat-label">Following</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ profile.total_likes_received|default:"0" }}</div>
+                <div class="stat-label">Total Likes</div>
             </div>
         </div>
+
+        <div class="theme-toggle-wrapper">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+        </div>
     </div>
+</div>
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
@@ -1185,35 +1826,33 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                             <button type="submit" class="btn btn-secondary">Following</button>
                         </div>
                         {% if request.user.is_authenticated and profile_user %}
-                        <div> <a href="{% url 'start_chat' username=profile_user.username %}" class="btn btn-primary">
+                        <div> 
+                            <a href="{% url 'start_chat' username=profile_user.username %}" class="btn btn-primary">
                                 Message
                             </a>
                         </div>
                     </div>
-
                     {% endif %}
                     {% else %}
                     <button type="submit" class="btn btn-primary">Follow</button>
                     {% endif %}
                 </form>
-
-                <!-- Message button -->
-
             </div>
             {% endif %}
-
         </div>
 
         <div class="post-card">
             {% if tweets %}
             <div class="masonry-grid" id="tweetsGrid">
                 {% for tweet in tweets %}
-                <div class="tweet-card" data-tweet-id="{{ tweet.id }}" data-tweet-text="{{ tweet.text }}"
-                    data-tweet-photo="{% if tweet.photo %}{{ tweet.photo.url }}{% endif %}"
-                    data-tweet-username="{{ tweet.user.username }}"
-                    data-tweet-date="{{ tweet.updated_at|date:'M d, Y' }}"
-                    data-tweet-userphoto="{% if tweet.user.userprofile.profile_photo %}{{ tweet.user.userprofile.profile_photo.url }}{% endif %}"
-                    data-tweet-likes="{{ tweet.total_likes }}">
+                <div class="tweet-card {% if forloop.counter > 4 %}hidden{% endif %}" 
+                     data-tweet-id="{{ tweet.id }}" 
+                     data-tweet-text="{{ tweet.text }}"
+                     data-tweet-photo="{% if tweet.photo %}{{ tweet.photo.url }}{% endif %}"
+                     data-tweet-username="{{ tweet.user.username }}"
+                     data-tweet-date="{{ tweet.updated_at|date:'M d, Y' }}"
+                     data-tweet-userphoto="{% if tweet.user.userprofile.profile_photo %}{{ tweet.user.userprofile.profile_photo.url }}{% endif %}"
+                     data-tweet-likes="{{ tweet.total_likes }}">
 
                     {% if tweet.photo %}
                     <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet Photo">
@@ -1237,15 +1876,15 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                 {% endfor %}
             </div>
 
-            <!-- Show more posts link -->
-            {% if all_tweets_count > 4 %}
-            <div class="show-more-container" style="text-align: center; margin-top: 20px;">
-                <a href="{% url 'my_feed' %}">
-                    <button id="showMoreBtn" class="show-more-btn">
-                        +{{ all_tweets_count|add:"-4" }} more posts
-                    </button>
-                </a>
-
+            <!-- Show more posts button -->
+            {% if tweets|length > 4 %}
+            <div class="show-more-container">
+                <button id="showMoreBtn" class="show-more-btn">
+                    +{{ tweets|length|add:"-4" }} more posts
+                </button>
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                </div>
             </div>
             {% endif %}
             {% else %}
@@ -1257,7 +1896,6 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             {% endif %}
         </div>
     </div>
-
     <!-- RIGHT SIDEBAR -->
     <div class="right-sidebar">
         <div class="widget-card">
@@ -1328,12 +1966,44 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 </div>
 
 <script>
-    // Tweet Modal functionality
+  // Tweet Modal functionality
     document.addEventListener('DOMContentLoaded', function () {
         const tweetCards = document.querySelectorAll('.tweet-card');
         const tweetModal = document.getElementById('tweetModal');
         const closeTweetModal = document.getElementById('closeTweetModal');
         const tweetModalBody = document.getElementById('tweetModalBody');
+        const showMoreBtn = document.getElementById('showMoreBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const tweetsGrid = document.getElementById('tweetsGrid');
+
+        // Show More functionality
+        if (showMoreBtn) {
+            showMoreBtn.addEventListener('click', function() {
+                const hiddenTweets = document.querySelectorAll('.tweet-card.hidden');
+                
+                // Show loading spinner
+                showMoreBtn.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+                
+                // Simulate loading delay for better UX
+                setTimeout(() => {
+                    // Show all hidden tweets
+                    hiddenTweets.forEach((tweet, index) => {
+                        setTimeout(() => {
+                            tweet.classList.remove('hidden');
+                            tweet.classList.add('show');
+                        }, index * 100); // Stagger the animation
+                    });
+                    
+                    // Hide the show more button after showing all tweets
+                    setTimeout(() => {
+                        showMoreBtn.style.display = 'none';
+                        loadingSpinner.style.display = 'none';
+                    }, hiddenTweets.length * 100 + 500);
+                    
+                }, 800);
+            });
+        }
 
         // Open modal on tweet card click
         tweetCards.forEach(card => {

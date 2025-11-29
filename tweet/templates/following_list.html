@@ -17,7 +17,7 @@
     .header-icon {
         width: 70px;
         height: 70px;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -59,7 +59,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 
     .following-count {
         display: inline-block;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         padding: 0.5rem 1.5rem;
         border-radius: 20px;
@@ -148,7 +148,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         width: 60px;
         height: 60px;
         border-radius: 50%;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -192,7 +192,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         left: 0;
         width: 0;
         height: 2px;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         transition: width 0.3s ease;
     }
 
@@ -229,7 +229,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     }
 
     .btn-follow {
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
@@ -314,48 +314,83 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         transform: translateX(-5px);
     }
 
-    /* Responsive */
+    /* ==================== IMPROVED MOBILE STYLING ==================== */
+    
+    /* Tablet */
+    @media (max-width: 1024px) {
+        .following-container {
+            margin: 2rem auto;
+            padding: 0 1.25rem;
+        }
+        
+        .following-card {
+            padding: 1.25rem;
+            gap: 1rem;
+        }
+        
+        .following-info {
+            gap: 1rem;
+        }
+        
+        .btn-follow,
+        .btn-unfollow {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Mobile - Improved Layout */
     @media (max-width: 768px) {
         .following-container {
             padding: 0 1rem;
+            margin: 1.5rem auto;
         }
 
         .page-title {
             font-size: 1.5rem;
         }
 
-        .following-card {
-            flex-direction: column;
-            text-align: center;
-            gap: 1rem;
-        }
-
-        .following-info {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .following-actions {
-            width: 100%;
-        }
-
-        .btn-follow,
-        .btn-unfollow {
-            width: 100%;
-            justify-content: center;
+        .page-header {
+            margin-bottom: 2rem;
         }
 
         .header-icon {
             width: 60px;
             height: 60px;
+            margin-bottom: 1rem;
         }
 
         .header-icon i {
             font-size: 1.5rem;
         }
-    }
 
-    @media (max-width: 480px) {
+        .back-button {
+            margin-bottom: 1.5rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Improved Following Card for Mobile */
+        .following-card {
+            flex-direction: row; /* Keep as row for better space usage */
+            align-items: center;
+            padding: 1rem;
+            gap: 0.75rem;
+            border-radius: 16px;
+        }
+
+        .following-info {
+            flex-direction: row;
+            text-align: left;
+            gap: 0.75rem;
+            flex: 1;
+            min-width: 0; /* Allow text truncation */
+        }
+
+        .following-avatar-wrapper {
+            flex-shrink: 0;
+        }
+
         .following-avatar,
         .following-avatar-placeholder {
             width: 50px;
@@ -366,19 +401,183 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             font-size: 1.25rem;
         }
 
+        .following-details {
+            flex: 1;
+            min-width: 0; /* Allow text truncation */
+            overflow: hidden;
+        }
+
+        .following-username {
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .following-handle {
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .following-actions {
+            flex-shrink: 0;
+        }
+
+        .btn-follow,
+        .btn-unfollow {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            min-width: 90px;
+            justify-content: center;
+        }
+
+        .btn-follow i,
+        .btn-unfollow i {
+            font-size: 0.7rem;
+        }
+
+        /* Reduce hover effects on mobile for better performance */
+        .following-card:hover {
+            transform: translateY(-2px);
+        }
+
         .empty-state {
             padding: 3rem 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+        }
+
+        .empty-text {
+            font-size: 0.9rem;
         }
     }
+
+    /* Small Mobile */
+    @media (max-width: 480px) {
+        .following-container {
+            padding: 0 0.75rem;
+            margin: 1rem auto;
+        }
+
+        .following-card {
+            padding: 0.875rem;
+            gap: 0.625rem;
+        }
+
+        .following-info {
+            gap: 0.625rem;
+        }
+
+        .following-avatar,
+        .following-avatar-placeholder {
+            width: 45px;
+            height: 45px;
+        }
+
+        .following-avatar-placeholder {
+            font-size: 1.1rem;
+        }
+
+        .following-username {
+            font-size: 0.95rem;
+        }
+
+        .following-handle {
+            font-size: 0.75rem;
+        }
+
+        .btn-follow,
+        .btn-unfollow {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            min-width: 80px;
+            gap: 4px;
+        }
+
+        .following-count {
+            padding: 0.4rem 1.25rem;
+            font-size: 0.8rem;
+        }
+
+        .back-button {
+            padding: 0.5rem 0.875rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Extra Small Mobile */
+    @media (max-width: 360px) {
+        .following-card {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .following-info {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .following-details {
+            width: 100%;
+        }
+
+        .following-actions {
+            width: 100%;
+        }
+
+        .btn-follow,
+        .btn-unfollow {
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .following-username,
+        .following-handle {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) {
+        .following-card:hover {
+            transform: none;
+        }
+        
+        .following-card:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+        
+        .btn-follow:active,
+        .btn-unfollow:active {
+            transform: scale(0.95);
+        }
+    }
+  
 </style>
 
 <div class="following-container">
-    <a href="{% url 'profile_detail' profile_user.username %}" class="back-button">
+   <a href="{% url 'profile_detail' profile_user.username %}" class="back-button">
         <i class="fas fa-arrow-left"></i> Back to Profile
     </a>
 
     <div class="page-header">
-       
+         
+    
         <p class="page-subtitle">People {{ profile_user.username }} is following</p>
         {% if following %}
         <span class="following-count">

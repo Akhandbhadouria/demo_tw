@@ -10,9 +10,15 @@ from django.contrib.auth.backends import ModelBackend
 
 
 
-def home(request):
-    return render(request,'home.html')
+from .models import UserProfile
 
+def home(request):
+    latest_reviews = Review.objects.select_related('user', 'profile').order_by('-created_at')[:10]
+    profiles = UserProfile.objects.all()  # send all profiles to template
+    return render(request,'home.html',{
+        'latest_reviews': latest_reviews,
+        'profiles': profiles,
+    })
 
 def logout(request):
     return render(request,"logged_out.html")
@@ -227,7 +233,7 @@ def profile_detail(request, username):
     tweets_count = all_tweets.count()
     
     # Only show first 4 tweets initially
-    tweets_display = all_tweets[:4]
+    tweets_display = all_tweets
 
     return render(request, 'profile_detail.html', {
         'profile': profile,
@@ -386,3 +392,27 @@ def delete_account(request):
     return render(request, "delete_account_confirm.html")
 
 
+
+
+
+
+from django.shortcuts import render, redirect
+from .forms import ReviewForm
+from .models import Review, UserProfile
+
+def add_review(request, profile_id):
+    profile = UserProfile.objects.get(id=profile_id)
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.profile = profile
+            review.save()
+            return redirect('homepage')  # or profile page
+
+    else:
+        form = ReviewForm()
+
+    return render(request, 'add_review.html', {'form': form, 'profile': profile})
