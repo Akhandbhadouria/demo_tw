@@ -862,6 +862,30 @@
             transform: scale(0.95);
         }
 
+        /* NEW: Mobile Back Button */
+        .mobile-back-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+        }
+
+        .mobile-back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .main-container {
@@ -972,6 +996,11 @@
             .delete-chat-btn {
                 padding: 0.45rem 0.75rem;
                 font-size: 0.8rem;
+            }
+
+            /* NEW: Show mobile back button in mobile view */
+            .mobile-back-btn {
+                display: flex;
             }
         }
 
@@ -1140,9 +1169,13 @@
                                 {{ other_user.username }}
                             </a>
                         </h3>
-
-
                     </div>
+                    
+                    <!-- NEW: Mobile Back Button - positioned on the right side -->
+                    <a href="{% url 'home' %}" class="mobile-back-btn" title="Back to Home">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    
                     <form method="post" action="{% url 'delete_chat' active_chatroom.id %}"
                         onsubmit="return confirm('Are you sure you want to delete this entire chat?');">
                         {% csrf_token %}

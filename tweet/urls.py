@@ -39,7 +39,6 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path("search/", views.search_user, name="search"),
 path("delete-account/", views.delete_account, name="delete_account"),
-    path('tweet/review/add/<int:profile_id>/', views.add_review, name='add_review'),
 
     path('following-feed/', views.following_feed, name='following_feed'),
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),

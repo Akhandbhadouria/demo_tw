@@ -1745,6 +1745,75 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     }
 }
 
+/* Mobile Quick Links - Follow and Message Buttons */
+.mobile-action-buttons {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.mobile-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.mobile-follow-btn {
+    background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.mobile-follow-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.mobile-message-btn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+}
+
+[data-theme="dark"] .mobile-message-btn {
+    background: rgba(26, 26, 46, 0.9);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.mobile-message-btn:hover {
+    background: white;
+    border-color: #cbd5e0;
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .mobile-message-btn:hover {
+    background: rgba(40, 40, 60, 0.9);
+}
+
+/* Show mobile action buttons only on mobile */
+@media (max-width: 768px) {
+    .mobile-action-buttons {
+        display: flex;
+    }
+    
+    /* Hide the desktop header bar buttons on mobile */
+    .header-bar .btn {
+        display: none;
+    }
+}
+
 </style>
 
 <div class="dashboard">
@@ -1800,6 +1869,35 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                 <div class="stat-label">Total Likes</div>
             </div>
         </div>
+
+        <!-- Mobile Action Buttons -->
+        {% if request.user != profile.user %}
+        <div class="mobile-action-buttons">
+            <!-- Follow/Following button -->
+            <form method="post" action="{% url 'follow_user' profile.user.username %}" class="mobile-follow-form">
+                {% csrf_token %}
+                {% if request.user in profile.followers.all %}
+                <button type="submit" class="mobile-action-btn mobile-follow-btn">
+                    <span>👥</span>
+                    Following
+                </button>
+                {% else %}
+                <button type="submit" class="mobile-action-btn mobile-follow-btn">
+                    <span>➕</span>
+                    Follow
+                </button>
+                {% endif %}
+            </form>
+
+            <!-- Message button -->
+            {% if request.user.is_authenticated and profile_user %}
+            <a href="{% url 'start_chat' username=profile_user.username %}" class="mobile-action-btn mobile-message-btn">
+                <span>💬</span>
+                Message
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
 
         <div class="theme-toggle-wrapper">
             <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
@@ -1948,9 +2046,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             <a href="{% url 'delete_account' %}" class="btn btn-danger">
                 Delete Account
             </a>
-
             {% endif %}
-
         </div>
     </div>
 </div>

@@ -40,11 +40,17 @@
         }
     }
 
-    @media (max-width: 600px) {
-        .masonry-grid {
-            column-count: 1;
-        }
+   @media (max-width: 600px) {
+    .masonry-grid {
+        column-count: 2;
+        column-gap: 15px;
+        padding: 0 15px;
     }
+    
+    .tweet-card {
+        margin-bottom: 15px;
+    }
+}
 
     .tweet-card {
         break-inside: avoid;
@@ -522,10 +528,6 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             hasPhoto: {% if tweet.photo %}true{% else %}false{% endif %},
             photoUrl: "{{ tweet.photo.url|default:'' }}",
             text: `{{ tweet.text|escapejs }}`,
-            username: "{{ tweet.user.username|escapejs }}",
-            profileUrl: "{% url 'profile_detail' tweet.user.username %}",
-            hasAvatar: {% if tweet.user.userprofile.profile_photo %}true{% else %}false{% endif %},
-            avatarUrl: "{{ tweet.user.userprofile.profile_photo.url|default:'' }}",
             timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}",
             isOwner: {% if tweet.user == request.user %}true{% else %}false{% endif %},
             editUrl: "{% url 'tweet_edit' tweet.id %}",
@@ -551,26 +553,10 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 
         let html = '<div class="mock-tweet">';
 
-        // User info
-        html += '<div class="mock-user">';
-        
-        // Avatar
-        if (tweet.hasAvatar && tweet.avatarUrl) {
-            html += `<div class="mock-avatar"><img src="${tweet.avatarUrl}" class="mock-avatar-img" alt="${tweet.username}"></div>`;
-        } else {
-            html += `<div class="mock-avatar">${tweet.username.charAt(0).toUpperCase()}</div>`;
-        }
-
-        html += '<div class="mock-user-info">';
-        html += `<div class="mock-name">${tweet.username}</div>`;
-        html += `<div class="mock-handle">@${tweet.username.toLowerCase()}</div>`;
-        html += '</div>';
-        html += '</div>'; // close mock-user
-
-        // Tweet content
+        // Sirf tweet content - NO USER HEADER
         html += `<div class="mock-content">${tweet.text}</div>`;
 
-        // Tweet image - now with click to open in new tab functionality
+        // Image agar hai toh
         if (tweet.hasPhoto && tweet.photoUrl) {
             html += `<div class="mock-image">`;
             html += `<div class="mock-image-overlay">Click to open in new tab</div>`;
@@ -581,7 +567,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         // Timestamp
         html += `<div class="mock-timestamp">🕒 ${tweet.timestamp}</div>`;
 
-        // Edit and Delete buttons (only show if user owns the tweet)
+        // Edit/Delete buttons (sirf owner ke liye)
         if (tweet.isOwner) {
             html += `<div class="mock-actions">`;
             html += `<a href="${tweet.editUrl}" class="action-btn edit-btn">✏️ Edit</a>`;
@@ -592,7 +578,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             html += `</div>`;
         }
 
-        html += '</div>'; // close mock-tweet
+        html += '</div>';
 
         modalBody.innerHTML = html;
         modal.classList.add('show');
@@ -600,7 +586,6 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     }
 
     function openImageInNewTab(imageUrl) {
-        // Open image in new tab
         window.open(imageUrl, '_blank');
     }
 
@@ -623,7 +608,6 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         }
     });
 
-    // Prevent modal from closing when clicking on the image or action buttons
     modalBody.addEventListener('click', function(e) {
         if (e.target.classList.contains('mock-image') || 
             e.target.closest('.mock-image') ||

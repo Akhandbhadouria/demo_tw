@@ -45,11 +45,17 @@
         }
     }
 
-    @media (max-width: 600px) {
-        .masonry-grid {
-            column-count: 1;
-        }
+   @media (max-width: 600px) {
+    .masonry-grid {
+        column-count: 2;
+        column-gap: 15px;
+        padding: 0 15px;
     }
+    
+    .tweet-card {
+        margin-bottom: 15px;
+    }
+}
 
     .tweet-card {
         break-inside: avoid;

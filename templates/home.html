@@ -7,662 +7,579 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TweetShare - Share Your Thoughts</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-</head>
-<style>
-    /* -------------------- Base Styles -------------------- */
-    body, html {
-        margin: 0;
-        padding: 0;
-        font-family: 'Inter', sans-serif;
-        background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
-        color: #1f2937;
-        overflow-x: hidden;
-        scroll-behavior: smooth;
-        transition: --primary-color 0.5s ease, --secondary-color 0.5s ease, --accent-color 0.5s ease;
-    }
+    <style>
+        /* -------------------- Base Styles -------------------- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
+            color: #1f2937;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-    :root {
-        --primary-color: #4f46e5;
-        --secondary-color: #9333ea;
-        --accent-color: #ec4899;
-        --gradient-from: #4f46e5;
-        --gradient-to: #9333ea;
-    }
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #9333ea;
+            --accent-color: #ec4899;
+        }
 
-    body.theme-blue {
-        --primary-color: #0c3483;
-        --secondary-color: #6b8cce;
-        --accent-color: #a2b6df;
-        --gradient-from: #0c3483;
-        --gradient-to: #6b8cce;
-    }
+        body.theme-blue {
+            --primary-color: #0c3483;
+            --secondary-color: #6b8cce;
+            --accent-color: #a2b6df;
+        }
 
-    body.theme-blue-purple {
-        --primary-color: #6b8cce;
-        --secondary-color: #a2b6df;
-        --accent-color: #0c3483;
-        --gradient-from: #6b8cce;
-        --gradient-to: #a2b6df;
-    }
+        body.theme-blue-purple {
+            --primary-color: #6b8cce;
+            --secondary-color: #a2b6df;
+            --accent-color: #0c3483;
+        }
 
-    /* -------------------- Perspective for 3D -------------------- */
-    html {
-        perspective: 1000px;
-    }
+        /* -------------------- Stars Background -------------------- */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 2px 2px;
+            z-index: -1;
+            animation: twinkle 5s linear infinite;
+        }
 
-    /* -------------------- Stars Background -------------------- */
-    .stars {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background: radial-gradient(#ffffff 1px, transparent 1px);
-        background-size: 2px 2px;
-        z-index: -1;
-        animation: twinkle 5s linear infinite;
-    }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
 
-    @keyframes twinkle {
-        0%, 100% { opacity: 0.6; }
-        50% { opacity: 1; }
-    }
-
-    /* -------------------- Main Container -------------------- */
-    .main-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 3rem;
-    }
-
-    /* -------------------- Scroll Sections with 3D Effects -------------------- */
-    .scroll-section {
-        transform-origin: center;
-        transition: all 0.3s ease-out;
-    }
-
-    .scroll-section.parallax-up {
-        transform: translateY(-50px) rotateX(5deg);
-        opacity: 0.8;
-    }
-
-    .scroll-section.parallax-down {
-        transform: translateY(50px) rotateX(-5deg);
-        opacity: 0.8;
-    }
-
-    .scroll-section.in-view {
-        transform: translateY(0) rotateX(0deg);
-        opacity: 1;
-    }
-
-    /* -------------------- Hero Section -------------------- */
-    .max-container {
-        max-width: 1200px;
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        position: relative;
-    }
-
-    @media(min-width: 1024px) {
-        .max-container {
-            grid-template-columns: 1fr 1fr;
+        /* -------------------- Main Container -------------------- */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
             gap: 3rem;
         }
-    }
 
-    /* Hero Left Content */
-    .hero-left {
-        text-align: center;
-        padding: 1rem;
-        animation: slideInLeft 1s ease-out;
-    }
-
-    @keyframes slideInLeft {
-        from {
+        /* -------------------- Enhanced Scroll Animations -------------------- */
+        .scroll-section {
             opacity: 0;
-            transform: translateX(-50px) rotateY(-10deg);
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        to {
-            opacity: 1;
-            transform: translateX(0) rotateY(0);
-        }
-    }
 
-    @media(min-width: 1024px) {
-        .hero-left {
-            text-align: left;
-            padding: 2rem 0;
-        }
-    }
-
-    .badge {
-        display: inline-block;
-        background: rgba(255,255,255,0.8);
-        backdrop-filter: blur(10px);
-        padding: 0.5rem 1rem;
-        border-radius: 2rem;
-        font-size: 0.875rem;
-        margin-bottom: 1.5rem;
-        animation: fadeInDown 0.8s ease-out;
-    }
-
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
+        .scroll-section.animate-in {
             opacity: 1;
             transform: translateY(0);
         }
-    }
 
-    .hero-left h1 {
-        font-size: 2.5rem;
-        font-weight: bold;
-        line-height: 1.2;
-        margin-bottom: 1rem;
-        animation: slideInUp 1s ease-out 0.2s both;
-    }
-
-    @keyframes slideInUp {
-        from {
+        /* Scale in animation */
+        .scale-in {
             opacity: 0;
-            transform: translateY(50px) rotateX(-10deg);
+            transform: scale(0.85);
+            transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        to {
+
+        .scale-in.animate-in {
             opacity: 1;
-            transform: translateY(0) rotateX(0);
+            transform: scale(1);
         }
-    }
 
-    @media(min-width: 768px) {
-        .hero-left h1 {
-            font-size: 3rem;
-        }
-    }
-
-    .gradient-text1, .gradient-text2 {
-        background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        transition: all 0.5s ease;
-    }
-
-    .hero-left p {
-        font-size: 1.125rem;
-        color: #4b5563;
-        margin-bottom: 2rem;
-        line-height: 1.6;
-        animation: slideInUp 1s ease-out 0.4s both;
-    }
-
-    .button-group {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
-        animation: slideInUp 1s ease-out 0.6s both;
-    }
-
-    @media(min-width: 1024px) {
-        .button-group {
-            justify-content: flex-start;
-        }
-    }
-
-    .btn {
-        padding: 1rem 2rem;
-        border-radius: 1rem;
-        font-size: 1rem;
-        cursor: pointer;
-        border: none;
-        transition: all 0.3s;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        transform: perspective(1000px);
-    }
-
-    .btn-primary {
-        background: linear-gradient(to top, var(--primary-color), var(--secondary-color));
-        color: white;
-        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background: linear-gradient(to top, var(--secondary-color), var(--primary-color));
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        transform: translateY(-3px) rotateX(2deg) perspective(1000px);
-    }
-
-    .btn-outline {
-        background: white;
-        color: #4b5563;
-        border: 2px solid #d1d5db;
-        transition: all 0.3s ease;
-    }
-
-    .btn-outline:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        transform: translateY(-3px) perspective(1000px);
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    .small-stats {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        font-size: 0.875rem;
-        color: #4b5563;
-        flex-wrap: wrap;
-        animation: slideInUp 1s ease-out 0.8s both;
-    }
-
-    @media(min-width: 1024px) {
-        .small-stats {
-            justify-content: flex-start;
-        }
-    }
-
-    .avatars {
-        display: flex;
-        cursor: pointer;
-    }
-
-    .avatars div {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        border: 2px solid white;
-        margin-left: -0.5rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .avatars div:hover {
-        transform: scale(1.15) translateY(-8px);
-        border-color: var(--primary-color);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-    }
-
-    .avatars div.active {
-        transform: scale(1.2) translateY(-10px);
-        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.6);
-        border-color: var(--primary-color);
-    }
-
-    .avatar1 {
-        background: linear-gradient(to bottom right, #4f46e5, #9333ea);
-    }
-
-    .avatar2 {
-        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
-    }
-
-    .avatar3 {
-        background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
-    }
-
-    /* Hero Right Content */
-    .hero-right {
-        position: relative;
-        display: none;
-        animation: slideInRight 1s ease-out;
-    }
-
-    @keyframes slideInRight {
-        from {
+        /* Staggered children animations */
+        .stagger-children > * {
             opacity: 0;
-            transform: translateX(50px) rotateY(10deg);
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        to {
+
+        .stagger-children.animate-in > *:nth-child(1) { transition-delay: 0.1s; }
+        .stagger-children.animate-in > *:nth-child(2) { transition-delay: 0.2s; }
+        .stagger-children.animate-in > *:nth-child(3) { transition-delay: 0.3s; }
+        .stagger-children.animate-in > *:nth-child(4) { transition-delay: 0.4s; }
+        .stagger-children.animate-in > *:nth-child(5) { transition-delay: 0.5s; }
+        .stagger-children.animate-in > *:nth-child(6) { transition-delay: 0.6s; }
+
+        .stagger-children.animate-in > * {
             opacity: 1;
-            transform: translateX(0) rotateY(0);
+            transform: translateY(0);
         }
-    }
 
-    @media(min-width: 1024px) {
-        .hero-right {
-            display: block;
+        /* Blur reveal effect */
+        .blur-reveal {
+            opacity: 0;
+            filter: blur(10px);
+            transform: scale(1.05);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
-    }
 
-    .main-card {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 2rem;
-        padding: 1.5rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        animation: float 4s ease-in-out infinite;
-        transform-style: preserve-3d;
-        transition: all 0.3s ease;
-    }
-
-    .main-card:hover {
-        background: rgba(255, 255, 255, 0.85);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: rotateY(3deg) rotateX(2deg) scale(1.02);
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .card-top {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .card-top div:first-child {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 50%;
-        background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
-        transition: all 0.5s ease;
-    }
-
-    .card-image {
-        width: 460px;
-        aspect-ratio: 1/1;
-        background: linear-gradient(to bottom right, rgba(224, 231, 255, 0.8), rgba(243, 232, 255, 0.8), rgba(255, 228, 240, 0.8));
-        border-radius: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 1rem;
-        overflow: hidden;
-    }
-
-    .card-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 1rem;
-    }
-
-    /* -------------------- Features Grid (with Advanced Glassmorphism) -------------------- */
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        padding: 0 1rem;
-    }
-
-    .feature-card {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-radius: 2rem;
-        padding: 2rem 1.5rem;
-        text-align: center;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.3);
-        text-decoration: none;
-        color: inherit;
-        min-height: 160px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transform-style: preserve-3d;
-        position: relative;
-        overflow: hidden;
-        border-image: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1)) 1;
-    }
-
-   
-
-    .feature-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
-        display: inline-block;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(147, 51, 234, 0.1));
-        border: 1px solid rgba(79, 70, 229, 0.2);
-    }
-
-  
-
-    .icon-purple { color: #9333ea; }
-    .icon-blue { color: #3b82f6; }
-    .icon-orange { color: #f97316; }
-
-    .feature-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: var(--primary-color);
-        transition: color 0.5s ease;
-        position: relative;
-        z-index: 1;
-    }
-
-    .feature-description {
-        font-size: 0.9rem;
-        color: #6b7280;
-        line-height: 1.4;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* -------------------- Tweet Preview Section -------------------- */
-    .content-section {
-        text-align: center;
-        padding: 2rem 1rem;
-    }
-
-    .tweet-preview {
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .preview-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        animation: slideInUp 1s ease-out;
-        color: var(--primary-color);
-        transition: color 0.5s ease;
-    }
-
-    .mock-tweet {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 1.5rem;
-        padding: 1.5rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        transform-style: preserve-3d;
-        transition: all 0.4s ease;
-    }
-
-    .mock-tweet:hover {
-        background: rgba(255, 255, 255, 0.95);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: rotateX(2deg) rotateY(-2deg) scale(1.03);
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
-    }
-
-    .mock-user {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    .mock-avatar {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
-        transition: all 0.3s ease;
-    }
-
-    .mock-tweet:hover .mock-avatar {
-        transform: scale(1.1) rotateZ(10deg);
-    }
-
-    .mock-name {
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: var(--primary-color);
-        transition: color 0.5s ease;
-    }
-
-    .mock-handle {
-        font-size: 0.75rem;
-        color: #6b7280;
-    }
-
-    .mock-content {
-        font-size: 0.9rem;
-        color: #374151;
-        line-height: 1.5;
-    }
-
-    .mock-image {
-        height: 120px;
-        background: linear-gradient(to bottom right, rgba(224, 231, 255, 0.6), rgba(243, 232, 255, 0.6));
-        border-radius: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        color: var(--primary-color);
-        font-size: 0.875rem;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(79, 70, 229, 0.2);
-    }
-
-    .mock-tweet:hover .mock-image {
-        transform: scale(1.05) perspective(1000px) rotateX(-3deg);
-        background: linear-gradient(to bottom right, rgba(79, 70, 229, 0.1), rgba(147, 51, 234, 0.1));
-    }
-
-    /* -------------------- Background animations -------------------- */
-    .bg-circle {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(60px);
-        opacity: 0.3;
-        z-index: -1;
-    }
-
-    .circle1 {
-        top: -200px;
-        right: -100px;
-        width: 300px;
-        height: 300px;
-        background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
-        animation: rotateScale1 20s linear infinite;
-    }
-
-    .circle2 {
-        bottom: -100px;
-        left: -100px;
-        width: 300px;
-        height: 300px;
-        background: linear-gradient(to top right, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2));
-        animation: rotateScale2 15s linear infinite;
-    }
-
-    @keyframes rotateScale1 {
-        0% { transform: scale(1) rotate(0deg); }
-        50% { transform: scale(1.2) rotate(90deg); }
-        100% { transform: scale(1) rotate(0deg); }
-    }
-
-    @keyframes rotateScale2 {
-        0% { transform: scale(1.2) rotate(90deg); }
-        50% { transform: scale(1) rotate(0deg); }
-        100% { transform: scale(1.2) rotate(90deg); }
-    }
-
-    /* Mobile optimizations */
-    @media (max-width: 480px) {
-        .main-container {
-            padding: 1rem 0.5rem;
-            gap: 2rem;
+        .blur-reveal.animate-in {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1);
         }
-        
-        .hero-left h1 {
-            font-size: 2rem;
-        }
-        
-        .hero-left p {
-            font-size: 1rem;
-        }
-        
-        .button-group {
-            flex-direction: column;
+
+        /* -------------------- Hero Section -------------------- */
+        .max-container {
+            max-width: 1200px;
             width: 100%;
-        }
-        
-        .btn {
-            width: 100%;
-        }
-        
-        .features-grid {
+            display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem;
+            gap: 2rem;
+            position: relative;
         }
-        
-        .feature-card {
-            padding: 1.5rem;
-            min-height: 140px;
-        }
-    }
-    .review-card {
-    padding: 15px;
-    margin: 10px 0;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-.reviews h2 {
-    margin-bottom: 20px;
-}
-</style>
-<body>
 
+        @media(min-width: 1024px) {
+            .max-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        .hero-left {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        @media(min-width: 1024px) {
+            .hero-left {
+                text-align: left;
+                padding: 2rem 0;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-left h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        @media(min-width: 768px) {
+            .hero-left h1 {
+                font-size: 3rem;
+            }
+        }
+
+        .gradient-text1, .gradient-text2 {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.5s ease;
+        }
+
+        .hero-left p {
+            font-size: 1.125rem;
+            color: #4b5563;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        @media(min-width: 1024px) {
+            .button-group {
+                justify-content: flex-start;
+            }
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to top, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-outline {
+            background: white;
+            color: #4b5563;
+            border: 2px solid #d1d5db;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .small-stats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+            flex-wrap: wrap;
+        }
+
+        @media(min-width: 1024px) {
+            .small-stats {
+                justify-content: flex-start;
+            }
+        }
+
+        .avatars {
+            display: flex;
+            cursor: pointer;
+        }
+
+        .avatars div {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-left: -0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .avatars div:hover {
+            transform: scale(1.15) translateY(-8px);
+            border-color: var(--primary-color);
+        }
+
+        .avatars div.active {
+            transform: scale(1.2) translateY(-10px);
+            border-color: var(--primary-color);
+        }
+
+        .avatar1 { background: linear-gradient(to bottom right, #4f46e5, #9333ea); }
+        .avatar2 { background: linear-gradient(to bottom right, #0c3483, #6b8cce); }
+        .avatar3 { background: linear-gradient(to bottom right, #6b8cce, #a2b6df); }
+
+        /* Hero Right Content */
+        .hero-right {
+            position: relative;
+            display: none;
+        }
+
+        @media(min-width: 1024px) {
+            .hero-right {
+                display: block;
+            }
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .main-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-top div:first-child {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: linear-gradient(to bottom right, rgba(224, 231, 255, 0.8), rgba(243, 232, 255, 0.8));
+            border-radius: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* -------------------- Features Grid - Horizontal on Mobile -------------------- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1rem;
+            text-decoration: none;
+        }
+
+        /* Mobile-specific horizontal layout */
+        @media (max-width: 768px) {
+            .features-grid {
+                display: flex;
+                overflow-x: auto;
+                gap: 1rem;
+                padding: 1rem;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+
+            .features-grid::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Edge */
+            }
+
+            .features-grid > * {
+                flex: 0 0 280px;
+                scroll-snap-align: start;
+                min-height: 180px;
+            }
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 2rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            text-decoration: none;
+            color: inherit;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(147, 51, 234, 0.1));
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotateZ(10deg);
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        /* -------------------- Tweet Preview -------------------- */
+        .content-section {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .tweet-preview {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .preview-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .mock-tweet {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.4s ease;
+        }
+
+        .mock-tweet:hover {
+            transform: scale(1.03);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .mock-user {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .mock-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+        }
+
+        .mock-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .mock-handle {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .mock-content {
+            font-size: 0.9rem;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .mock-image {
+            height: 120px;
+            background: linear-gradient(to bottom right, rgba(224, 231, 255, 0.6), rgba(243, 232, 255, 0.6));
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        /* -------------------- Background animations -------------------- */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .circle1 {
+            top: -200px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            animation: rotateScale1 20s linear infinite;
+        }
+
+        .circle2 {
+            bottom: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(to top right, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2));
+            animation: rotateScale2 15s linear infinite;
+        }
+
+        @keyframes rotateScale1 {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(90deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes rotateScale2 {
+            0% { transform: scale(1.2) rotate(90deg); }
+            50% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.2) rotate(90deg); }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 1rem 0.5rem;
+                gap: 2rem;
+            }
+            
+            .hero-left h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                padding: 0.5rem;
+            }
+            
+            .feature-card {
+                min-height: 180px;
+                padding: 1.5rem 1rem;
+            }
+        }
+        .a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
     <!-- Animated Stars Background -->
-    <div class="stars" id="stars"></div>
+    <div class="stars"></div>
 
     <div class="main-container">
         <!-- Hero Section -->
         <div class="max-container scroll-section">
-            <!-- Left content -->
-            <div class="hero-left">
+            <div class="hero-left stagger-children">
                 <h1>
                     <span class="gradient-text1">Connect.</span><br>
                     <span class="gradient-text2">Share.</span><br>
@@ -674,22 +591,21 @@
                 </p>
 
                 <div class="button-group">
-                    <a href="{%url 'tweet_list'%}" class="btn btn-primary">Get Started Free</a>
+                    <a href="#" class="btn btn-primary">Get Started Free</a>
                     <button class="btn btn-outline">Watch Demo</button>
                 </div>
 
                 <div class="small-stats">
                     <div class="avatars" id="avatarGroup">
-                        <div class="avatars-item avatar1" data-theme="default"></div>
+                        <div class="avatars-item avatar1 active" data-theme="default"></div>
                         <div class="avatars-item avatar2" data-theme="theme-blue"></div>
                         <div class="avatars-item avatar3" data-theme="theme-blue-purple"></div>
                     </div>
-                    <span>{{ total_users }} users</span>
+                    <span>10,000+ users</span>
                     <span>| ✨ Trusted worldwide</span>
                 </div>
             </div>
 
-            <!-- Right card (Hidden on mobile) -->
             <div class="hero-right">
                 <div class="main-card">
                     <div class="card-top">
@@ -701,7 +617,7 @@
                     </div>
 
                     <div class="card-image">
-                        <img src="https://i.pinimg.com/736x/a6/1c/49/a61c497a88baaf2a1c52841bb0fa50ca.jpg" alt="">
+                        <img src="https://i.pinimg.com/736x/a6/1c/49/a61c497a88baaf2a1c52841bb0fa50ca.jpg" alt="Preview">
                     </div>
 
                     <div style="height:0.5rem; width:100%; background:#e5e7eb; margin-bottom:0.25rem;"></div>
@@ -709,40 +625,51 @@
                 </div>
             </div>
         </div>
-        <br><br><br><br><br>
 
-        <!-- Features Section (Minimized) -->
-        {% if user.is_authenticated %}
-        <div class="features-grid scroll-section">
-            <a href="{% url 'profile_detail' username=user.username %}">
-                <div class="feature-card">
-                    <div class="feature-icon icon-purple">💬</div>
-                    <h3 class="feature-title">Profile</h3>
-                    <p class="feature-description">See Latest Updates</p>
-                </div>
-            </a>
+        <br><br>
+
+        <!-- Features Section -->
+        <div class="features-grid scroll-section scale-in stagger-children">
+           {% if user.is_authenticated %}
+    <a href="{% url 'profile_detail' username=user.username %}" style="text-decoration: none;">
+        <div class="feature-card">
+            <div class="feature-icon">👤</div>
+            <h3 class="feature-title">Profile</h3>
+            <p class="feature-description">See Your Profile</p>
+        </div>
+    </a>
+{% else %}
+    <a href="{% url 'login' %}" style="text-decoration: none;">
+        <div class="feature-card">
+            <div class="feature-icon">👤</div>
+            <h3 class="feature-title">Login</h3>
+            <p class="feature-description">Login to view your profile</p>
+        </div>
+    </a>
+{% endif %}
            
-            <a href="{% url 'tweet_list' %}">
+            <a href="{% url 'tweet_list' %}" style="text-decoration: none;">
                 <div class="feature-card">
-                    <div class="feature-icon icon-blue">⚡</div>
+                    <div class="feature-icon">⚡</div>
                     <h3 class="feature-title">Feed</h3>
                     <p class="feature-description">Explore recent activities</p>
                 </div>
             </a>
             
-            <a href="{% url 'following_list' username=user.username %}">
+            <a href="{% url 'combined_chat' %}" style="text-decoration: none;">
                 <div class="feature-card">
-                    <div class="feature-icon icon-orange">👥</div>
-                    <h3 class="feature-title">Following</h3>
-                    <p class="feature-description">Latest from your friends</p>
+                    <div class="feature-icon">
+💬                    </div>
+                    <h3 class="feature-title">Message</h3>
+                    <p class="feature-description" style="text-decoration: none;">Message from your friends</p>
                 </div>
             </a>
         </div>
-        {% endif %}
-        <br><br><br>
+
+        <br><br>
 
         <!-- Tweet Preview Section -->
-        <div class="content-section scroll-section">
+        <div class="content-section scroll-section blur-reveal">
             <div class="tweet-preview">
                 <div class="preview-title">See How Your Tweets Look</div>
                 <div class="mock-tweet">
@@ -763,125 +690,104 @@
             </div>
         </div>
     </div>
-    <br><br><br>
-    {%include "contact.html"%}
+ {%include "contact.html"%}
 
-    <section class="reviews">
-    <h2>Latest Reviews</h2>
-{% for profile in profiles %}
-    <div>
-        <p>{{ profile.user.username }}</p>
-        {% if user.is_authenticated %}
-            <a href="{% url 'add_review' profile.id %}" class="btn btn-primary">Add Review</a>
-        {% else %}
-            <p>Login to add a review</p>
-        {% endif %}
-    </div>
-{% endfor %}
-
-
-</section>
-{% if user.is_authenticated %}
-    <a href="{% url 'add_review' profile.id %}" class="btn btn-primary">Add Review</a>
-{% else %}
-    <p>Login to add a review</p>
-{% endif %}
-
-
-
+ 
     <script>
-        // Theme Switching Functionality
+        // Theme Switching
         const avatarItems = document.querySelectorAll('.avatars-item');
         const body = document.body;
-        const defaultTheme = 'default';
-
-        // Set initial active state
-        document.querySelector('[data-theme="default"]').classList.add('active');
 
         avatarItems.forEach(avatar => {
             avatar.addEventListener('click', function() {
-                // Remove active class from all avatars
                 avatarItems.forEach(item => item.classList.remove('active'));
-                
-                // Add active class to clicked avatar
                 this.classList.add('active');
                 
-                // Get theme and apply it
                 const theme = this.getAttribute('data-theme');
-                
-                // Remove all theme classes
                 body.classList.remove('theme-blue', 'theme-blue-purple');
                 
-                // Add new theme class if not default
                 if (theme !== 'default') {
                     body.classList.add(theme);
                 }
                 
-                // Store theme preference
                 localStorage.setItem('selectedTheme', theme);
             });
         });
 
-        // Load saved theme on page load
+        // Load saved theme
         window.addEventListener('DOMContentLoaded', function() {
             const savedTheme = localStorage.getItem('selectedTheme') || 'default';
             const savedAvatar = document.querySelector(`[data-theme="${savedTheme}"]`);
             if (savedAvatar) {
                 savedAvatar.click();
             }
-        });
-
-        // 3D Scroll Effect Handler
-        const scrollSections = document.querySelectorAll('.scroll-section');
-        
-        function handleScroll() {
-            scrollSections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                const sectionCenter = rect.top + rect.height / 2;
-                const viewportCenter = window.innerHeight / 2;
-                const distance = sectionCenter - viewportCenter;
-                const scrollProgress = distance / viewportCenter;
-                
-                section.classList.remove('parallax-up', 'parallax-down', 'in-view');
-                
-                if (Math.abs(distance) < 150) {
-                    section.classList.add('in-view');
-                } else if (distance > 150) {
-                    section.classList.add('parallax-down');
-                    section.style.transform = `translateY(${Math.min(distance * 0.3, 100)}px) rotateX(-${Math.min(Math.abs(scrollProgress) * 5, 8)}deg)`;
-                } else {
-                    section.classList.add('parallax-up');
-                    section.style.transform = `translateY(${Math.max(distance * 0.3, -100)}px) rotateX(${Math.min(Math.abs(scrollProgress) * 5, 8)}deg)`;
-                }
-            });
-        }
-
-        // Add scroll event listener with throttling
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(handleScroll);
-                ticking = true;
-                setTimeout(() => { ticking = false; }, 10);
+            
+            // Animate hero section immediately on load
+            const heroSection = document.querySelector('.max-container');
+            const heroLeft = document.querySelector('.hero-left');
+            if (heroSection && heroLeft) {
+                heroSection.classList.add('animate-in');
+                heroLeft.classList.add('animate-in');
             }
         });
 
-        // Initial call
-        handleScroll();
+        // Enhanced Scroll Animations with Intersection Observer
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        // Smooth scroll for buttons
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll sections (except hero which animates on load)
+        document.querySelectorAll('.scroll-section').forEach(section => {
+            if (!section.classList.contains('max-container')) {
+                observer.observe(section);
+            }
+        });
+
+        // Parallax effect on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const circles = document.querySelectorAll('.bg-circle');
+            
+            circles.forEach((circle, index) => {
+                const speed = (index + 1) * 0.05;
+                circle.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+            
+            lastScroll = scrolled;
+        });
+
+        // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
-    </script>
 
-    <script src="{%static 'java_script/home.js'%}"></script>
+        // Add animated circles
+        const container = document.querySelector('.main-container');
+        if (container) {
+            const circle1 = document.createElement('div');
+            circle1.className = 'bg-circle circle1';
+            const circle2 = document.createElement('div');
+            circle2.className = 'bg-circle circle2';
+            container.appendChild(circle1);
+            container.appendChild(circle2);
+        }
+    </script>
 </body>
 </html>
 
