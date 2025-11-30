@@ -716,6 +716,126 @@
       height: 100px;
       width: auto;
     }
+ /* Fixed Logo Styles */
+.logo-container {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 20px;
+}
+
+.symbol {
+    display: flex;
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.symbol-part {
+    position: absolute;
+    width: 16px;
+    height: 32px;
+    border-radius: 8px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.part-blue {
+    background: linear-gradient(135deg, #4A90E2 0%, #2E5C8A 100%);
+    left: 0;
+    top: 4px;
+    transform: rotate(-15deg);
+    z-index: 2;
+}
+
+.part-blue::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0.3) 0%, transparent 50%);
+    border-radius: 8px;
+}
+
+.part-green {
+    background: linear-gradient(135deg, #50C878 0%, #2E8B57 100%);
+    right: 0;
+    top: 4px;
+    transform: rotate(15deg) scaleX(-1);
+    z-index: 1;
+}
+
+.part-green::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0.3) 0%, transparent 50%);
+    border-radius: 8px;
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: transparent;
+    background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    text-transform: lowercase;
+    position: relative;
+}
+
+.logo-text::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    z-index: -1;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Mobile adjustments for logo */
+@media (max-width: 768px) {
+    .logo-container {
+        gap: 10px;
+        margin-right: 10px;
+    }
+    
+    .logo-text {
+        font-size: 1.5rem;
+    }
+    
+    .symbol {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .symbol-part {
+        width: 13px;
+        height: 26px;
+        border-radius: 6.5px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.3rem;
+    }
+    
+    .symbol {
+        width: 28px;
+        height: 28px;
+    }
+}
   </style>
 </head>
 
@@ -727,7 +847,7 @@
   <div class="mobile-sidebar" id="mobileSidebar">
     <div class="sidebar-header">
     <div class="sidebar-brand">
-  <img src="{% static 'images/final_logo.png' %}" alt="TweetHub Logo" style="height: 100px; width: 150px;">
+  <img src="{% static 'con.jpeg' %}" alt="TweetHub Logo" style="height: 100px; width: 150px;">
 
 </div>
       <button class="close-sidebar-btn" id="closeSidebarBtn">
@@ -837,9 +957,14 @@
   <nav class="navbar navbar-expand-lg" id="mainNav">
     <div class="container-fluid">
    
- <a class="navbar-brand" href="{% url 'home' %}" >
-    <img src="{% static 'images/final_logo.png' %}" alt="TweetHub Logo" style="height: 40px; width: auto;">
-  </a>
+ <!-- Replace the existing logo-container div with this: -->
+<div class="logo-container">
+    <div class="symbol">
+        <div class="symbol-part part-blue"></div>
+        <div class="symbol-part part-green"></div>
+    </div>
+    <div class="logo-text" data-text="connecto">connecto</div>
+</div>
       <button class="sidebar-toggle-btn" id="sidebarToggleBtn">
         <i class="fas fa-bars"></i>
       </button>
