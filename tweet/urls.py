@@ -20,6 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static 
 from . import views
 from django.urls import path
+from django.contrib.auth.views import LogoutView
+
 urlpatterns = [
      path("", views.home, name="home"),
 
@@ -28,7 +30,8 @@ urlpatterns = [
     path("<int:tweet_id>/edit/", views.tweet_edit, name="tweet_edit"),
     path("<int:tweet_id>/delete/", views.tweet_delete, name="tweet_delete"),
     path("register/", views.register, name="register"),
-    path("logout/", views.logout, name="logout"),
+path("logout/", LogoutView.as_view(next_page='/'), name="logout"),
+
     path("<int:tweet_id>/like/", views.like_tweet, name="like_tweet"),  # NEW
 
     path('create-profile/', views.create_profile, name='create_profile'),
@@ -42,6 +45,11 @@ path("delete-account/", views.delete_account, name="delete_account"),
 
     path('following-feed/', views.following_feed, name='following_feed'),
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),
+
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path("account-settings/", views.account_settings, name="account_settings"),
+
+
 ]
 
 if settings.DEBUG:

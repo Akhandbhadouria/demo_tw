@@ -521,12 +521,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 </style>
 
 <div class="tweet-container">
-    <!-- Create Tweet Button -->
-    <!-- <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
-        +
-    </a> -->
-    
-    <!-- Masonry Grid -->
+   
      <h3 class="tit">Public Feed</h3>
     {% if tweets %}
         <div class="masonry-grid">
@@ -542,10 +537,16 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                  <div class="tweet-actions">
             <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
                 {% csrf_token %}
-                <button type="submit" class="like-btn">
-                    <span class="like-icon">❤️</span>
-                    <span class="like-count">{{ tweet.total_likes }}</span>
-                </button>
+                <button type="submit" class="like-btn {% if request.user in tweet.likes.all %}liked{% endif %}">
+    <span class="like-icon">
+        {% if request.user in tweet.likes.all %}
+            ❤️
+        {% else %}
+            🤍
+        {% endif %}
+    </span>
+    <span class="like-count">{{ tweet.total_likes }}</span>
+</button>
             </form>
         </div>
             </div>
@@ -686,6 +687,42 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             e.stopPropagation();
         }
     });
+    document.querySelectorAll(".like-form").forEach(form => {
+    form.addEventListener("click", function(e) {
+        e.stopPropagation();   // STOP POPUP FROM OPENING
+    });
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        e.stopPropagation();   // ALSO STOP MODAL FROM TRIGGERING
+
+        const url = this.action;
+        const countSpan = this.querySelector(".like-count");
+        const icon = this.querySelector(".like-icon");
+        const btn = this.querySelector(".like-btn");
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            countSpan.textContent = data.total_likes;
+
+            if (data.liked) {
+                btn.classList.add("liked");
+                icon.textContent = "❤️";
+            } else {
+                btn.classList.remove("liked");
+                icon.textContent = "🤍";
+            }
+        })
+        .catch(error => console.log(error));
+    });
+});
+
 </script>
 
 {% endblock %}

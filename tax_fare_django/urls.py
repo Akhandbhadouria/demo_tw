@@ -21,14 +21,19 @@ from django.conf.urls.static import static
 from django.http import HttpResponse
 from tax_fare_django import views
 from django.contrib.auth.urls import views as auth_views
+from django.contrib.auth.views import LoginView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tweet/', include("tweet.urls")),
     path('', views.home,name="home"),
-path('accounts/', include('django.contrib.auth.urls')),
-path('chat/chat/', include('chat.urls')),
+    path('', include('django.contrib.auth.urls')),
+
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
+
+ path('accounts/', include('allauth.urls')), 
+ path('chat/chat/', include('chat.urls')),
 
 ]
 

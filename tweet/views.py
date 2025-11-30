@@ -75,6 +75,17 @@ def tweet_delete(request,tweet_id):
         tweet.delete()
         return redirect("my_feed")
     return render(request,"tweet_confirm_delete.html",{"tweet":tweet})
+
+
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.conf import settings
+
 def register(request):
     if request.method=="POST":
         form= UserRegrestrationForm(request.POST)
@@ -90,6 +101,57 @@ def register(request):
 
     return render(request,'registration/register.html',{'form':form})
 
+from .forms import UsernameUpdateForm, SetPasswordWithoutOldForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
+@login_required
+def account_settings(request):
+    user = request.user
+
+    # Detect if user came from Google (no usable password)
+    google_user = not user.has_usable_password()
+
+    if request.method == "POST":
+        username_form = UsernameUpdateForm(request.POST, instance=user)
+
+        # For Google login users → use “Set Password without old”
+        if google_user:
+            password_form = SetPasswordWithoutOldForm(request.POST)
+        else:
+            password_form = PasswordChangeForm(user, request.POST)
+
+        # Username update
+        if "save_username" in request.POST:
+            if username_form.is_valid():
+                username_form.save()
+                messages.success(request, "Username updated successfully.")
+                return redirect("account_settings")
+
+        # Password update
+        if "save_password" in request.POST:
+            if password_form.is_valid():
+                if google_user:
+                    # Save new password without old
+                    password_form.save(user)
+                else:
+                    # Normal users
+                    user = password_form.save()
+
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password updated successfully.")
+                return redirect("account_settings")
+
+    else:
+        username_form = UsernameUpdateForm(instance=user)
+        password_form = SetPasswordWithoutOldForm() if google_user else PasswordChangeForm(user)
+
+    return render(request, "account_settings.html", {
+        "username_form": username_form,
+        "password_form": password_form,
+        "google_user": google_user,
+    })
 
 ### Step-by-Step Flow of Django User Registration (Hinglish me samjha hua)
 
@@ -237,20 +299,25 @@ def profile_detail(request, username):
         'tweets': tweets_display,
         'all_tweets_count': tweets_count,
     })
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 @login_required
 def like_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
-    
+
     if tweet.user_has_liked(request.user):
         tweet.likes.remove(request.user)
+        liked = False
     else:
         tweet.likes.add(request.user)
-    
-    # Return to the same page
-    next_url = request.META.get('HTTP_REFERER', '/')
-    return redirect(next_url)
+        liked = True
 
+    return JsonResponse({
+        "liked": liked,
+        "total_likes": tweet.likes.count()
+    })
 
 
 
@@ -312,21 +379,19 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserProfileForm
 from .models import UserProfile
+from .forms import CombinedProfileForm
 
 @login_required
 def edit_profile(request):
-    # Get the profile of the logged-in user
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':
-        # Bind form with POST data and files (image)
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        form = CombinedProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('profile_detail', username=request.user.username)
     else:
-        # Display form pre-filled with current profile data
-        form = UserProfileForm(instance=profile)
+        form = CombinedProfileForm(instance=profile, user=request.user)
 
     return render(request, 'edit_profile.html', {'form': form})
 
@@ -389,3 +454,49 @@ def delete_account(request):
 
 
 
+
+
+
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+
+def send_verification_email(request, user):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+
+    domain = get_current_site(request).domain
+
+    verify_url = f"http://{domain}{reverse('activate', kwargs={'uidb64': uid, 'token': token})}"
+
+    message = f"Hi {user.username},\n\nClick the link below to verify your email:\n{verify_url}\n\nThanks!"
+
+    send_mail(
+        "Verify your Email - TweetShare",
+        message,
+        EMAIL_HOST_USER,
+        [user.email],
+        fail_silently=False,
+    )
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.http import HttpResponse
+
+def activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return redirect("login")   # after verification
+        
+    return HttpResponse("Activation link is invalid or expired.")

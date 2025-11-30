@@ -398,7 +398,32 @@
 
     <form method="POST" enctype="multipart/form-data" class="profile-form">
       {% csrf_token %}
-      {{ form.as_p }}
+     <p>
+  <label>Username</label>
+  {{ form.username }}
+</p>
+
+{{ form.profile_photo.errors }}
+<p>
+  <label>Profile Photo</label>
+  {{ form.profile_photo }}
+</p>
+
+<p>
+  <label>Profession</label>
+  {{ form.profession }}
+</p>
+
+<p>
+  <label>Email</label>
+  {{ form.email }}
+</p>
+
+<p>
+  <label>Bio</label>
+  {{ form.bio }}
+</p>
+
       
       <div class="button-group">
         <button type="submit" class="btn-save">

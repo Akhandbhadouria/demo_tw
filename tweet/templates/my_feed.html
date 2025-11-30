@@ -1,9 +1,18 @@
-{% extends 'layout.html' %}
-{% block title %}Following Feed{% endblock %}
+{%extends "layout.html"%}
+{%load static%}
+{% block title %}
+Tweets - TweetShare
+{% endblock %}
 
 {% block content %}
+
 <style>
-   
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
@@ -12,11 +21,43 @@
         overflow-x: hidden;
     }
 
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+    }
+
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
         color: #333;
         margin-bottom: 10px;
+    }
+
+    .page-description {
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+    .create-tweet-btn {
+        display: inline-block;
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0 auto 40px;
+        display: block;
+        width: fit-content;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .create-tweet-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
     }
 
     /* Masonry Grid Layout */
@@ -265,15 +306,15 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         overflow: hidden;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         border: 1px solid rgba(255, 255, 255, 0.3);
-        max-height: none; /* Remove max-height restriction */
+        max-height: none;
         position: relative;
     }
 
     .mock-image img {
         width: 100%;
-        height: auto; /* Change to auto to maintain aspect ratio */
-        max-height: 70vh; /* Limit maximum height to viewport */
-        object-fit: contain; /* Show entire image without cropping */
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain;
         display: block;
         cursor: pointer;
         transition: transform 0.3s ease;
@@ -477,30 +518,45 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     justify-content: center;   /* horizontal center */
     align-items: center;        /* vertical center */
 }
+  
 </style>
 
-<div class="container">
-    <h3 class="tit">Your Post</h3>
+<div class="tweet-container">
+    <!-- Create Tweet Button -->
+    <!-- <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
+        +
+    </a> -->
+    
+    <!-- Masonry Grid -->
+     <h3 class="tit">My Post</h3>
+   <br><br>
+         
     {% if tweets %}
         <div class="masonry-grid">
             {% for tweet in tweets %}
             <div class="tweet-card" data-tweet-id="{{ tweet.id }}">
                 {% if tweet.photo %}
-                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet Photo">
+                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
                 {% else %}
                     <div class="tweet-text-only">
                         <p>{{ tweet.text|truncatewords:20 }}</p>
                     </div>
                 {% endif %}
-                <div class="tweet-actions">
-                    <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
-                        {% csrf_token %}
-                        <button type="submit" class="like-btn">
-                            <span class="like-icon">❤️</span>
-                            <span class="like-count">{{ tweet.total_likes }}</span>
-                        </button>
-                    </form>
-                </div>
+                 <div class="tweet-actions">
+            <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
+                {% csrf_token %}
+                <button type="submit" class="like-btn {% if request.user in tweet.likes.all %}liked{% endif %}">
+    <span class="like-icon">
+        {% if request.user in tweet.likes.all %}
+            ❤️
+        {% else %}
+            🤍
+        {% endif %}
+    </span>
+    <span class="like-count">{{ tweet.total_likes }}</span>
+</button>
+            </form>
+        </div>
             </div>
             {% endfor %}
         </div>
@@ -513,10 +569,11 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             </div>
         </div>
     {% else %}
+        <!-- Empty State -->
         <div class="empty-state">
-            <div class="empty-state-icon">👥</div>
+            <div class="empty-state-icon">📭</div>
             <h2 class="empty-state-title">No tweets yet</h2>
-            <p class="empty-state-text">Start following people to see their tweets here!</p>
+            <p class="empty-state-text">Be the first to share something!</p>
         </div>
     {% endif %}
 </div>
@@ -528,8 +585,12 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             hasPhoto: {% if tweet.photo %}true{% else %}false{% endif %},
             photoUrl: "{{ tweet.photo.url|default:'' }}",
             text: `{{ tweet.text|escapejs }}`,
+            username: "{{ tweet.user.username|escapejs }}",
+            profileUrl: "{% url 'profile_detail' username=tweet.user.username %}",
+            hasAvatar: {% if tweet.user.userprofile.profile_photo %}true{% else %}false{% endif %},
+            avatarUrl: "{{ tweet.user.userprofile.profile_photo.url|default:'' }}",
             timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}",
-            isOwner: {% if tweet.user == request.user %}true{% else %}false{% endif %},
+            isOwner: {% if tweet.user == user %}true{% else %}false{% endif %},
             editUrl: "{% url 'tweet_edit' tweet.id %}",
             deleteUrl: "{% url 'tweet_delete' tweet.id %}"
         }{% if not forloop.last %},{% endif %}
@@ -553,10 +614,26 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 
         let html = '<div class="mock-tweet">';
 
-        // Sirf tweet content - NO USER HEADER
+        // User info
+        html += '<div class="mock-user">';
+        
+        // Avatar
+        if (tweet.hasAvatar && tweet.avatarUrl) {
+            html += `<div class="mock-avatar"><img src="${tweet.avatarUrl}" class="mock-avatar-img" alt="${tweet.username}"></div>`;
+        } else {
+            html += `<div class="mock-avatar">${tweet.username.charAt(0).toUpperCase()}</div>`;
+        }
+
+        html += '<div class="mock-user-info">';
+        html += `<div class="mock-name">${tweet.username}</div>`;
+        html += `<a href="${tweet.profileUrl}" class="mock-handle">@${tweet.username.toLowerCase()}</a>`;
+        html += '</div>';
+        html += '</div>'; // close mock-user
+
+        // Tweet content
         html += `<div class="mock-content">${tweet.text}</div>`;
 
-        // Image agar hai toh
+        // Tweet image - with click to open in new tab functionality
         if (tweet.hasPhoto && tweet.photoUrl) {
             html += `<div class="mock-image">`;
             html += `<div class="mock-image-overlay">Click to open in new tab</div>`;
@@ -567,7 +644,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         // Timestamp
         html += `<div class="mock-timestamp">🕒 ${tweet.timestamp}</div>`;
 
-        // Edit/Delete buttons (sirf owner ke liye)
+        // Edit and Delete buttons (only show if user owns the tweet)
         if (tweet.isOwner) {
             html += `<div class="mock-actions">`;
             html += `<a href="${tweet.editUrl}" class="action-btn edit-btn">✏️ Edit</a>`;
@@ -578,7 +655,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             html += `</div>`;
         }
 
-        html += '</div>';
+        html += '</div>'; // close mock-tweet
 
         modalBody.innerHTML = html;
         modal.classList.add('show');
@@ -586,6 +663,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     }
 
     function openImageInNewTab(imageUrl) {
+        // Open image in new tab
         window.open(imageUrl, '_blank');
     }
 
@@ -608,6 +686,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         }
     });
 
+    // Prevent modal from closing when clicking on the image or action buttons
     modalBody.addEventListener('click', function(e) {
         if (e.target.classList.contains('mock-image') || 
             e.target.closest('.mock-image') ||
@@ -616,6 +695,42 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             e.stopPropagation();
         }
     });
+    document.querySelectorAll(".like-form").forEach(form => {
+    form.addEventListener("click", function(e) {
+        e.stopPropagation();   // STOP POPUP FROM OPENING
+    });
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        e.stopPropagation();   // ALSO STOP MODAL FROM TRIGGERING
+
+        const url = this.action;
+        const countSpan = this.querySelector(".like-count");
+        const icon = this.querySelector(".like-icon");
+        const btn = this.querySelector(".like-btn");
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            countSpan.textContent = data.total_likes;
+
+            if (data.liked) {
+                btn.classList.add("liked");
+                icon.textContent = "❤️";
+            } else {
+                btn.classList.remove("liked");
+                icon.textContent = "🤍";
+            }
+        })
+        .catch(error => console.log(error));
+    });
+});
+
 </script>
 
 {% endblock %}

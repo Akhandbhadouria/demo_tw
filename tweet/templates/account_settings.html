@@ -1,0 +1,16 @@
+<div class="card" style="padding:20px;border-radius:15px;">
+    {% if google_user %}
+        <h4>Set Password</h4>
+        <p style="color:#999;">You logged in using Google. Set a password to enable normal login.</p>
+    {% else %}
+        <h4>Change Password</h4>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit" name="save_password" class="btn btn-warning">
+            {% if google_user %}Set Password{% else %}Change Password{% endif %}
+        </button>
+    </form>
+</div>

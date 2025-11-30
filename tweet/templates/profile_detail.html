@@ -287,29 +287,28 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: #ffffff;
     }
 .post-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        transition: all 0.3s ease;
-        /* Add these properties for scrolling */
-        max-height: 80vh;
-        overflow-y: auto;
-        position: relative;
-    }
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+    /* Remove fixed height and scrolling */
+    max-height: none;
+    overflow-y: visible;
+    position: relative;
+}
 
-    [data-theme="dark"] .post-card {
-        background: rgba(26, 26, 46, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+[data-theme="dark"] .post-card {
+    background: rgba(26, 26, 46, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-    .post-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
     .profile-links {
         display: flex;
         flex-direction: column;
@@ -1912,7 +1911,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         <div class="header-bar">
             <h1 class="header-title">Profile Activity</h1>
             {% if request.user == profile.user %}
-            <a href="{% url 'tweet_create' %}" class="btn btn-primary">Create Tweet</a>
+            <a href="{% url 'tweet_create' %}" class="btn btn-primary">New Post</a>
             {% else %}
             <div class="ms">
                 <!-- Follow/Following button -->
@@ -1964,10 +1963,16 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                     <div class="tweet-actions">
                         <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
                             {% csrf_token %}
-                            <button type="submit" class="like-btn">
-                                <span class="like-icon">❤️</span>
-                                <span class="like-count">{{ tweet.total_likes }}</span>
-                            </button>
+                           <button type="submit" class="like-btn {% if request.user in tweet.likes.all %}liked{% endif %}">
+    <span class="like-icon">
+        {% if request.user in tweet.likes.all %}
+            ❤️
+        {% else %}
+            🤍
+        {% endif %}
+    </span>
+    <span class="like-count">{{ tweet.total_likes }}</span>
+</button>
                         </form>
                     </div>
                 </div>
@@ -2206,6 +2211,44 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             }, index * 100);
         });
     });
+      document.querySelectorAll(".like-form").forEach(form => {
+    form.addEventListener("click", function(e) {
+        e.stopPropagation();   // STOP POPUP FROM OPENING
+    });
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        e.stopPropagation();   // ALSO STOP MODAL FROM TRIGGERING
+
+        const url = this.action;
+        const countSpan = this.querySelector(".like-count");
+        const icon = this.querySelector(".like-icon");
+        const btn = this.querySelector(".like-btn");
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            countSpan.textContent = data.total_likes;
+
+            if (data.liked) {
+                btn.classList.add("liked");
+                icon.textContent = "❤️";
+            } else {
+                btn.classList.remove("liked");
+                icon.textContent = "🤍";
+            }
+        })
+        .catch(error => console.log(error));
+    });
+});
 </script>
 
 {% endblock %}
+
+
+

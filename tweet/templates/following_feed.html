@@ -1,7 +1,11 @@
-{% extends 'layout.html' %}
-{% block title %}Following Feed{% endblock %}
+{%extends "layout.html"%}
+{%load static%}
+{% block title %}
+Tweets - TweetShare
+{% endblock %}
 
 {% block content %}
+
 <style>
     * {
         margin: 0;
@@ -17,11 +21,43 @@
         overflow-x: hidden;
     }
 
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+    }
+
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
         color: #333;
         margin-bottom: 10px;
+    }
+
+    .page-description {
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+    .create-tweet-btn {
+        display: inline-block;
+background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0 auto 40px;
+        display: block;
+        width: fit-content;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .create-tweet-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
     }
 
     /* Masonry Grid Layout */
@@ -270,14 +306,41 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         overflow: hidden;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         border: 1px solid rgba(255, 255, 255, 0.3);
-        max-height: 500px;
+        max-height: none;
+        position: relative;
     }
 
     .mock-image img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain;
         display: block;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .mock-image img:hover {
+        transform: scale(1.02);
+    }
+
+    .mock-image-overlay {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .mock-image:hover .mock-image-overlay {
+        opacity: 1;
     }
 
     .mock-timestamp {
@@ -294,6 +357,56 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     [data-theme="dark"] .mock-timestamp {
         color: #a8a8a8;
         background: rgba(40, 40, 60, 0.4);
+    }
+
+    /* Tweet Actions in Modal */
+    .mock-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 10px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .mock-actions {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .action-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .edit-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .edit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+    }
+
+    .delete-btn {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    .delete-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
     }
 
     /* Empty State */
@@ -399,79 +512,49 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     .modal-content::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.5);
     }
-    .mock-image {
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    max-height: none; /* Remove max-height restriction */
-    position: relative;
-}
-
-.mock-image img {
-    width: 100%;
-    height: auto; /* Change to auto to maintain aspect ratio */
-    max-height: 70vh; /* Limit maximum height to viewport */
-    object-fit: contain; /* Show entire image without cropping */
-    display: block;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.mock-image img:hover {
-    transform: scale(1.02);
-}
-
-.mock-image-overlay {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    backdrop-filter: blur(10px);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.mock-image:hover .mock-image-overlay {
-    opacity: 1;
-}
-.tit{
+    .tit{
     color: #2d3748;
     display: flex;
     justify-content: center;   /* horizontal center */
     align-items: center;        /* vertical center */
 }
-
 </style>
 
-<div class="container">
-    <h2 class="tit">Following feed</h2>
+<div class="tweet-container">
+    <!-- Create Tweet Button -->
+    <!-- <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
+        +
+    </a> -->
+    
+    <!-- Masonry Grid -->
+     <h3 class="tit">Following Feed</h3>
     {% if tweets %}
         <div class="masonry-grid">
             {% for tweet in tweets %}
             <div class="tweet-card" data-tweet-id="{{ tweet.id }}">
                 {% if tweet.photo %}
-                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet Photo">
+                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
                 {% else %}
                     <div class="tweet-text-only">
                         <p>{{ tweet.text|truncatewords:20 }}</p>
                     </div>
                 {% endif %}
-                <div class="tweet-actions">
-                    <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
-                        {% csrf_token %}
-                        <button type="submit" class="like-btn">
-                            <span class="like-icon">❤️</span>
-                            <span class="like-count">{{ tweet.total_likes }}</span>
-                        </button>
-                    </form>
-                </div>
-               
+                 <div class="tweet-actions">
+            <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
+                {% csrf_token %}
+                <button type="submit" class="like-btn {% if request.user in tweet.likes.all %}liked{% endif %}">
+    <span class="like-icon">
+        {% if request.user in tweet.likes.all %}
+            ❤️
+        {% else %}
+            🤍
+        {% endif %}
+    </span>
+    <span class="like-count">{{ tweet.total_likes }}</span>
+</button>
+
+            </form>
+        </div>
             </div>
             {% endfor %}
         </div>
@@ -484,10 +567,11 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             </div>
         </div>
     {% else %}
+        <!-- Empty State -->
         <div class="empty-state">
-            <div class="empty-state-icon">👥</div>
+            <div class="empty-state-icon">📭</div>
             <h2 class="empty-state-title">No tweets yet</h2>
-            <p class="empty-state-text">Start following people to see their tweets here!</p>
+            <p class="empty-state-text">Be the first to share something!</p>
         </div>
     {% endif %}
 </div>
@@ -500,10 +584,13 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
             photoUrl: "{{ tweet.photo.url|default:'' }}",
             text: `{{ tweet.text|escapejs }}`,
             username: "{{ tweet.user.username|escapejs }}",
-            profileUrl: "{% url 'profile_detail' tweet.user.username %}",
+            profileUrl: "{% url 'profile_detail' username=tweet.user.username %}",
             hasAvatar: {% if tweet.user.userprofile.profile_photo %}true{% else %}false{% endif %},
             avatarUrl: "{{ tweet.user.userprofile.profile_photo.url|default:'' }}",
-            timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}"
+            timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}",
+            isOwner: {% if tweet.user == user %}true{% else %}false{% endif %},
+            editUrl: "{% url 'tweet_edit' tweet.id %}",
+            deleteUrl: "{% url 'tweet_delete' tweet.id %}"
         }{% if not forloop.last %},{% endif %}
         {% endfor %}
     };
@@ -519,60 +606,64 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         });
     });
 
-   function openModal(tweetId) {
-    const tweet = tweetData[tweetId];
-    if (!tweet) return;
+    function openModal(tweetId) {
+        const tweet = tweetData[tweetId];
+        if (!tweet) return;
 
-    let html = '<div class="mock-tweet">';
+        let html = '<div class="mock-tweet">';
 
-    // User info
-    html += '<div class="mock-user">';
-    
-    // Avatar
-    if (tweet.hasAvatar && tweet.avatarUrl) {
-        html += `<div class="mock-avatar"><img src="${tweet.avatarUrl}" class="mock-avatar-img" alt="${tweet.username}"></div>`;
-    } else {
-        html += `<div class="mock-avatar">${tweet.username.charAt(0).toUpperCase()}</div>`;
+        // User info
+        html += '<div class="mock-user">';
+        
+        // Avatar
+        if (tweet.hasAvatar && tweet.avatarUrl) {
+            html += `<div class="mock-avatar"><img src="${tweet.avatarUrl}" class="mock-avatar-img" alt="${tweet.username}"></div>`;
+        } else {
+            html += `<div class="mock-avatar">${tweet.username.charAt(0).toUpperCase()}</div>`;
+        }
+
+        html += '<div class="mock-user-info">';
+        html += `<div class="mock-name">${tweet.username}</div>`;
+        html += `<a href="${tweet.profileUrl}" class="mock-handle">@${tweet.username.toLowerCase()}</a>`;
+        html += '</div>';
+        html += '</div>'; // close mock-user
+
+        // Tweet content
+        html += `<div class="mock-content">${tweet.text}</div>`;
+
+        // Tweet image - with click to open in new tab functionality
+        if (tweet.hasPhoto && tweet.photoUrl) {
+            html += `<div class="mock-image">`;
+            html += `<div class="mock-image-overlay">Click to open in new tab</div>`;
+            html += `<img src="${tweet.photoUrl}" alt="Tweet Photo" onclick="openImageInNewTab('${tweet.photoUrl}')">`;
+            html += `</div>`;
+        }
+
+        // Timestamp
+        html += `<div class="mock-timestamp">🕒 ${tweet.timestamp}</div>`;
+
+        // Edit and Delete buttons (only show if user owns the tweet)
+        if (tweet.isOwner) {
+            html += `<div class="mock-actions">`;
+            html += `<a href="${tweet.editUrl}" class="action-btn edit-btn">✏️ Edit</a>`;
+            html += `<form action="${tweet.deleteUrl}" method="POST" style="display: inline;">`;
+            html += `{% csrf_token %}`;
+            html += `<button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this tweet?')">🗑️ Delete</button>`;
+            html += `</form>`;
+            html += `</div>`;
+        }
+
+        html += '</div>'; // close mock-tweet
+
+        modalBody.innerHTML = html;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
     }
 
-    html += '<div class="mock-user-info">';
-    html += `<div class="mock-name">${tweet.username}</div>`;
-    html += `<div class="mock-handle">@${tweet.username.toLowerCase()}</div>`;
-    html += '</div>';
-    html += '</div>'; // close mock-user
-
-    // Tweet content
-    html += `<div class="mock-content">${tweet.text}</div>`;
-
-    // Tweet image - now with click to open in new tab functionality
-    if (tweet.hasPhoto && tweet.photoUrl) {
-        html += `<div class="mock-image">`;
-        html += `<div class="mock-image-overlay">Click to open in new tab</div>`;
-        html += `<img src="${tweet.photoUrl}" alt="Tweet Photo" onclick="openImageInNewTab('${tweet.photoUrl}')">`;
-        html += `</div>`;
+    function openImageInNewTab(imageUrl) {
+        // Open image in new tab
+        window.open(imageUrl, '_blank');
     }
-
-    // Timestamp
-    html += `<div class="mock-timestamp">🕒 ${tweet.timestamp}</div>`;
-
-    html += '</div>'; // close mock-tweet
-
-    modalBody.innerHTML = html;
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function openImageInNewTab(imageUrl) {
-    // Open image in new tab
-    window.open(imageUrl, '_blank');
-}
-
-// Add this new event listener to prevent modal from closing when clicking on image
-modalBody.addEventListener('click', function(e) {
-    if (e.target.classList.contains('mock-image') || e.target.closest('.mock-image')) {
-        e.stopPropagation();
-    }
-});
 
     function closeModal() {
         modal.classList.remove('show');
@@ -592,10 +683,54 @@ modalBody.addEventListener('click', function(e) {
             closeModal();
         }
     });
-    function openImageInNewTab(imageUrl) {
-    // Open image in new tab
-    window.open(imageUrl, '_blank');
-}
+
+    // Prevent modal from closing when clicking on the image or action buttons
+    modalBody.addEventListener('click', function(e) {
+        if (e.target.classList.contains('mock-image') || 
+            e.target.closest('.mock-image') ||
+            e.target.classList.contains('action-btn') ||
+            e.target.closest('.action-btn')) {
+            e.stopPropagation();
+        }
+    });
+    document.querySelectorAll(".like-form").forEach(form => {
+    form.addEventListener("click", function(e) {
+        e.stopPropagation();   // STOP POPUP FROM OPENING
+    });
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        e.stopPropagation();   // ALSO STOP MODAL FROM TRIGGERING
+
+        const url = this.action;
+        const countSpan = this.querySelector(".like-count");
+        const icon = this.querySelector(".like-icon");
+        const btn = this.querySelector(".like-btn");
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            countSpan.textContent = data.total_likes;
+
+            if (data.liked) {
+                btn.classList.add("liked");
+                icon.textContent = "❤️";
+            } else {
+                btn.classList.remove("liked");
+                icon.textContent = "🤍";
+            }
+        })
+        .catch(error => console.log(error));
+    });
+});
+
 </script>
 
 {% endblock %}
+
+

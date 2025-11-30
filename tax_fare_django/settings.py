@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-4c-5tmhb02c0i+k-2#2om^6g!xf+2kbw3k%&45f$+!iag9#eo1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*',    "unextrinsic-tierra-nipping.ngrok-free.dev",
+]
 
 
 # Application definition
@@ -41,12 +42,13 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'channels',
     'chat',
+    'django.contrib.sites',   # IMPORTANT
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
+
    
 ]
 
@@ -58,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 
 ]
 
@@ -149,9 +151,15 @@ LOGIN_URL= '/accounts/login'
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
+    "https://unextrinsic-tierra-nipping.ngrok-free.dev",
+
 ]
 
-LOGIN_REDIRECT_URL='/tweet/'
+# LOGIN_REDIRECT_URL='/tweet/'
+# LOGOUT_REDIRECT_URL='/tweet/'
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/tweet/create-profile/'
 LOGOUT_REDIRECT_URL='/tweet/'
 
 
@@ -160,5 +168,31 @@ ASGI_APPLICATION = "tax_fare_django.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'akhandbhadouria1707@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ebkvmnmqthfomlho'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_EMAIL_REQUIRED = False
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '998688829192-l1rjsnd7ncmvr6muei52it3cr5m7c655.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        },
+         'OAUTH_PKCE_ENABLED': True,
     }
 }

@@ -15,10 +15,21 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
             color: #1f2937;
-            overflow-x: hidden;
+            /* overflow-x: hidden; */
             scroll-behavior: smooth;
         }
-
+  body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, .05) 2px, rgba(255, 255, 255, .05) 4px);
+        pointer-events: none;
+        z-index: 1;
+    }
         :root {
             --primary-color: #4f46e5;
             --secondary-color: #9333ea;
@@ -37,23 +48,7 @@
             --accent-color: #0c3483;
         }
 
-        /* -------------------- Stars Background -------------------- */
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background: radial-gradient(#ffffff 1px, transparent 1px);
-            background-size: 2px 2px;
-            z-index: -1;
-            animation: twinkle 5s linear infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
+      
 
         /* -------------------- Main Container -------------------- */
         .main-container {
@@ -591,7 +586,7 @@
                 </p>
 
                 <div class="button-group">
-                    <a href="#" class="btn btn-primary">Get Started Free</a>
+                    <a href="{% url 'tweet_list' %}" class="btn btn-primary">Get Started Free</a>
                     <button class="btn btn-outline">Watch Demo</button>
                 </div>
 
