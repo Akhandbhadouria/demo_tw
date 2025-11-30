@@ -2,24 +2,52 @@
 
 {% block content %}
 <style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: linear-gradient(to bottom right, #f0f4ff, #faf0ff, #fff0f6);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, .05) 2px, rgba(255, 255, 255, .05) 4px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  [data-theme="dark"] body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+
+  [data-theme="dark"] body::before {
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .3) 2px, rgba(0, 0, 0, .3) 4px);
+  }
+
   .profile-edit-container {
-    max-width: 700px;
+    max-width: 1200px;
     margin: 3rem auto;
     padding: 0 1.5rem;
   }
 
   .form-card {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(20px);
-    border-radius: 25px;
+    border-radius: 2rem;
     padding: 3rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     animation: fadeInUp 0.6s ease;
   }
 
   [data-theme="dark"] .form-card {
-    background: rgba(26, 26, 46, 0.85);
+    background: rgba(26, 26, 46, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -36,45 +64,28 @@
 
   .form-header {
     text-align: center;
-    margin-bottom: 2.5rem;
-  }
-
-  .form-icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .form-icon i {
-    font-size: 2.5rem;
-    color: white;
+    margin-bottom: 3rem;
   }
 
   .form-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: #2d3748;
     margin-bottom: 0.5rem;
+background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   [data-theme="dark"] .form-title {
-    color: #ffffff;
+background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .form-subtitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #718096;
   }
 
@@ -82,51 +93,275 @@
     color: #a8a8a8;
   }
 
-  /* Current Profile Preview */
+  /* Horizontal Layout for Desktop */
+  .profile-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* Left Side - Profile Preview */
+  .profile-preview-section {
+    position: sticky;
+    top: 2rem;
+  }
+
   .current-profile-preview {
     text-align: center;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: rgba(102, 126, 234, 0.05);
-    border-radius: 15px;
-    border: 1px solid rgba(102, 126, 234, 0.1);
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(147, 51, 234, 0.1));
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  [data-theme="dark"] .current-profile-preview {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(147, 51, 234, 0.15));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .preview-badge {
+    display: inline-block;
+    padding: 6px 16px;
+background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    backdrop-filter: blur(5px);
+  }
+
+  /* Clickable Avatar with 3D Effects */
+  .clickable-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .clickable-avatar-wrapper:hover {
+    transform: translateY(-5px) rotateY(5deg) rotateX(5deg);
   }
 
   .current-avatar {
-    width: 100px;
-    height: 100px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid rgba(102, 126, 234, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
+    border: 5px solid rgba(79, 70, 229, 0.3);
+    box-shadow: 
+      0 15px 35px rgba(0, 0, 0, 0.2),
+      0 5px 15px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: brightness(1.05) contrast(1.1);
+    backdrop-filter: blur(5px);
+  }
+
+  .clickable-avatar-wrapper:hover .current-avatar {
+    transform: scale(1.05);
+    border-color: rgba(79, 70, 229, 0.6);
+    box-shadow: 
+      0 25px 50px rgba(79, 70, 229, 0.3),
+      0 10px 25px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    filter: brightness(1.1) contrast(1.2);
+  }
+
+  .avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+   background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .clickable-avatar-wrapper:hover .avatar-overlay {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  .avatar-overlay-content {
+    color: white;
+    text-align: center;
+    transform: translateZ(20px);
+  }
+
+  .avatar-overlay-content i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .avatar-overlay-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .avatar-badge {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    backdrop-filter: blur(5px);
+  }
+
+  [data-theme="dark"] .avatar-badge {
+    border: 3px solid rgba(26, 26, 46, 0.9);
+  }
+
+  .avatar-badge i {
+    color: white;
+    font-size: 1rem;
   }
 
   .current-username {
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: #2d3748;
     margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   [data-theme="dark"] .current-username {
     color: #ffffff;
   }
 
+  .current-profession {
+    font-size: 1rem;
+    color: #4f46e5;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding: 8px 16px;
+    background: rgba(79, 70, 229, 0.1);
+    border-radius: 20px;
+    display: inline-block;
+    backdrop-filter: blur(5px);
+  }
+
+  /* Smaller Bio Container */
   .current-bio {
     font-size: 0.9rem;
     color: #718096;
-    max-width: 400px;
-    margin: 0 auto;
+    line-height: 1.5;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 1rem;
+    margin-top: 1rem;
+    max-height: 80px;
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .current-bio:hover {
+    max-height: none;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
   [data-theme="dark"] .current-bio {
     color: #a8a8a8;
+    background: rgba(40, 40, 60, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Form Styles */
+  [data-theme="dark"] .current-bio:hover {
+    background: rgba(50, 50, 70, 0.8);
+  }
+
+  .bio-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.8));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  [data-theme="dark"] .bio-fade {
+    background: linear-gradient(transparent, rgba(26, 26, 46, 0.8));
+  }
+
+  .current-bio:hover .bio-fade {
+    opacity: 0;
+  }
+
+  /* Right Side - Form */
+  .profile-form-section {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 2rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+  }
+
+  [data-theme="dark"] .profile-form-section {
+    background: rgba(40, 40, 60, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateZ(10px);
+  }
+
+  [data-theme="dark"] .section-title {
+    color: #ffffff;
+  }
+
+  .section-title i {
+    color: #4f46e5;
+    font-size: 1.2rem;
+  }
+
+  /* Hidden File Input */
+  .hidden-file-input {
+    display: none;
+  }
+
+  /* Form Fields */
   .profile-form p {
     margin-bottom: 1.5rem;
+    transform-style: preserve-3d;
   }
 
   .profile-form label {
@@ -135,6 +370,7 @@
     color: #2d3748;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
+    transform: translateZ(5px);
   }
 
   [data-theme="dark"] .profile-form label {
@@ -147,13 +383,15 @@
   .profile-form textarea,
   .profile-form select {
     width: 100%;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.6);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(79, 70, 229, 0.2);
+    border-radius: 1rem;
     font-size: 1rem;
     color: #2d3748;
     transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    transform-style: preserve-3d;
   }
 
   [data-theme="dark"] .profile-form input[type="text"],
@@ -161,7 +399,7 @@
   [data-theme="dark"] .profile-form input[type="url"],
   [data-theme="dark"] .profile-form textarea,
   [data-theme="dark"] .profile-form select {
-    background: rgba(40, 40, 60, 0.6);
+    background: rgba(50, 50, 70, 0.8);
     border: 2px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
   }
@@ -175,115 +413,75 @@
   .profile-form textarea:focus,
   .profile-form select:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.8);
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #4f46e5;
+    box-shadow: 
+      0 0 0 4px rgba(79, 70, 229, 0.1),
+      0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px) translateZ(10px);
   }
 
   [data-theme="dark"] .profile-form input:focus,
   [data-theme="dark"] .profile-form textarea:focus,
   [data-theme="dark"] .profile-form select:focus {
-    background: rgba(50, 50, 70, 0.8);
-    border-color: #667eea;
+    background: rgba(60, 60, 80, 0.95);
+    border-color: #4f46e5;
   }
 
   .profile-form textarea {
     resize: vertical;
-    min-height: 120px;
+    min-height: 40px;
+    backdrop-filter: blur(5px);
   }
 
-  /* File Input Styling */
-  .profile-form input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.6);
-    border: 2px dashed rgba(102, 126, 234, 0.3);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  [data-theme="dark"] .profile-form input[type="file"] {
-    background: rgba(40, 40, 60, 0.6);
-    border: 2px dashed rgba(102, 126, 234, 0.5);
-    color: #ffffff;
-  }
-
-  .profile-form input[type="file"]:hover {
-    border-color: #667eea;
-    background: rgba(102, 126, 234, 0.1);
-  }
-
-  /* Help Text */
-  .profile-form .helptext {
-    display: block;
-    font-size: 0.85rem;
-    color: #718096;
-    margin-top: 0.5rem;
-    font-style: italic;
-  }
-
-  [data-theme="dark"] .profile-form .helptext {
-    color: #a8a8a8;
-  }
-
-  /* Error Messages */
-  .profile-form .errorlist {
-    list-style: none;
-    padding: 0;
-    margin: 0.5rem 0 0;
-  }
-
-  .profile-form .errorlist li {
-    color: #ef4444;
-    font-size: 0.875rem;
-    padding: 0.5rem;
-    background: rgba(239, 68, 68, 0.1);
-    border-radius: 8px;
-    margin-top: 0.5rem;
-  }
-
-  /* Button Group */
+  /* Button Group with 3D Effects */
   .button-group {
     display: flex;
     gap: 1rem;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
+    transform-style: preserve-3d;
   }
 
   .btn-save {
     flex: 1;
-    padding: 14px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px 28px;
+background: linear-gradient(to bottom right, #6b8cce, #a2b6df);
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 1rem;
     font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 
+      0 4px 15px rgba(79, 70, 229, 0.4),
+      0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    backdrop-filter: blur(5px);
+    transform: translateZ(10px);
   }
 
   .btn-save:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    transform: translateY(-3px) translateZ(15px);
+    box-shadow: 
+      0 8px 25px rgba(79, 70, 229, 0.5),
+      0 4px 10px rgba(0, 0, 0, 0.15);
   }
 
   .btn-save:active {
-    transform: translateY(0);
+    transform: translateY(-1px) translateZ(5px);
   }
 
   .btn-cancel {
     flex: 1;
-    padding: 14px 24px;
+    padding: 16px 28px;
     background: rgba(255, 255, 255, 0.9);
-    color: #4a5568;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
+    color: #4b5563;
+    border: 2px solid #d1d5db;
+    border-radius: 1rem;
     font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
@@ -293,7 +491,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    backdrop-filter: blur(5px);
+    transform: translateZ(10px);
   }
 
   [data-theme="dark"] .btn-cancel {
@@ -305,8 +505,8 @@
   .btn-cancel:hover {
     background: white;
     border-color: #cbd5e0;
-    transform: translateY(-2px);
-    color: #4a5568;
+    transform: translateY(-3px) translateZ(15px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
   [data-theme="dark"] .btn-cancel:hover {
@@ -318,6 +518,11 @@
   .photo-preview {
     margin-top: 1rem;
     text-align: center;
+    padding: 1rem;
+    background: rgba(79, 70, 229, 0.05);
+    border-radius: 1rem;
+    border: 1px dashed rgba(79, 70, 229, 0.3);
+    backdrop-filter: blur(5px);
   }
 
   .photo-preview img {
@@ -325,63 +530,166 @@
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid rgba(102, 126, 234, 0.3);
+    border: 4px solid rgba(79, 70, 229, 0.3);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
   .preview-label {
     display: block;
-    font-size: 0.85rem;
-    color: #667eea;
+    font-size: 0.9rem;
+    color: #4f46e5;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
-  /* Responsive */
+  /* Responsive - Tablet */
+  @media (max-width: 992px) {
+    .profile-layout {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .profile-preview-section {
+      position: static;
+    }
+
+    .current-profile-preview {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      text-align: left;
+      padding: 1.5rem;
+    }
+
+    .preview-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+
+    .clickable-avatar-wrapper {
+      margin-bottom: 0;
+    }
+
+    .current-avatar {
+      width: 120px;
+      height: 120px;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .current-bio {
+      margin-top: 0.75rem;
+      text-align: left;
+    }
+  }
+
+  /* Responsive - Mobile */
   @media (max-width: 768px) {
+    .profile-edit-container {
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
     .form-card {
       padding: 2rem 1.5rem;
     }
 
     .form-title {
-      font-size: 1.5rem;
-    }
-
-    .form-icon {
-      width: 60px;
-      height: 60px;
-    }
-
-    .form-icon i {
       font-size: 2rem;
+    }
+
+    .form-subtitle {
+      font-size: 1rem;
+    }
+
+    .form-header {
+      margin-bottom: 2rem;
+    }
+
+    .profile-form-section {
+      padding: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+    }
+
+    .current-profile-preview {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .preview-badge {
+      position: static;
+      margin-bottom: 1rem;
+    }
+
+    .current-bio {
+      text-align: center;
     }
 
     .button-group {
       flex-direction: column;
     }
 
-    .current-avatar {
-      width: 80px;
-      height: 80px;
+    .btn-save,
+    .btn-cancel {
+      width: 100%;
     }
   }
 
+  /* Responsive - Small Mobile */
   @media (max-width: 480px) {
     .profile-edit-container {
-      padding: 0 1rem;
-      margin: 2rem auto;
+      margin: 1.5rem auto;
+      padding: 0 0.75rem;
     }
 
     .form-card {
       padding: 1.5rem 1rem;
+      border-radius: 1.5rem;
     }
 
     .form-title {
-      font-size: 1.25rem;
+      font-size: 1.75rem;
     }
 
-    .current-profile-preview {
-      padding: 1rem;
+    .form-subtitle {
+      font-size: 0.95rem;
+    }
+
+    .current-avatar {
+      width: 120px;
+      height: 120px;
+    }
+
+    .current-username {
+      font-size: 1.3rem;
+    }
+
+    .current-profession {
+      font-size: 0.95rem;
+    }
+
+    .profile-form-section {
+      padding: 1.25rem;
+    }
+
+    .profile-form input[type="text"],
+    .profile-form input[type="email"],
+    .profile-form textarea {
+      padding: 12px 14px;
+      font-size: 0.95rem;
+    }
+
+    .btn-save,
+    .btn-cancel {
+      padding: 14px 20px;
+      font-size: 1rem;
     }
   }
 </style>
@@ -389,120 +697,195 @@
 <div class="profile-edit-container">
   <div class="form-card">
     <div class="form-header">
-      <div class="form-icon">
-        <i class="fas fa-user-edit"></i>
-      </div>
       <h2 class="form-title">Edit Your Profile</h2>
       <p class="form-subtitle">Update your information and customize your profile</p>
     </div>
 
-    <form method="POST" enctype="multipart/form-data" class="profile-form">
-      {% csrf_token %}
-     <p>
-  <label>Username</label>
-  {{ form.username }}
-</p>
+    <div class="profile-layout">
+      <!-- Left Side - Profile Preview -->
+      <div class="profile-preview-section">
+        <div class="current-profile-preview">
+        
+          
+          <!-- Clickable Avatar -->
+          <div class="clickable-avatar-wrapper" id="avatarTrigger">
+            {% if request.user.userprofile.profile_photo %}
+              <img src="{{ request.user.userprofile.profile_photo.url }}" alt="Profile" class="current-avatar" id="currentAvatar">
+            {% else %}
+              <img src="https://via.placeholder.com/160?text={{ request.user.username|slice:':1'|upper }}" alt="Profile" class="current-avatar" id="currentAvatar">
+            {% endif %}
+            <div class="avatar-overlay">
+              <div class="avatar-overlay-content">
+                <i class="fas fa-camera"></i>
+                <div class="avatar-overlay-text">Change Photo</div>
+              </div>
+            </div>
+            <div class="avatar-badge">
+              <i class="fas fa-edit"></i>
+            </div>
+          </div>
 
-{{ form.profile_photo.errors }}
-<p>
-  <label>Profile Photo</label>
-  {{ form.profile_photo }}
-</p>
-
-<p>
-  <label>Profession</label>
-  {{ form.profession }}
-</p>
-
-<p>
-  <label>Email</label>
-  {{ form.email }}
-</p>
-
-<p>
-  <label>Bio</label>
-  {{ form.bio }}
-</p>
-
-      
-      <div class="button-group">
-        <button type="submit" class="btn-save">
-          <i class="fas fa-check"></i> Save Changes
-        </button>
-        <a href="{% url 'profile_detail' request.user.username %}" class="btn-cancel">
-          <i class="fas fa-times"></i> Cancel
-        </a>
+          <div class="profile-info">
+            <div class="current-username">{{ request.user.username }}</div>
+            <div class="current-profession">
+              {% if request.user.userprofile.profession %}
+                {{ request.user.userprofile.profession }}
+              {% else %}
+                Add your profession
+              {% endif %}
+            </div>
+            <div class="current-bio">
+              {% if request.user.userprofile.bio %}
+                {{ request.user.userprofile.bio|truncatewords:15 }}
+              {% else %}
+                Tell us about yourself...
+              {% endif %}
+              <div class="bio-fade"></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </form>
+
+      <!-- Right Side - Form -->
+      <div class="profile-form-section">
+        <h3 class="section-title">
+          <i class="fas fa-user-edit"></i>
+          Profile Information
+        </h3>
+        
+        <form method="POST" enctype="multipart/form-data" class="profile-form" id="profileForm">
+          {% csrf_token %}
+          
+          <!-- Hidden File Input -->
+          <input type="file" name="profile_photo" id="profilePhotoInput" class="hidden-file-input" accept="image/*">
+          
+          <p>
+            <label><i class="fas fa-user"></i> Username</label>
+            {{ form.username }}
+          </p>
+
+          <p>
+            <label><i class="fas fa-briefcase"></i> Profession</label>
+            {{ form.profession }}
+          </p>
+
+          <p>
+            <label><i class="fas fa-envelope"></i> Email</label>
+            {{ form.email }}
+          </p>
+
+          <p>
+            <label><i class="fas fa-align-left"></i> Bio</label>
+            {{ form.bio }}
+            <small class="helptext">Brief description about yourself</small>
+          </p>
+
+          <div class="button-group">
+            <button type="submit" class="btn-save">
+              <i class="fas fa-check-circle"></i> Save Changes
+            </button>
+            <a href="{% url 'profile_detail' request.user.username %}" class="btn-cancel">
+              <i class="fas fa-times-circle"></i> Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  // Image preview functionality
   document.addEventListener('DOMContentLoaded', function() {
-    const fileInputs = document.querySelectorAll('input[type="file"]');
-    
-    fileInputs.forEach(input => {
-      input.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          
-          reader.onload = function(event) {
-            // Remove existing preview if any
-            let preview = input.parentElement.querySelector('.photo-preview');
-            if (!preview) {
-              preview = document.createElement('div');
-              preview.className = 'photo-preview';
-              input.parentElement.appendChild(preview);
-            }
-            
-            preview.innerHTML = `
-              <span class="preview-label">New Photo Preview:</span>
-              <img src="${event.target.result}" alt="Profile Preview">
-            `;
-          };
-          
-          reader.readAsDataURL(file);
-        }
-      });
+    const avatarTrigger = document.getElementById('avatarTrigger');
+    const profilePhotoInput = document.getElementById('profilePhotoInput');
+    const currentAvatar = document.getElementById('currentAvatar');
+    const profileForm = document.getElementById('profileForm');
+
+    // Click avatar to trigger file input
+    avatarTrigger.addEventListener('click', function() {
+      profilePhotoInput.click();
     });
 
-    // Add animation to form on load
+    // Handle file selection
+    profilePhotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+          // Update avatar preview with 3D effect
+          currentAvatar.src = event.target.result;
+          
+          // Add temporary animation
+          avatarTrigger.style.transform = 'scale(1.1) rotateY(10deg)';
+          setTimeout(() => {
+            avatarTrigger.style.transform = 'translateY(-5px) rotateY(5deg) rotateX(5deg)';
+          }, 300);
+          
+          // Show success feedback
+          const badge = avatarTrigger.querySelector('.avatar-badge i');
+          badge.className = 'fas fa-check';
+          setTimeout(() => {
+            badge.className = 'fas fa-edit';
+          }, 2000);
+        };
+        
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Enhanced 3D hover effects
+    avatarTrigger.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-5px) rotateY(5deg) rotateX(5deg)';
+    });
+
+    avatarTrigger.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) rotateY(0) rotateX(0)';
+    });
+
+    // Form submission handler
+    profileForm.addEventListener('submit', function() {
+      // Add submission animation
+      const saveBtn = this.querySelector('.btn-save');
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+      saveBtn.disabled = true;
+    });
+
+    // Bio container hover effect
+    const bioContainer = document.querySelector('.current-bio');
+    if (bioContainer) {
+      bioContainer.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px) scale(1.02)';
+      });
+
+      bioContainer.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+    }
+
+    // Add page load animation
     const formCard = document.querySelector('.form-card');
     if (formCard) {
       formCard.style.opacity = '0';
+      formCard.style.transform = 'translateY(30px) rotateX(5deg)';
+      
       setTimeout(() => {
-        formCard.style.transition = 'opacity 0.6s ease';
+        formCard.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         formCard.style.opacity = '1';
+        formCard.style.transform = 'translateY(0) rotateX(0)';
       }, 100);
     }
 
-    // Add confirmation before leaving with unsaved changes
-    const form = document.querySelector('.profile-form');
-    const inputs = form.querySelectorAll('input, textarea, select');
-    let formChanged = false;
-
+    // Input focus effects with 3D
+    const inputs = profileForm.querySelectorAll('input, textarea');
     inputs.forEach(input => {
-      input.addEventListener('change', function() {
-        formChanged = true;
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateZ(15px)';
       });
-    });
 
-    const cancelBtn = document.querySelector('.btn-cancel');
-    if (cancelBtn) {
-      cancelBtn.addEventListener('click', function(e) {
-        if (formChanged) {
-          if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
-            e.preventDefault();
-          }
-        }
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateZ(0)';
       });
-    }
-
-    // Form submission handler
-    form.addEventListener('submit', function() {
-      formChanged = false;
     });
   });
 </script>

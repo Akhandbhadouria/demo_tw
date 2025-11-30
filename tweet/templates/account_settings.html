@@ -1,16 +1,187 @@
-<div class="card" style="padding:20px;border-radius:15px;">
-    {% if google_user %}
-        <h4>Set Password</h4>
-        <p style="color:#999;">You logged in using Google. Set a password to enable normal login.</p>
-    {% else %}
-        <h4>Change Password</h4>
-    {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ password_form.as_p }}
-        <button type="submit" name="save_password" class="btn btn-warning">
-            {% if google_user %}Set Password{% else %}Change Password{% endif %}
-        </button>
-    </form>
-</div>
+{%extends "layout.html"%}
+{%load static%}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+       
+        
+        body.theme-blue-purple {
+            --primary-color: #6b8cce;
+            --secondary-color: #a2b6df;
+            --accent-color: #0c3483;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        h4 {
+            color: var(--accent-color, #0c3483);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color, #6b8cce);
+            box-shadow: 0 0 0 3px rgba(107, 140, 206, 0.2);
+            background-color: white;
+            outline: none;
+        }
+        
+        .btn-warning {
+            background-color: var(--primary-color, #6b8cce);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-warning:hover {
+            background-color: var(--accent-color, #0c3483);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(12, 52, 131, 0.2);
+        }
+        
+        .form-note {
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+        }
+        
+        .password-field {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="theme-blue-purple">
+    <div class="card">
+        <!-- For Google User -->
+        <h4>Set Password</h4>
+        <p class="subtitle">You logged in using Google. Set a password to enable normal login.</p>
+        
+        <!-- For Regular User (commented out) -->
+        <!--
+        <h4>Change Password</h4>
+        -->
+        
+        <form method="post">
+            <div class="form-group">
+                <label for="id_old_password">Current Password</label>
+                <div class="password-field">
+                    <input type="password" name="old_password" class="form-control" id="id_old_password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_old_password')">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_new_password1">New Password</label>
+                <div class="password-field">
+                    <input type="password" name="new_password1" class="form-control" id="id_new_password1" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_new_password1')">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_new_password2">Confirm New Password</label>
+                <div class="password-field">
+                    <input type="password" name="new_password2" class="form-control" id="id_new_password2" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_new_password2')">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            
+            <button type="submit" name="save_password" class="btn btn-warning">
+                Set Password
+                <!-- For Regular User: Change Password -->
+            </button>
+            
+            <p class="form-note">Make sure your password is at least 8 characters long and includes a mix of letters, numbers, and symbols.</p>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleButton = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = '👁️';
+            }
+        }
+    </script>
+</body>
+</html>
+
+{% endblock %}

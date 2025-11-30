@@ -46,7 +46,6 @@ path("delete-account/", views.delete_account, name="delete_account"),
     path('following-feed/', views.following_feed, name='following_feed'),
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),
 
-    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
     path("account-settings/", views.account_settings, name="account_settings"),
 
 
