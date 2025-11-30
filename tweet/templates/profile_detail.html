@@ -1915,7 +1915,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                 {% if profile.profession %}
                 <span class="profile-profession">{{ profile.profession }}</span>
                 {% endif %}
-                <a href="{% url 'edit_profile' %}">🖋️</a>
+                
             </div>
             
             {% if profile.email %}
@@ -2119,11 +2119,17 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 
         <div class="widget-card" style="display: flex;flex-direction: column; gap: 10px;">
             <h3 class="widget-title">Quick Links</h3>
+            <a href="{% url 'edit_profile' %}" class="profile-link">
+                <i class="fas fa-user-friends"></i> Edit Profile
+            </a>
             <a href="{% url 'followers_list' profile.user.username %}" class="profile-link">
                 <i class="fas fa-users"></i> View Followers
             </a>
             <a href="{% url 'following_list' profile.user.username %}" class="profile-link">
                 <i class="fas fa-user-friends"></i> View Following
+            </a>
+            <a href="{% url 'account_settings' %}" class="profile-link">
+             <i class="fa fa-cog" aria-hidden="true"></i> Update Password
             </a>
             {% if request.user == profile.user %}
             <a href="{% url 'delete_account' %}" class="btn btn-danger">

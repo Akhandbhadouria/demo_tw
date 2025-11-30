@@ -107,6 +107,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 
 @login_required
+
 def account_settings(request):
     user = request.user
 
@@ -116,7 +117,7 @@ def account_settings(request):
     if request.method == "POST":
         username_form = UsernameUpdateForm(request.POST, instance=user)
 
-        # For Google login users → use “Set Password without old”
+        # For Google login users → use "Set Password without old"
         if google_user:
             password_form = SetPasswordWithoutOldForm(request.POST)
         else:
@@ -128,6 +129,8 @@ def account_settings(request):
                 username_form.save()
                 messages.success(request, "Username updated successfully.")
                 return redirect("account_settings")
+            else:
+                messages.error(request, "Please correct the errors below.")
 
         # Password update
         if "save_password" in request.POST:
@@ -135,13 +138,16 @@ def account_settings(request):
                 if google_user:
                     # Save new password without old
                     password_form.save(user)
+                    messages.success(request, "Password set successfully. You can now login with your password.")
                 else:
                     # Normal users
                     user = password_form.save()
+                    messages.success(request, "Password changed successfully.")
 
                 update_session_auth_hash(request, user)
-                messages.success(request, "Password updated successfully.")
                 return redirect("account_settings")
+            else:
+                messages.error(request, "Please correct the password errors below.")
 
     else:
         username_form = UsernameUpdateForm(instance=user)
@@ -152,7 +158,6 @@ def account_settings(request):
         "password_form": password_form,
         "google_user": google_user,
     })
-
 ### Step-by-Step Flow of Django User Registration (Hinglish me samjha hua)
 
 # 1.                                                       **User register page open karta hai (GET request hoti hai)**
