@@ -1,10 +1,45 @@
 {% extends 'layout.html' %}
 {% block content %}
 <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, .05) 2px, rgba(255, 255, 255, .05) 4px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  [data-theme="dark"] body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+
+  [data-theme="dark"] body::before {
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .3) 2px, rgba(0, 0, 0, .3) 4px);
+  }
+
   .profile-create-container {
-    max-width: 600px;
+    max-width: 900px;
     margin: 3rem auto;
     padding: 0 1.5rem;
+    position: relative;
+    z-index: 2;
   }
 
   .form-card {
@@ -41,7 +76,7 @@
   .form-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -81,28 +116,145 @@
     color: #a8a8a8;
   }
 
-  /* Form Styles */
-  .profile-form p {
+  /* Profile Photo Upload Section */
+  .profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    border: 2px dashed rgba(102, 126, 234, 0.3);
+  }
+
+  [data-theme="dark"] .profile-photo-section {
+    background: rgba(40, 40, 60, 0.6);
+    border: 2px dashed rgba(102, 126, 234, 0.5);
+  }
+
+  .photo-preview-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
     margin-bottom: 1.5rem;
   }
 
-  .profile-form label {
-    display: block;
+  .photo-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #667eea;
+  }
+
+  [data-theme="dark"] .photo-preview {
+    background: rgba(40, 40, 60, 0.9);
+    border: 4px solid rgba(102, 126, 234, 0.5);
+  }
+
+  .photo-preview img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  .upload-btn {
+    background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  }
+
+  .upload-btn-wrapper input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-hint {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #718096;
+    text-align: center;
+  }
+
+  [data-theme="dark"] .photo-hint {
+    color: #a8a8a8;
+  }
+
+  /* Form Grid Layout */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-grid.full-width {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-field label {
     font-weight: 600;
     color: #2d3748;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  [data-theme="dark"] .profile-form label {
+  [data-theme="dark"] .form-field label {
     color: #ffffff;
   }
 
-  .profile-form input[type="text"],
-  .profile-form input[type="email"],
-  .profile-form input[type="url"],
-  .profile-form textarea,
-  .profile-form select {
+  .form-field label i {
+    color: #667eea;
+    font-size: 1rem;
+  }
+
+  .form-field input[type="text"],
+  .form-field input[type="email"],
+  .form-field input[type="url"],
+  .form-field textarea,
+  .form-field select {
     width: 100%;
     padding: 12px 16px;
     background: rgba(255, 255, 255, 0.6);
@@ -111,68 +263,43 @@
     font-size: 1rem;
     color: #2d3748;
     transition: all 0.3s ease;
+    font-family: inherit;
   }
 
-  [data-theme="dark"] .profile-form input[type="text"],
-  [data-theme="dark"] .profile-form input[type="email"],
-  [data-theme="dark"] .profile-form input[type="url"],
-  [data-theme="dark"] .profile-form textarea,
-  [data-theme="dark"] .profile-form select {
+  [data-theme="dark"] .form-field input,
+  [data-theme="dark"] .form-field textarea,
+  [data-theme="dark"] .form-field select {
     background: rgba(40, 40, 60, 0.6);
     border: 2px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
   }
 
-  .profile-form input::placeholder,
-  .profile-form textarea::placeholder {
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
     color: #a0aec0;
   }
 
-  .profile-form input:focus,
-  .profile-form textarea:focus,
-  .profile-form select:focus {
+  .form-field input:focus,
+  .form-field textarea:focus,
+  .form-field select:focus {
     outline: none;
     background: rgba(255, 255, 255, 0.8);
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }
 
-  [data-theme="dark"] .profile-form input:focus,
-  [data-theme="dark"] .profile-form textarea:focus,
-  [data-theme="dark"] .profile-form select:focus {
+  [data-theme="dark"] .form-field input:focus,
+  [data-theme="dark"] .form-field textarea:focus,
+  [data-theme="dark"] .form-field select:focus {
     background: rgba(50, 50, 70, 0.8);
-    border-color: #667eea;
   }
 
-  .profile-form textarea {
+  .form-field textarea {
     resize: vertical;
     min-height: 120px;
   }
 
-  /* File Input Styling */
-  .profile-form input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.6);
-    border: 2px dashed rgba(102, 126, 234, 0.3);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  [data-theme="dark"] .profile-form input[type="file"] {
-    background: rgba(40, 40, 60, 0.6);
-    border: 2px dashed rgba(102, 126, 234, 0.5);
-    color: #ffffff;
-  }
-
-  .profile-form input[type="file"]:hover {
-    border-color: #667eea;
-    background: rgba(102, 126, 234, 0.1);
-  }
-
-  /* Help Text */
-  .profile-form .helptext {
+  .helptext {
     display: block;
     font-size: 0.85rem;
     color: #718096;
@@ -180,18 +307,17 @@
     font-style: italic;
   }
 
-  [data-theme="dark"] .profile-form .helptext {
+  [data-theme="dark"] .helptext {
     color: #a8a8a8;
   }
 
-  /* Error Messages */
-  .profile-form .errorlist {
+  .errorlist {
     list-style: none;
     padding: 0;
     margin: 0.5rem 0 0;
   }
 
-  .profile-form .errorlist li {
+  .errorlist li {
     color: #ef4444;
     font-size: 0.875rem;
     padding: 0.5rem;
@@ -200,11 +326,15 @@
     margin-top: 0.5rem;
   }
 
+  .required {
+    color: #ef4444;
+  }
+
   /* Submit Button */
   .btn-submit {
     width: 100%;
     padding: 14px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     color: white;
     border: none;
     border-radius: 12px;
@@ -214,6 +344,10 @@
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 
   .btn-submit:hover {
@@ -225,25 +359,33 @@
     transform: translateY(0);
   }
 
-  /* Required Field Indicator */
-  .profile-form label:after {
-    content: ' *';
-    color: #ef4444;
+  /* Theme Toggle */
+  .theme-toggle-wrapper {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
   }
 
-  /* Photo Preview */
-  .photo-preview {
-    margin-top: 1rem;
-    text-align: center;
-  }
-
-  .photo-preview img {
-    max-width: 150px;
-    height: 150px;
+  .theme-toggle {
+    background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+    border: none;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid rgba(102, 126, 234, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-size: 22px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1) rotate(20deg);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
   }
 
   /* Responsive */
@@ -264,11 +406,39 @@
     .form-icon i {
       font-size: 2rem;
     }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .photo-preview-wrapper {
+      width: 120px;
+      height: 120px;
+    }
+
+    .photo-preview {
+      width: 120px;
+      height: 120px;
+      font-size: 2.5rem;
+    }
+
+    .theme-toggle-wrapper {
+      bottom: 20px;
+      right: 20px;
+    }
+
+    .theme-toggle {
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+    }
   }
 
   @media (max-width: 480px) {
     .profile-create-container {
       padding: 0 1rem;
+      margin: 2rem auto;
     }
 
     .form-card {
@@ -278,55 +448,192 @@
     .form-title {
       font-size: 1.25rem;
     }
+
+    .profile-photo-section {
+      padding: 1.5rem;
+    }
+
+    .photo-preview-wrapper {
+      width: 100px;
+      height: 100px;
+    }
+
+    .photo-preview {
+      width: 100px;
+      height: 100px;
+      font-size: 2rem;
+    }
+  }
+
+  /* Loading Animation */
+  .loading-spinner {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(102, 126, 234, 0.2);
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 </style>
 
 <div class="profile-create-container">
   <div class="form-card">
     <div class="form-header">
-      <div class="form-icon">
-        <i class="fas fa-user-circle"></i>
-      </div>
+      
       <h2 class="form-title">Create Your Profile</h2>
       <p class="form-subtitle">Tell us about yourself and customize your profile</p>
     </div>
 
-    <form method="POST" enctype="multipart/form-data" class="profile-form">
+    <!-- Profile Photo Upload Section -->
+    <div class="profile-photo-section">
+      <div class="photo-preview-wrapper">
+        <div class="photo-preview" id="photoPreview">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+      <div class="upload-btn-wrapper">
+        <button class="upload-btn">
+          <i class="fas fa-camera"></i>
+          <span>Upload Photo</span>
+        </button>
+        <input type="file" id="photoInput" accept="image/*">
+      </div>
+      <p class="photo-hint">Upload a profile photo (JPG, PNG, max 5MB)</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" id="profileForm" class="profile-form">
       {% csrf_token %}
-      {{ form.as_p }}
+      
+      <!-- Basic Information -->
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="id_profession">
+            <i class="fas fa-briefcase"></i>
+            Profession <span class="required">*</span>
+          </label>
+          {{ form.profession }}
+          {% if form.profession.errors %}
+            <ul class="errorlist">
+              {% for error in form.profession.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label for="id_email">
+            <i class="fas fa-envelope"></i>
+            Email
+          </label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <ul class="errorlist">
+              {% for error in form.email.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Bio Section -->
+      <div class="form-grid full-width">
+        <div class="form-field">
+          <label for="id_bio">
+            <i class="fas fa-align-left"></i>
+            Bio
+          </label>
+          {{ form.bio }}
+          <span class="helptext">Tell us about yourself in a few sentences</span>
+          {% if form.bio.errors %}
+            <ul class="errorlist">
+              {% for error in form.bio.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      
+      <!-- Hidden file input for form submission -->
+      <input type="file" name="profile_photo" id="hiddenPhotoInput" style="display: none;">
+
+      <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>Creating your profile...</p>
+      </div>
+
       <button type="submit" class="btn-submit">
-        <i class="fas fa-save"></i> Save Profile
+        <i class="fas fa-save"></i>
+        <span>Save Profile</span>
       </button>
     </form>
   </div>
 </div>
 
+<!-- Theme Toggle -->
+<div class="theme-toggle-wrapper">
+  <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+    <i class="fas fa-moon" id="theme-icon"></i>
+  </button>
+</div>
+
 <script>
   // Image preview functionality
   document.addEventListener('DOMContentLoaded', function() {
-    const fileInputs = document.querySelectorAll('input[type="file"]');
-    
-    fileInputs.forEach(input => {
-      input.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          
-          reader.onload = function(event) {
-            // Remove existing preview if any
-            let preview = input.parentElement.querySelector('.photo-preview');
-            if (!preview) {
-              preview = document.createElement('div');
-              preview.className = 'photo-preview';
-              input.parentElement.appendChild(preview);
-            }
-            
-            preview.innerHTML = `<img src="${event.target.result}" alt="Profile Preview">`;
-          };
-          
-          reader.readAsDataURL(file);
+    const photoInput = document.getElementById('photoInput');
+    const hiddenPhotoInput = document.getElementById('hiddenPhotoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const profileForm = document.getElementById('profileForm');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    // Handle photo upload
+    photoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      
+      if (file && file.type.startsWith('image/')) {
+        // Check file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size must be less than 5MB');
+          return;
         }
-      });
+
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+          photoPreview.innerHTML = `<img src="${event.target.result}" alt="Profile Preview">`;
+          
+          // Transfer the file to the hidden input for form submission
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          hiddenPhotoInput.files = dataTransfer.files;
+        };
+        
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle form submission
+    profileForm.addEventListener('submit', function(e) {
+      const submitBtn = profileForm.querySelector('.btn-submit');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Creating Profile...</span>';
+      loadingSpinner.style.display = 'block';
     });
 
     // Add animation to form on load
@@ -337,6 +644,33 @@
         formCard.style.transition = 'opacity 0.6s ease';
         formCard.style.opacity = '1';
       }, 100);
+    }
+  });
+
+  // Theme toggle functionality
+  function toggleTheme() {
+    const body = document.body;
+    const themeIcon = document.getElementById('theme-icon');
+
+    if (body.getAttribute('data-theme') === 'dark') {
+      body.removeAttribute('data-theme');
+      themeIcon.className = 'fas fa-moon';
+      localStorage.setItem('theme', 'light');
+    } else {
+      body.setAttribute('data-theme', 'dark');
+      themeIcon.className = 'fas fa-sun';
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+
+  // Load saved theme on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('theme');
+    const themeIcon = document.getElementById('theme-icon');
+
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.body.setAttribute('data-theme', 'dark');
+      themeIcon.className = 'fas fa-sun';
     }
   });
 </script>
