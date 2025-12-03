@@ -31,7 +31,7 @@
         font-weight: 600;
     }
 
-    /* User Cards Grid */
+    /* User Cards Grid - Updated for better mobile */
     .users-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -133,7 +133,7 @@
         left: 0;
         width: 0;
         height: 2px;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         transition: width 0.3s ease;
     }
 
@@ -160,7 +160,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         align-items: center;
         gap: 8px;
         padding: 10px 20px;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         text-decoration: none;
         border-radius: 12px;
@@ -224,35 +224,239 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: #a8a8a8;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
+    /* ==================== IMPROVED MOBILE STYLING ==================== */
+    
+    /* Tablet */
+    @media (max-width: 1024px) {
+        .search-container {
+            margin: 2rem auto;
+            padding: 0 1.25rem;
+        }
+        
+        .search-header {
+            margin-bottom: 2rem;
+        }
+        
+        .search-title {
+            font-size: 1.75rem;
+        }
+        
         .users-grid {
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+        
+        .user-card {
+            padding: 1.25rem;
+        }
+        
+        .view-profile-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Mobile - Improved Layout */
+    @media (max-width: 768px) {
+        .search-container {
+            padding: 0 1rem;
+            margin: 1.5rem auto;
         }
 
         .search-title {
             font-size: 1.5rem;
         }
 
+        .search-header {
+            margin-bottom: 2rem;
+        }
+
+        /* Improved User Grid for Mobile */
+        .users-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Improved User Card for Mobile */
         .user-card {
-            padding: 20px;
+            padding: 1rem;
+            border-radius: 16px;
+        }
+
+        .user-avatar-wrapper {
+            margin-bottom: 1rem;
         }
 
         .horizontal-profile-photo,
         .user-avatar-placeholder {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
         }
 
         .user-avatar-placeholder {
-            font-size: 2rem;
+            font-size: 1.75rem;
+        }
+
+        .user-info {
+            width: 100%;
+            min-width: 0; /* Allow text truncation */
+        }
+
+        .user-username {
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            width: 100%;
+        }
+
+        .user-handle {
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.75rem;
+        }
+
+        .view-profile-btn {
+            padding: 0.625rem 1.25rem;
+            font-size: 0.85rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .view-profile-btn i {
+            font-size: 0.8rem;
+        }
+
+        /* Reduce hover effects on mobile for better performance */
+        .user-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            padding: 3rem 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+        }
+
+        .empty-text {
+            font-size: 0.9rem;
         }
     }
 
+    /* Small Mobile */
     @media (max-width: 480px) {
+        .search-container {
+            padding: 0 0.75rem;
+            margin: 1rem auto;
+        }
+
         .users-grid {
             grid-template-columns: 1fr;
+            gap: 0.875rem;
+        }
+
+        .user-card {
+            padding: 0.875rem;
+            flex-direction: row;
+            text-align: left;
+            gap: 1rem;
+        }
+
+        .user-avatar-wrapper {
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+
+        .horizontal-profile-photo,
+        .user-avatar-placeholder {
+            width: 50px;
+            height: 50px;
+        }
+
+        .user-avatar-placeholder {
+            font-size: 1.25rem;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .user-username {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-handle {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .view-profile-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            width: auto;
+            margin-top: 0;
+        }
+
+        .search-title {
+            font-size: 1.25rem;
+        }
+    }
+
+    /* Extra Small Mobile */
+    @media (max-width: 360px) {
+        .user-card {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .user-info {
+            text-align: center;
+            width: 100%;
+        }
+
+        .user-username,
+        .user-handle {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+        }
+
+        .view-profile-btn {
+            width: 100%;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) {
+        .user-card:hover {
+            transform: none;
+        }
+        
+        .user-card:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+        
+        .view-profile-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .user-username:hover::after {
+            width: 0;
         }
     }
 </style>
@@ -299,4 +503,4 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         </div>
     {% endif %}
 </div>
-    {% endblock %}
+{% endblock %}
