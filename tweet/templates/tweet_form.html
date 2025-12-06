@@ -28,6 +28,7 @@
         min-height: 100vh;
         position: relative;
         overflow-x: hidden;
+        padding: 20px;
     }
 
     body::before {
@@ -52,7 +53,6 @@
             repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .3) 2px, rgba(0, 0, 0, .3) 4px);
     }
 
-    /* Stars Background */
     .stars {
         position: fixed;
         width: 100%;
@@ -70,13 +70,44 @@
         50% { opacity: 1; }
     }
 
-    /* Form Container */
-    .form-container {
-        max-width: 600px;
+    /* Main Container - Horizontal for desktop */
+    .main-container {
+        display: flex;
+        gap: 30px;
+        max-width: 1200px;
         margin: 0 auto;
-        padding: 30px 20px;
         position: relative;
         z-index: 2;
+    }
+
+    /* Left Column - Form */
+    .left-column {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Right Column - Preview */
+    .right-column {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Form Container */
+    .form-container {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        height: fit-content;
+    }
+
+    [data-theme="dark"] .form-container {
+        background: rgba(26, 26, 46, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     /* Page Header */
@@ -97,7 +128,7 @@
     }
 
     .page-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: 700;
         color: #2d3748;
         margin-bottom: 10px;
@@ -109,7 +140,7 @@
 
     .page-description {
         color: #718096;
-        font-size: 1.1rem;
+        font-size: 1rem;
         line-height: 1.6;
     }
 
@@ -119,30 +150,22 @@
 
     /* Tweet Form */
     .tweet-form {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-    }
-
-    [data-theme="dark"] .tweet-form {
-        background: rgba(26, 26, 46, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
     /* Form Groups */
     .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 0;
     }
 
     .form-label {
         display: block;
         font-weight: 600;
         color: #2d3748;
-        margin-bottom: 10px;
-        font-size: 1rem;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
     }
 
     [data-theme="dark"] .form-label {
@@ -152,16 +175,16 @@
     /* Textarea */
     .form-textarea {
         width: 100%;
-        min-height: 150px;
-        padding: 20px;
+        min-height: 120px;
+        padding: 15px;
         border: 2px solid #e2e8f0;
-        border-radius: 15px;
-        font-size: 1rem;
+        border-radius: 12px;
+        font-size: 0.95rem;
         font-family: inherit;
         resize: vertical;
         background: rgba(255, 255, 255, 0.9);
         transition: all 0.3s ease;
-        line-height: 1.6;
+        line-height: 1.5;
     }
 
     .form-textarea:focus {
@@ -185,13 +208,13 @@
     /* File Input */
     .form-file {
         width: 100%;
-        padding: 15px;
+        padding: 12px;
         border: 2px dashed #cbd5e0;
-        border-radius: 15px;
+        border-radius: 12px;
         background: rgba(255, 255, 255, 0.8);
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
     .form-file:hover {
@@ -219,8 +242,8 @@
     /* Character Counter */
     .char-counter {
         text-align: right;
-        margin-top: 8px;
-        font-size: 0.85rem;
+        margin-top: 5px;
+        font-size: 0.8rem;
         color: #718096;
         font-weight: 500;
     }
@@ -241,25 +264,24 @@
     /* Form Actions */
     .form-actions {
         display: flex;
-        gap: 15px;
+        gap: 12px;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap;
+        margin-top: 10px;
     }
 
     .btn-submit {
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
+        background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         color: white;
         border: none;
-        padding: 15px 30px;
-        border-radius: 12px;
+        padding: 12px 24px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.9rem;
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         flex: 1;
-        min-width: 200px;
     }
 
     .btn-submit:hover {
@@ -275,15 +297,14 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         background: rgba(255, 255, 255, 0.9);
         color: #4a5568;
         border: 2px solid #e2e8f0;
-        padding: 13px 25px;
-        border-radius: 12px;
+        padding: 10px 20px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         text-decoration: none;
         transition: all 0.3s ease;
         text-align: center;
         flex: 1;
-        min-width: 150px;
     }
 
     .btn-back:hover {
@@ -304,42 +325,205 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         background: rgba(50, 50, 70, 0.9);
     }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .form-container {
-            padding: 20px 15px;
-        }
-
-        .page-header {
-            padding: 25px 20px;
-        }
-
-        .page-title {
-            font-size: 1.7rem;
-        }
-
-        .tweet-form {
-            padding: 25px 20px;
-        }
-
-        .form-actions {
-            flex-direction: column;
-        }
-
-        .btn-submit, .btn-back {
-            width: 100%;
-            min-width: auto;
-        }
+    /* Preview Section */
+    .preview-section {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        height: fit-content;
+        flex-grow: 1;
     }
 
-    @media (max-width: 480px) {
-        .form-container {
-            padding: 15px 10px;
+    [data-theme="dark"] .preview-section {
+        background: rgba(26, 26, 46, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-title {
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    [data-theme="dark"] .preview-title {
+        color: #ffffff;
+    }
+
+    /* Tweet Preview Card */
+    .tweet-preview-card {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        margin-bottom: 20px;
+    }
+
+    [data-theme="dark"] .tweet-preview-card {
+        background: rgba(40, 40, 60, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .preview-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .preview-user-info h4 {
+        margin: 0;
+        font-size: 1rem;
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    [data-theme="dark"] .preview-user-info h4 {
+        color: #ffffff;
+    }
+
+    .preview-user-info p {
+        margin: 2px 0 0 0;
+        font-size: 0.85rem;
+        color: #718096;
+    }
+
+    [data-theme="dark"] .preview-user-info p {
+        color: #a8a8a8;
+    }
+
+    .preview-content {
+        color: #2d3748;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        word-break: break-word;
+    }
+
+    [data-theme="dark"] .preview-content {
+        color: #ffffff;
+    }
+
+    /* Image Preview */
+    .image-preview-container {
+        margin-top: 15px;
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        display: none; /* Hidden by default */
+    }
+
+    .image-preview {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        display: block;
+    }
+
+    .remove-image-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .remove-image-btn:hover {
+        background: rgba(0, 0, 0, 0.9);
+        transform: scale(1.1);
+    }
+
+    /* Preview Footer */
+    .preview-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="dark"] .preview-footer {
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-time {
+        font-size: 0.8rem;
+        color: #718096;
+    }
+
+    [data-theme="dark"] .preview-time {
+        color: #a8a8a8;
+    }
+
+    .preview-likes {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.8rem;
+        color: #718096;
+    }
+
+    /* Placeholder State */
+    .preview-placeholder {
+        text-align: center;
+        padding: 40px 20px;
+        color: #718096;
+        font-size: 0.9rem;
+    }
+
+    [data-theme="dark"] .preview-placeholder {
+        color: #a8a8a8;
+    }
+
+    .placeholder-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    /* Responsive Design - Mobile (Vertical Layout) */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+
+        .main-container {
+            flex-direction: column;
+            gap: 20px;
         }
 
         .page-header {
             padding: 20px 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .page-title {
@@ -347,25 +531,61 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         }
 
         .page-description {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
-        .tweet-form {
-            padding: 20px 15px;
+        .form-container {
+            padding: 20px;
+        }
+
+        .preview-section {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-submit, .btn-back {
+            width: 100%;
+        }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 480px) {
+        body {
+            padding: 5px;
+        }
+
+        .form-container, 
+        .preview-section,
+        .page-header {
+            padding: 15px;
+            border-radius: 15px;
         }
 
         .form-textarea {
-            min-height: 120px;
-            padding: 15px;
+            min-height: 100px;
+            padding: 12px;
         }
 
-        .form-file {
-            padding: 12px;
+        .page-title {
+            font-size: 1.3rem;
+        }
+
+        .preview-title {
+            font-size: 1rem;
+        }
+
+        .tweet-preview-card {
+            padding: 15px;
         }
     }
 
     /* Animation */
-    .form-container {
+    .form-container,
+    .preview-section {
         animation: fadeInUp 0.6s ease forwards;
         opacity: 0;
         transform: translateY(20px);
@@ -378,40 +598,19 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         }
     }
 
-    /* Preview Section (Optional) */
-    .preview-section {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.6);
+    /* Existing Photo Preview */
+    .existing-photo {
+        margin-top: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        display: none;
     }
 
-    [data-theme="dark"] .preview-section {
-        background: rgba(40, 40, 60, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .preview-title {
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 15px;
-        font-size: 1rem;
-    }
-
-    [data-theme="dark"] .preview-title {
-        color: #ffffff;
-    }
-
-    .preview-content {
-        color: #718096;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-
-    [data-theme="dark"] .preview-content {
-        color: #a8a8a8;
+    .existing-photo img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 12px;
     }
 </style>
 
@@ -419,82 +618,165 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     <!-- Animated Stars Background -->
     <div class="stars" id="stars"></div>
 
-    <div class="form-container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">
-                {% if form.instance.pk %}
-                    ✏️ Edit Tweet
-                {% else %}
-                    🐦 Create Tweet
-                {% endif %}
-            </h1>
-            <p class="page-description">
-                {% if form.instance.pk %}
-                    Update your thoughts and share with the world
-                {% else %}
-                    Share your thoughts with the world
-                {% endif %}
-            </p>
+    <div class="main-container">
+        <!-- Left Column: Form -->
+        <div class="left-column">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    {% if form.instance.pk %}
+                        ✏️ Edit post
+                    {% else %}
+                        🐦 Create post
+                    {% endif %}
+                </h1>
+                <p class="page-description">
+                    {% if form.instance.pk %}
+                        Update your thoughts and share with the world
+                    {% else %}
+                        Share your thoughts with the world
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Tweet Form -->
+            <div class="form-container">
+                <form action="" method="post" enctype="multipart/form-data" class="tweet-form">
+                    {% csrf_token %}
+                    
+                    <!-- Text Field -->
+                    <div class="form-group">
+                        <label for="id_text" class="form-label">Your Message</label>
+                        <textarea 
+                            name="text" 
+                            id="id_text" 
+                            class="form-textarea" 
+                            placeholder="What's happening? Share your thoughts..."
+                            maxlength="280"
+                        >{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+                        <div id="charCounter" class="char-counter">0/280</div>
+                    </div>
+                    
+                    <!-- Photo Field -->
+                    <div class="form-group">
+                        <label for="id_photo" class="form-label">Add Photo (Optional)</label>
+                        <input 
+                            type="file" 
+                            name="photo" 
+                            id="id_photo" 
+                            class="form-file"
+                            accept="image/*"
+                        >
+                        
+                        <!-- Show existing photo if editing -->
+                        {% if form.instance.pk and form.instance.photo %}
+                        <div class="existing-photo" id="existingPhoto">
+                            <p class="form-label" style="margin-top: 15px;">Current Photo:</p>
+                            <img src="{{ form.instance.photo.url }}" alt="Current photo">
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">
+                            {% if form.instance.pk %}
+                                ✨ Update Tweet
+                            {% else %}
+                                🚀 Post Tweet
+                            {% endif %}
+                        </button>
+                        
+                        <a href="{% url 'tweet_list' %}" class="btn-back">
+                            ← Back to Feed
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <!-- Tweet Form -->
-        <form action="" method="post" enctype="multipart/form-data" class="tweet-form">
-            {% csrf_token %}
-            
-            <!-- Text Field -->
-            <div class="form-group">
-                <label for="id_text" class="form-label">Your Message</label>
-                <textarea 
-                    name="text" 
-                    id="id_text" 
-                    class="form-textarea" 
-                    placeholder="What's happening? Share your thoughts..."
-                    maxlength="280"
-                >{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
-                <div id="charCounter" class="char-counter">0/280</div>
-            </div>
-            
-            <!-- Photo Field -->
-            <div class="form-group">
-                <label for="id_photo" class="form-label">Add Photo (Optional)</label>
-                <input 
-                    type="file" 
-                    name="photo" 
-                    id="id_photo" 
-                    class="form-file"
-                    accept="image/*"
-                >
-            </div>
-            
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="submit" class="btn-submit">
-                    {% if form.instance.pk %}
-                        ✨ Update Tweet
-                    {% else %}
-                        🚀 Post Tweet
-                    {% endif %}
-                </button>
+        <!-- Right Column: Preview -->
+        <div class="right-column">
+            <div class="preview-section">
+                <h3 class="preview-title">🎯 Live Preview</h3>
                 
-                <a href="{% url 'tweet_list' %}" class="btn-back">
-                    ← Back to Feed
-                </a>
+                <div class="tweet-preview-card">
+                    <div class="preview-header">
+                        <div class="preview-avatar">
+                            {{ request.user.username|slice:":1"|upper }}
+                        </div>
+                        <div class="preview-user-info">
+                            <h4>{{ request.user.username }}</h4>
+                            <p>@{{ request.user.username|lower }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-content" id="textPreview">
+                        {% if form.text.value %}
+                            {{ form.text.value|linebreaksbr }}
+                        {% else %}
+                            Your message will appear here...
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Image Preview Container -->
+                    <div class="image-preview-container" id="imagePreviewContainer">
+                        <img src="" alt="Preview" class="image-preview" id="imagePreview">
+                        <button type="button" class="remove-image-btn" id="removeImageBtn">×</button>
+                    </div>
+                    
+                    <div class="preview-footer">
+                        <span class="preview-time">Just now</span>
+                        <div class="preview-likes">
+                            <span>❤️ 0 likes</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preview Placeholder (shown when no content) -->
+                <div class="preview-placeholder" id="previewPlaceholder">
+                    <div class="placeholder-icon">👈</div>
+                    <p>Start typing to see a live preview of your post here.</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">
+                        Add a photo to see how it will look!
+                    </p>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 
     <script>
-        // Character counter functionality
         document.addEventListener('DOMContentLoaded', function() {
             const textarea = document.getElementById('id_text');
             const charCounter = document.getElementById('charCounter');
+            const textPreview = document.getElementById('textPreview');
+            const fileInput = document.getElementById('id_photo');
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const removeImageBtn = document.getElementById('removeImageBtn');
+            const previewPlaceholder = document.getElementById('previewPlaceholder');
+            const existingPhoto = document.getElementById('existingPhoto');
             
+            // Show existing photo if editing
+            if (existingPhoto) {
+                existingPhoto.style.display = 'block';
+            }
+            
+            // Character counter and text preview
             function updateCharCounter() {
                 const length = textarea.value.length;
                 charCounter.textContent = `${length}/280`;
                 
-                // Add warning classes based on character count
+                // Update preview
+                if (textarea.value.trim()) {
+                    textPreview.innerHTML = textarea.value.replace(/\n/g, '<br>');
+                    previewPlaceholder.style.display = 'none';
+                } else {
+                    textPreview.innerHTML = 'Your message will appear here...';
+                    previewPlaceholder.style.display = 'block';
+                }
+                
+                // Add warning classes
                 charCounter.classList.remove('warning', 'danger');
                 if (length > 250) {
                     charCounter.classList.add('warning');
@@ -504,11 +786,75 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
                 }
             }
             
-            // Initial update
+            // Image preview functionality
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreviewContainer.style.display = 'block';
+                        previewPlaceholder.style.display = 'none';
+                        
+                        // Hide existing photo when new one is selected
+                        if (existingPhoto) {
+                            existingPhoto.style.display = 'none';
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Remove image preview
+            removeImageBtn.addEventListener('click', function() {
+                fileInput.value = '';
+                imagePreviewContainer.style.display = 'none';
+                
+                // Show existing photo again if editing
+                if (existingPhoto && existingPhoto.querySelector('img').src) {
+                    existingPhoto.style.display = 'block';
+                } else {
+                    previewPlaceholder.style.display = 'block';
+                }
+            });
+            
+            // Initial setup
             updateCharCounter();
             
-            // Update on input
+            // Update preview on input
             textarea.addEventListener('input', updateCharCounter);
+            
+            // Handle initial state for editing
+            if (textPreview.textContent.trim() && textPreview.textContent.trim() !== 'Your message will appear here...') {
+                previewPlaceholder.style.display = 'none';
+            }
+            
+            // Initialize image preview if editing with photo
+            if (existingPhoto && existingPhoto.style.display !== 'none') {
+                previewPlaceholder.style.display = 'none';
+            }
+            
+            // Create stars background animation
+            function createStars() {
+                const starsContainer = document.getElementById('stars');
+                starsContainer.innerHTML = '';
+                
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.style.position = 'absolute';
+                    star.style.width = Math.random() * 3 + 'px';
+                    star.style.height = star.style.width;
+                    star.style.background = 'white';
+                    star.style.borderRadius = '50%';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.opacity = Math.random() * 0.8 + 0.2;
+                    star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite alternate`;
+                    starsContainer.appendChild(star);
+                }
+            }
+            
+            createStars();
         });
     </script>
 </body>
