@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from decouple import config, Csv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4c-5tmhb02c0i+k-2#2om^6g!xf+2kbw3k%&45f$+!iag9#eo1'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-4c-5tmhb02c0i+k-2#2om^6g!xf+2kbw3k%645f$+!iag9#eo1')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['*',    "unextrinsic-tierra-nipping.ngrok-free.dev",".onrender.com"
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*,localhost,127.0.0.1', cast=Csv())
 
 
 # Application definition
@@ -70,7 +72,7 @@ ROOT_URLCONF = 'tax_fare_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR,"templates"],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,12 +91,22 @@ WSGI_APPLICATION = 'tax_fare_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Use PostgreSQL in production, SQLite in development
+if config('DATABASE_URL', default=None):
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=config('DATABASE_URL'),
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -148,12 +160,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 LOGIN_URL= '/accounts/login'
 
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    "https://unextrinsic-tierra-nipping.ngrok-free.dev",
-
-]
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='http://127.0.0.1:3000,http://localhost:3000',
+    cast=Csv()
+)
 
 # LOGIN_REDIRECT_URL='/tweet/'
 # LOGOUT_REDIRECT_URL='/tweet/'
@@ -165,11 +176,23 @@ LOGOUT_REDIRECT_URL='/tweet/'
 
 ASGI_APPLICATION = "tax_fare_django.asgi.application"
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+# Use Redis for channels in production, InMemory for development
+REDIS_URL = config('REDIS_URL', default=None)
+if REDIS_URL:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [REDIS_URL],
+            },
+        },
     }
-}
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
+    }
 
 
 
@@ -182,8 +205,8 @@ ACCOUNT_SIGNUP_FIELDS = ['email', 'username', 'password1', 'password2']
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '998688829192-l1rjsnd7ncmvr6muei52it3cr5m7c655.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': config('GOOGLE_CLIENT_ID', default='998688829192-l1rjsnd7ncmvr6muei52it3cr5m7c655.apps.googleusercontent.com'),
+            'secret': config('GOOGLE_CLIENT_SECRET', default='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'),
             'key': ''
         },
          'OAUTH_PKCE_ENABLED': True,
@@ -193,6 +216,14 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com",
-]
+# Production Security Settings
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

@@ -5,6 +5,8 @@ __pycache__/
 /media/
 db.sqlite3
 .env
+*.env
+!.env.example
 *.log
 *.sqlite3
 

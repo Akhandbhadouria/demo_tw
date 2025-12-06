@@ -20,3 +20,8 @@ requests-oauthlib==2.0.0
 sqlparse==0.5.4
 urllib3==2.5.0
 whitenoise==6.11.0
+python-decouple==3.8
+dj-database-url==2.2.0
+redis==5.2.1
+channels-redis==4.2.1
+mysqlclient==2.2.8
