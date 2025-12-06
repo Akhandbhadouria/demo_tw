@@ -1,139 +1,83 @@
-# Django Twitter Clone 🐦
+# Conecto – Social Media Platform
 
-A full-featured Twitter/X clone built with Django, featuring tweets, real-time chat, user profiles, and Google OAuth authentication.
+A modern full-stack social networking application built with Django, featuring real-time chat, posts, likes, follows, profiles, and production-ready deployment.
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
-![Django](https://img.shields.io/badge/Django-5.2.8-green.svg)
+🔗 **Live Demo**: [https://lambardaar.pythonanywhere.com/](https://lambardaar.pythonanywhere.com/)
 
-## ✨ Features
+## ⭐ Features
 
-- **Tweets**: Create, view, delete tweets with text and images (240 char limit)
-- **User Profiles**: Custom profiles with bio, photos, follow/unfollow system
-- **Social Engagement**: Like tweets, follow users, view timelines
-- **Real-time Chat**: Live messaging with Django Channels and WebSocket
-- **Authentication**: Username/password login + Google OAuth integration
-- **Security**: CSRF protection, XSS filtering, production-ready settings
+- **Tweet/Post System** – text + images, like/unlike
+- **User Profiles** – bio, profession, photo, verification badge
+- **Real-Time Chat** – WebSockets using Django Channels
+- **Authentication** – username/password + optional Google OAuth
+- **Social Actions** – follow/unfollow, timelines
+- **Responsive UI** – mobile-ready design
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-- **Backend**: Django 5.2.8, Channels, Allauth, Gunicorn
-- **Database**: SQLite (dev), PostgreSQL/MySQL (production)
+- **Backend**: Django, Django Channels, Python
+- **Realtime**: WebSockets, Redis
 - **Frontend**: HTML, CSS, JavaScript
-- **Real-time**: Redis (production), In-memory (dev)
-- **Deployment**: WhiteNoise, PythonAnywhere
+- **Database**: SQLite (dev), PostgreSQL/MySQL (prod)
+- **Deployment**: Gunicorn, WhiteNoise, environment variables
 
-## � Quick Start
+## 📁 Project Structure (Simplified)
 
-### 1. Setup
+```
+project/
+├── chat/            # Real-time messaging
+├── tweet/           # Tweet & profile features
+├── project_root/    # Settings, URLs, ASGI/WSGI
+├── templates/
+├── static/
+├── media/
+└── requirements.txt
+```
+
+## 🚀 Installation
 
 ```bash
-# Clone and navigate
-git clone <repository-url>
-cd tweet_copy_2
+git clone <repo-url>
+cd project
 
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate      # or venv\Scripts\activate on Windows
 
-# Install dependencies
 pip install -r requirements.txt
-```
-
-### 2. Configure Environment
-
-```bash
 cp .env.example .env
-```
-
-Edit `.env`:
-```env
-SECRET_KEY=your-secret-key
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-```
-
-### 3. Initialize Database
-
-```bash
 python manage.py migrate
-python manage.py createsuperuser
-python manage.py collectstatic --no-input
-```
-
-### 4. Run Server
-
-```bash
 python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000`
-
-## 📁 Project Structure
-
+**Visit:**
 ```
-tweet_copy_2/
-├── chat/              # Real-time chat app
-├── tweet/             # Main tweet app (models, views, forms)
-├── tax_fare_django/   # Project settings
-├── templates/         # Global templates
-├── static/            # CSS, JS, images
-├── media/             # User uploads
-└── requirements.txt   # Dependencies
+http://127.0.0.1:8000
 ```
 
-## 🔐 Google OAuth (Optional)
+## 🎮 How to Use
 
-1. Create project at [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable Google+ API and create OAuth credentials
-3. Add redirect URI: `http://localhost:8000/accounts/google/login/callback/`
-4. Add credentials to `.env`:
-```env
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-secret
-```
+1. **Sign Up / Login** – Create an account or use Google OAuth
+2. **Create Profile** – Add bio, profession, and profile photo
+3. **Post Tweets** – Share text and images (240 char limit)
+4. **Social Actions** – Like posts, follow users, view timelines
+5. **Real-Time Chat** – Message other users instantly
+6. **Explore** – Discover content and connect with others
 
-## 🌐 Deployment
+## 🔒 Security
 
-See [`DEPLOYMENT_PYTHONANYWHERE.md`](./DEPLOYMENT_PYTHONANYWHERE.md) for detailed PythonAnywhere deployment guide.
+- CSRF protection
+- XSS filtering
+- Secure cookies (production)
+- WhiteNoise static serving
 
-**Quick deploy checklist:**
-- Set `DEBUG=False` in production
-- Configure `DATABASE_URL` for PostgreSQL/MySQL
-- Set up Redis for real-time chat
-- Add production domain to `ALLOWED_HOSTS`
-- Configure `CSRF_TRUSTED_ORIGINS`
+## � Future Enhancements
 
-## 📝 Key Environment Variables
+- Notifications
+- Hashtags
+- Retweets
+- Group chat
+- API for mobile apps
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SECRET_KEY` | Django secret key | Yes |
-| `DEBUG` | Debug mode (True/False) | No |
-| `DATABASE_URL` | Database connection | No (uses SQLite) |
-| `ALLOWED_HOSTS` | Allowed domains | Yes (prod) |
-| `REDIS_URL` | Redis for chat | No (uses in-memory) |
+## 📝 License
 
-## 🐛 Troubleshooting
-
-**Missing packages:**
-```bash
-pip install -r requirements.txt
-```
-
-**Database issues:**
-```bash
-python manage.py migrate --run-syncdb
-```
-
-**Static files not loading:**
-```bash
-python manage.py collectstatic --clear
-```
-
-## � License
-
-MIT License
-
----
-
-**Built with ❤️ using Django**
+MIT License. Feel free to use and modify.
