@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-4c-5tmhb02c0i+k-2#2om^6g!xf+2kbw3k%&45f$+!iag9#eo1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*',    "unextrinsic-tierra-nipping.ngrok-free.dev",
+ALLOWED_HOSTS = ['*',    "unextrinsic-tierra-nipping.ngrok-free.dev",".onrender.com"
 ]
 
 
@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 
 ]
 
@@ -140,7 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT=BASE_DIR /"media"
 
-STATIC_URL = 'static/'
 
 import os
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -189,3 +189,10 @@ SOCIALACCOUNT_PROVIDERS = {
          'OAUTH_PKCE_ENABLED': True,
     }
 }
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+]
