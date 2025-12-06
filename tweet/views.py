@@ -394,6 +394,11 @@ def edit_profile(request):
         form = CombinedProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
+
+            # IMPORTANT: refresh user data after saving form
+            request.user.refresh_from_db()
+
+            # Redirect to NEW username
             return redirect('profile_detail', username=request.user.username)
     else:
         form = CombinedProfileForm(instance=profile, user=request.user)

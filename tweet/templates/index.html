@@ -1,9 +1,10 @@
 {%extends "layout.html"%}
-
+{% load static %}
 {% block title %}
 chai aur tweet
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <h1>hey tweet</h1>
 {% endblock %}

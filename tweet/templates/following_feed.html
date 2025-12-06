@@ -5,594 +5,82 @@ Tweets - TweetShare
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/following_feed.css' %}">
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    .page-header {
-        text-align: center;
-        margin-bottom: 30px;
-        padding: 20px;
-    }
-
-    .page-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .page-description {
-        font-size: 1.1rem;
-        color: #666;
-    }
-
-    .create-tweet-btn {
-        display: inline-block;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
-        color: white;
-        padding: 15px 40px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin: 0 auto 40px;
-        display: block;
-        width: fit-content;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .create-tweet-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-    }
-
-    /* Masonry Grid Layout */
-    .masonry-grid {
-        column-count: 4;
-        column-gap: 20px;
-        max-width: 1600px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    @media (max-width: 1400px) {
-        .masonry-grid {
-            column-count: 3;
-        }
-    }
-
-    @media (max-width: 1000px) {
-        .masonry-grid {
-            column-count: 2;
-        }
-    }
-
-   @media (max-width: 600px) {
-    .masonry-grid {
-        column-count: 2;
-        column-gap: 15px;
-        padding: 0 15px;
-    }
-    
-    .tweet-card {
-        margin-bottom: 15px;
-    }
-}
-
-    .tweet-card {
-        break-inside: avoid;
-        margin-bottom: 20px;
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .tweet-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .tweet-image {
-        width: 100%;
-        height: auto;
-        display: block;
-        object-fit: cover;
-    }
-
-    /* Text only cards */
-    .tweet-text-only {
-        padding: 24px;
-        min-height: 120px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .tweet-text-only p {
-        color: #333;
-        font-size: 1rem;
-        line-height: 1.6;
-        text-align: center;
-        margin: 0;
-        word-wrap: break-word;
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    .modal-overlay.show {
-        display: flex;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .modal-content {
-        background: transparent;
-        border-radius: 25px;
-        max-width: 650px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        position: relative;
-        animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-        from {
-            transform: translateY(50px);
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .modal-close {
-        position: absolute;
-        top: -50px;
-        right: 0;
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(10px);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        line-height: 1;
-        transition: all 0.3s ease;
-    }
-
-    .modal-close:hover {
-        background: rgba(255, 255, 255, 0.35);
-        transform: scale(1.1) rotate(90deg);
-    }
-
-    /* Glassmorphic Tweet Modal */
-    .mock-tweet {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
-        border-radius: 25px;
-        padding: 35px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    [data-theme="dark"] .mock-tweet {
-        background: rgba(26, 26, 46, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .mock-user {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-    }
-
-    .mock-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-background: linear-gradient(to bottom right, #0c3483, #6b8cce);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 1.5rem;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-        flex-shrink: 0;
-    }
-
-    .mock-avatar-img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .mock-user-info {
-        flex: 1;
-    }
-
-    .mock-name {
-        font-weight: 700;
-        color: #2d3748;
-        font-size: 1.2rem;
-        margin-bottom: 4px;
-    }
-
-    [data-theme="dark"] .mock-name {
-        color: #ffffff;
-    }
-
-    .mock-handle {
-        font-size: 0.95rem;
-        color: #718096;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    [data-theme="dark"] .mock-handle {
-        color: #a8a8a8;
-    }
-
-    .mock-content {
-        font-size: 1.1rem;
-        color: #4a5568;
-        line-height: 1.8;
-        word-wrap: break-word;
-        white-space: pre-wrap;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    [data-theme="dark"] .mock-content {
-        color: #d4d4d4;
-        background: rgba(40, 40, 60, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .mock-image {
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        max-height: none;
-        position: relative;
-    }
-
-    .mock-image img {
-        width: 100%;
-        height: auto;
-        max-height: 70vh;
-        object-fit: contain;
-        display: block;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-    }
-
-    .mock-image img:hover {
-        transform: scale(1.02);
-    }
-
-    .mock-image-overlay {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 8px 12px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        backdrop-filter: blur(10px);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-    }
-
-    .mock-image:hover .mock-image-overlay {
-        opacity: 1;
-    }
-
-    .mock-timestamp {
-        font-size: 0.9rem;
-        color: #a0aec0;
-        padding: 15px 20px;
-        background: rgba(255, 255, 255, 0.4);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    [data-theme="dark"] .mock-timestamp {
-        color: #a8a8a8;
-        background: rgba(40, 40, 60, 0.4);
-    }
-
-    /* Tweet Actions in Modal */
-    .mock-actions {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-        margin-top: 10px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    [data-theme="dark"] .mock-actions {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .action-btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .edit-btn {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-    }
-
-    .edit-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-    }
-
-    .delete-btn {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-    }
-
-    .delete-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
-    }
-
-    /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .empty-state-icon {
-        font-size: 5rem;
-        margin-bottom: 20px;
-    }
-
-    .empty-state-title {
-        font-size: 1.8rem;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .empty-state-text {
-        font-size: 1.1rem;
-        color: #666;
-    }
-
-    /* Like Button Styles */
-    .tweet-actions {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        z-index: 5;
-    }
-
-    .like-form {
-        margin: 0;
-    }
-
-    .like-btn {
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 20px;
-        padding: 8px 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    [data-theme="dark"] .like-btn {
-        background: rgba(26, 26, 46, 0.9);
-    }
-
-    .like-btn:hover {
-        transform: scale(1.05);
-    }
-
-    .like-btn.liked {
-        background: rgba(239, 68, 68, 0.2);
-    }
-
-    .like-btn.liked .like-icon {
-        transform: scale(1.2);
-    }
-
-    .like-icon {
-        font-size: 1.1rem;
-        transition: transform 0.2s ease;
-    }
-
-    .like-count {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #4a5568;
-    }
-
-    [data-theme="dark"] .like-count {
-        color: #d4d4d4;
-    }
-
-    .like-btn.liked .like-count {
-        color: #ef4444;
-        font-weight: 700;
-    }
-
-    /* Custom Scrollbar */
-    .modal-content::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .modal-content::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .modal-content::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 10px;
-    }
-
-    .modal-content::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.5);
-    }
-    .tit{
-    color: #2d3748;
-    display: flex;
-    justify-content: center;   /* horizontal center */
-    align-items: center;        /* vertical center */
-}
-</style>
 
 <div class="tweet-container">
     <!-- Create Tweet Button -->
     <!-- <a href="{% url 'tweet_create' %}" class="create-tweet-btn">
         +
     </a> -->
-    
+
     <!-- Masonry Grid -->
-     <h3 class="tit">Following Feed</h3>
+    <h3 class="tit">Following Feed</h3>
     {% if tweets %}
-        <div class="masonry-grid">
-            {% for tweet in tweets %}
-            <div class="tweet-card" data-tweet-id="{{ tweet.id }}">
-                {% if tweet.photo %}
-                    <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
-                {% else %}
-                    <div class="tweet-text-only">
-                        <p>{{ tweet.text|truncatewords:20 }}</p>
-                    </div>
-                {% endif %}
-                 <div class="tweet-actions">
-            <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
-                {% csrf_token %}
-                <button type="submit" class="like-btn {% if request.user in tweet.likes.all %}liked{% endif %}">
-    <span class="like-icon">
-        {% if request.user in tweet.likes.all %}
-            ❤️
-        {% else %}
-            🤍
-        {% endif %}
-    </span>
-    <span class="like-count">{{ tweet.total_likes }}</span>
-</button>
-
-            </form>
-        </div>
+    <div class="masonry-grid">
+        {% for tweet in tweets %}
+        <div class="tweet-card" data-tweet-id="{{ tweet.id }}">
+            {% if tweet.photo %}
+            <img src="{{ tweet.photo.url }}" class="tweet-image" alt="Tweet image">
+            {% else %}
+            <div class="tweet-text-only">
+                <p>{{ tweet.text|truncatewords:20 }}</p>
             </div>
-            {% endfor %}
-        </div>
+            {% endif %}
+            <div class="tweet-actions">
+                <form method="post" action="{% url 'like_tweet' tweet.id %}" class="like-form">
+                    {% csrf_token %}
+                    <button type="submit" class="like-btn {% if request.user in tweet.likes.all %}liked{% endif %}">
+                        <span class="like-icon">
+                            {% if request.user in tweet.likes.all %}
+                            ❤️
+                            {% else %}
+                            🤍
+                            {% endif %}
+                        </span>
+                        <span class="like-count">{{ tweet.total_likes }}</span>
+                    </button>
 
-        <!-- Modal -->
-        <div class="modal-overlay" id="tweetModal">
-            <div class="modal-content">
-                <button class="modal-close" id="closeModal">&times;</button>
-                <div id="modalBody"></div>
+                </form>
             </div>
         </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="tweetModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
     {% else %}
-        <!-- Empty State -->
-        <div class="empty-state">
-            <div class="empty-state-icon">📭</div>
-            <h2 class="empty-state-title">No tweets yet</h2>
-            <p class="empty-state-text">Be the first to share something!</p>
-        </div>
+    <!-- Empty State -->
+    <div class="empty-state">
+        <div class="empty-state-icon">📭</div>
+        <h2 class="empty-state-title">No Posts yet</h2>
+        <p class="empty-state-text">Be the first to share something!</p>
+    </div>
     {% endif %}
 </div>
 
 <script>
     const tweetData = {
         {% for tweet in tweets %}
-        "{{ tweet.id }}": {
-            hasPhoto: {% if tweet.photo %}true{% else %}false{% endif %},
-            photoUrl: "{{ tweet.photo.url|default:'' }}",
+    "{{ tweet.id }}": {
+        hasPhoto: {% if tweet.photo %} true{% else %} false{% endif %},
+        photoUrl: "{{ tweet.photo.url|default:'' }}",
             text: `{{ tweet.text|escapejs }}`,
-            username: "{{ tweet.user.username|escapejs }}",
-            profileUrl: "{% url 'profile_detail' username=tweet.user.username %}",
-            hasAvatar: {% if tweet.user.userprofile.profile_photo %}true{% else %}false{% endif %},
-            avatarUrl: "{{ tweet.user.userprofile.profile_photo.url|default:'' }}",
+                username: "{{ tweet.user.username|escapejs }}",
+                    profileUrl: "{% url 'profile_detail' username=tweet.user.username %}",
+                        hasAvatar: {% if tweet.user.userprofile.profile_photo %} true{% else %} false{% endif %},
+        avatarUrl: "{{ tweet.user.userprofile.profile_photo.url|default:'' }}",
             timestamp: "{{ tweet.updated_at|date:'M d, Y H:i' }}",
-            isOwner: {% if tweet.user == user %}true{% else %}false{% endif %},
-            editUrl: "{% url 'tweet_edit' tweet.id %}",
+                isOwner: {% if tweet.user == user %} true{% else %} false{% endif %},
+        editUrl: "{% url 'tweet_edit' tweet.id %}",
             deleteUrl: "{% url 'tweet_delete' tweet.id %}"
-        }{% if not forloop.last %},{% endif %}
-        {% endfor %}
+    } {% if not forloop.last %}, {% endif %}
+    {% endfor %}
     };
 
     const modal = document.getElementById('tweetModal');
@@ -600,7 +88,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
     const closeBtn = document.getElementById('closeModal');
 
     document.querySelectorAll('.tweet-card').forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             const tweetId = this.getAttribute('data-tweet-id');
             openModal(tweetId);
         });
@@ -614,7 +102,7 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 
         // User info
         html += '<div class="mock-user">';
-        
+
         // Avatar
         if (tweet.hasAvatar && tweet.avatarUrl) {
             html += `<div class="mock-avatar"><img src="${tweet.avatarUrl}" class="mock-avatar-img" alt="${tweet.username}"></div>`;
@@ -672,21 +160,21 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
 
     closeBtn.addEventListener('click', closeModal);
 
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             closeModal();
         }
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             closeModal();
         }
     });
 
     // Prevent modal from closing when clicking on the image or action buttons
-    modalBody.addEventListener('click', function(e) {
-        if (e.target.classList.contains('mock-image') || 
+    modalBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('mock-image') ||
             e.target.closest('.mock-image') ||
             e.target.classList.contains('action-btn') ||
             e.target.closest('.action-btn')) {
@@ -694,43 +182,41 @@ background: linear-gradient(to bottom right, #0c3483, #6b8cce);
         }
     });
     document.querySelectorAll(".like-form").forEach(form => {
-    form.addEventListener("click", function(e) {
-        e.stopPropagation();   // STOP POPUP FROM OPENING
+        form.addEventListener("click", function (e) {
+            e.stopPropagation();   // STOP POPUP FROM OPENING
+        });
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            e.stopPropagation();   // ALSO STOP MODAL FROM TRIGGERING
+
+            const url = this.action;
+            const countSpan = this.querySelector(".like-count");
+            const icon = this.querySelector(".like-icon");
+            const btn = this.querySelector(".like-btn");
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    countSpan.textContent = data.total_likes;
+
+                    if (data.liked) {
+                        btn.classList.add("liked");
+                        icon.textContent = "❤️";
+                    } else {
+                        btn.classList.remove("liked");
+                        icon.textContent = "🤍";
+                    }
+                })
+                .catch(error => console.log(error));
+        });
     });
-
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-        e.stopPropagation();   // ALSO STOP MODAL FROM TRIGGERING
-
-        const url = this.action;
-        const countSpan = this.querySelector(".like-count");
-        const icon = this.querySelector(".like-icon");
-        const btn = this.querySelector(".like-btn");
-
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            countSpan.textContent = data.total_likes;
-
-            if (data.liked) {
-                btn.classList.add("liked");
-                icon.textContent = "❤️";
-            } else {
-                btn.classList.remove("liked");
-                icon.textContent = "🤍";
-            }
-        })
-        .catch(error => console.log(error));
-    });
-});
 
 </script>
 
 {% endblock %}
-
-

@@ -3,375 +3,55 @@
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body.theme-blue-purple {
-            --primary-color: #6b8cce;
-            --secondary-color: #a2b6df;
-            --accent-color: #0c3483;
-        }
-        
+    <link rel="stylesheet" href="{% static 'css/account_setting.css' %}">
 
-        
 
-        /* Centering Container */
-        .password-form-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 70vh;
-            /* padding: 2rem 1rem; */
-        }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: transform 0.3s ease;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        [data-theme="dark"] .card {
-            background: rgba(26, 26, 46, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        h4 {
-            color: var(--accent-color, #0c3483);
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-        }
-
-        [data-theme="dark"] h4 {
-            color: #8b9eea;
-        }
-        
-        .subtitle {
-            color: #718096;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        [data-theme="dark"] .subtitle {
-            color: #a8a8a8;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2d3748;
-        }
-
-        [data-theme="dark"] label {
-            color: #ffffff;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 14px 45px 14px 15px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: rgba(255, 255, 255, 0.8);
-            color: #2d3748;
-        }
-
-        [data-theme="dark"] .form-control {
-            background: rgba(50, 50, 70, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-color, #6b8cce);
-            box-shadow: 0 0 0 4px rgba(107, 140, 206, 0.2);
-            background: rgba(255, 255, 255, 0.95);
-            outline: none;
-            transform: translateY(-2px);
-        }
-
-        [data-theme="dark"] .form-control:focus {
-            background: rgba(60, 60, 80, 0.95);
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, var(--primary-color, #6b8cce) 0%, var(--accent-color, #0c3483) 100%);
-            border: none;
-            color: white;
-            padding: 14px 25px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-warning:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-            border: none;
-            color: white;
-            padding: 14px 25px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 10px;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
-        }
-        
-        .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.5);
-        }
-        
-        .form-note {
-            font-size: 0.85rem;
-            color: #718096;
-            margin-top: 15px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        [data-theme="dark"] .form-note {
-            color: #a8a8a8;
-        }
-        
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #777;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .password-toggle:hover {
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        .password-field {
-            position: relative;
-        }
-        
-        /* Success Message Styles */
-        .success-message {
-            background: linear-gradient(135deg, rgba(212, 237, 218, 0.95), rgba(195, 230, 203, 0.95));
-            backdrop-filter: blur(10px);
-            border: 2px solid #28a745;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            text-align: center;
-            animation: slideDown 0.5s ease-out;
-        }
-
-        [data-theme="dark"] .success-message {
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(40, 167, 69, 0.15));
-            border: 2px solid #28a745;
-        }
-        
-        .success-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            display: block;
-        }
-        
-        .success-title {
-            color: #155724;
-            font-weight: 700;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-
-        [data-theme="dark"] .success-title {
-            color: #28a745;
-        }
-        
-        .success-text {
-            color: #155724;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        [data-theme="dark"] .success-text {
-            color: #b8e6c0;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Error Message Styles */
-        .error-messages {
-            background: rgba(239, 68, 68, 0.15);
-            backdrop-filter: blur(10px);
-            border: 2px solid #ef4444;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .error-messages ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .error-messages li {
-            color: #ef4444;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .error-messages li::before {
-            content: '⚠️';
-            font-size: 1rem;
-        }
-        
-        .error-messages li:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .password-form-wrapper {
-                padding: 1.5rem 1rem;
-            }
-
-            .card {
-                padding: 30px 20px;
-            }
-
-            h4 {
-                font-size: 1.5rem;
-            }
-
-            .success-icon {
-                font-size: 2.5rem;
-            }
-
-            .success-title {
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 25px 15px;
-            }
-
-            h4 {
-                font-size: 1.3rem;
-            }
-
-            .form-control {
-                padding: 12px 40px 12px 12px;
-            }
-
-            .btn-warning,
-            .btn-secondary {
-                padding: 12px 20px;
-            }
-        }
-    </style>
 </head>
+
 <body class="theme-blue-purple">
     <div class="password-form-wrapper">
         <div class="card">
             <!-- Success Message (shown after password update) -->
             {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'success' %}
-                    <div class="success-message">
-                        <span class="success-icon">✅</span>
-                        <h3 class="success-title">Password Updated Successfully!</h3>
-                        <p class="success-text">Your password has been changed successfully. You can now use your new password to log in.</p>
-                        
-                    </div>
-                    {% endif %}
-                {% endfor %}
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class="success-message">
+                <span class="success-icon">✅</span>
+                <h3 class="success-title">Password Updated Successfully!</h3>
+                <p class="success-text">Your password has been changed successfully. You can now use your new password
+                    to log in.</p>
+
+            </div>
+            {% endif %}
+            {% endfor %}
             {% endif %}
 
             <!-- For Google User -->
             <h4>Set Password</h4>
             <p class="subtitle">You logged in using Google. Set a password to enable normal login.</p>
-            
+
             <!-- For Regular User (commented out) -->
             <!--
             <h4>Change Password</h4>
             -->
-            
+
             <!-- Display form errors if any -->
             {% if form.errors %}
             <div class="error-messages">
                 <ul>
                     {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
                     {% endfor %}
                     {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
+                    <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -379,13 +59,14 @@
 
             <form method="post">
                 {% csrf_token %}
-                
+
                 {% if request.user.has_usable_password %}
                 <div class="form-group">
                     <label for="id_old_password">Current Password</label>
                     <div class="password-field">
                         <input type="password" name="old_password" class="form-control" id="id_old_password">
-                        <button type="button" class="password-toggle" onclick="togglePassword('id_old_password')">👁️</button>
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('id_old_password')">👁️</button>
                     </div>
                 </div>
                 {% endif %}
@@ -415,7 +96,8 @@
                 </button>
 
                 <p class="form-note">
-                    Make sure your password is at least 8 characters long and includes a mix of letters, numbers, and symbols.
+                    Make sure your password is at least 8 characters long and includes a mix of letters, numbers, and
+                    symbols.
                 </p>
             </form>
         </div>
@@ -425,7 +107,7 @@
         function togglePassword(inputId) {
             const passwordInput = document.getElementById(inputId);
             const toggleButton = passwordInput.nextElementSibling;
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleButton.textContent = '🙈';
@@ -436,7 +118,7 @@
         }
 
         // Auto-hide success message after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const successMessage = document.querySelector('.success-message');
             if (successMessage) {
                 setTimeout(() => {
@@ -450,5 +132,6 @@
         });
     </script>
 </body>
+
 </html>
 {% endblock %}
